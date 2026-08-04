@@ -352,7 +352,7 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 ## 7. File Structure
 
 ```
-koperasi-map/
+peta-koperasi/
 ├── soul.md
 ├── SPEC.md
 ├── CLAUDE.md

@@ -67,7 +67,7 @@ The front door. Must work for someone who landed on the GitHub page from a searc
 
 4. **Quick start** — Exactly three commands for developers:
    ```
-   git clone <repo-url> && cd koperasi-map
+   git clone <repo-url> && cd peta-koperasi
    npm install
    npm run dev
    ```

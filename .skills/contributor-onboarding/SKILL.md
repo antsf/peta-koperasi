@@ -76,7 +76,7 @@ Setiap kontribusi sangat berarti. / Every contribution matters.
 2. **Local setup in under 10 minutes**:
    ```bash
    git clone <repo-url>
-   cd koperasi-map
+   cd peta-koperasi
    npm install
    cp .env.local.example .env.local
    # Fill in Supabase URL and anon key (provided in CONTRIBUTING.md)
