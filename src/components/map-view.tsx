@@ -51,12 +51,15 @@ export function MapView({
     setLoading(true)
     try {
       const res = await fetch(`/api/points?${params}`)
+      if (!res.ok) {
+        console.error(`[map] API ${res.status}: ${await res.text()}`)
+        return
+      }
       const json = await res.json()
-      if (!res.ok) return
       setLimited(json.limited ?? false)
       renderMarkers(map, json.data ?? [])
-    } catch {
-      // Network error — markers stay as-is
+    } catch (err) {
+      console.error('[map] Failed to fetch points:', err)
     } finally {
       setLoading(false)
     }
@@ -66,7 +69,10 @@ export function MapView({
   function renderMarkers(map: LeafletMap, points: KoperasiPointSummary[]) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const L = (window as any).LeafletLib
-    if (!L) return
+    if (!L) {
+      console.error('[map] LeafletLib not available on window')
+      return
+    }
 
     const cluster = clusterRef.current as { clearLayers: () => void; addLayer: (m: Marker) => void } | null
 
@@ -74,9 +80,17 @@ export function MapView({
       cluster.clearLayers()
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const newCluster = (L as any).markerClusterGroup({ maxClusterRadius: 60 })
+      const hasCluster = typeof (L as any).markerClusterGroup === 'function'
+      if (!hasCluster) {
+        console.error('[map] L.markerClusterGroup is not a function — markercluster plugin may not have loaded. Falling back to plain markers.')
+      }
+
+      const newCluster = hasCluster
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ? (L as any).markerClusterGroup({ maxClusterRadius: 60 })
+        : null
       clusterRef.current = newCluster
-      map.addLayer(newCluster)
+      if (newCluster) map.addLayer(newCluster)
     }
 
     const activeCluster = clusterRef.current as { clearLayers: () => void; addLayer: (m: Marker) => void }
@@ -103,7 +117,11 @@ export function MapView({
         marker.on('click', () => onPointClick(point))
       }
 
-      activeCluster.addLayer(marker)
+      if (activeCluster) {
+        activeCluster.addLayer(marker)
+      } else {
+        marker.addTo(map)
+      }
     })
   }
 
@@ -113,6 +131,10 @@ export function MapView({
     ;(async () => {
       const L = await import('leaflet')
       await import('leaflet/dist/leaflet.css')
+
+      // markercluster expects L on the global scope — set it before importing the plugin
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(window as any).L = L
       await import('leaflet.markercluster')
       await import('leaflet.markercluster/dist/MarkerCluster.css')
       await import('leaflet.markercluster/dist/MarkerCluster.Default.css')

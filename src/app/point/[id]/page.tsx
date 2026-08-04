@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!point) return { title: 'Tidak ditemukan' }
 
   return {
-    title: `${point.name} — Peta Koperasi Merah Putih`,
+    title: `${point.name} — Peta Koperasi Desa Merah Putih`,
     description: `Koperasi di ${point.kabupaten}, ${point.provinsi}. Lihat lokasi dan kontak.`,
   }
 }

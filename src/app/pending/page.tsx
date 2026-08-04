@@ -8,7 +8,7 @@ import { PhotoDisplay } from '@/components/photo-display'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Verifikasi Koperasi — Peta Koperasi Merah Putih',
+  title: 'Verifikasi Koperasi — Peta Koperasi Desa Merah Putih',
   description: 'Bantu komunitas memverifikasi data koperasi baru.',
 }
 

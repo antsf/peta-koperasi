@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { SubmitPageClient } from './submit-page-client'
 
 export const metadata: Metadata = {
-  title: 'Tambah Koperasi — Peta Koperasi Merah Putih',
+  title: 'Tambah Koperasi — Peta Koperasi Desa Merah Putih',
   description: 'Tambahkan koperasi desa ke peta komunitas.',
 }
 
