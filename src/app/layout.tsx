@@ -21,8 +21,8 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="id" className="min-h-full">
-      <body className="min-h-full flex flex-col bg-bg antialiased font-body">
+    <html lang="id" className="min-h-screen">
+      <body className="min-h-screen flex flex-col bg-bg antialiased font-body">
         <LocaleProvider>
           <Header />
           <main className="flex-1 flex flex-col">
