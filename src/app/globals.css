@@ -1,11 +1,82 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
+@theme {
+  /* Design director color tokens */
   --color-bg: #FAF9F5;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #F5F3EE;
+  --color-primary: #0B6E4F;
+  --color-primary-hover: #085A40;
+  --color-secondary: #D97706;
+  --color-accent: #2563EB;
+  --color-danger: #B91C1C;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #57534E;
+  --color-text-disabled: #A8A29E;
+  --color-border: #E7E5E4;
+  --color-border-focus: #0B6E4F;
+
+  /* Status colors */
+  --color-status-pending-bg: #FEF9C3;
+  --color-status-pending-text: #713F12;
+  --color-status-pending-border: #FDE047;
+  --color-status-approved-bg: #DCFCE7;
+  --color-status-approved-text: #14532D;
+  --color-status-approved-border: #86EFAC;
+  --color-status-flagged-bg: #FFEDD5;
+  --color-status-flagged-text: #7C2D12;
+  --color-status-flagged-border: #FDBA74;
+  --color-status-removed-bg: #F5F5F4;
+  --color-status-removed-text: #78716C;
+  --color-status-removed-border: #D6D3D1;
+
+  /* Typography */
+  --font-heading: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Border radius */
+  --radius-card: 16px;
+  --radius-button: 12px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(28, 25, 23, 0.08), 0 1px 2px rgba(28, 25, 23, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(28, 25, 23, 0.10), 0 2px 4px rgba(28, 25, 23, 0.06);
+  --shadow-modal: 0 20px 40px rgba(28, 25, 23, 0.15), 0 8px 16px rgba(28, 25, 23, 0.10);
+  --shadow-popup: 0 4px 16px rgba(28, 25, 23, 0.12);
+
+  /* Easing */
+  --ease-out-custom: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-custom: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Duration */
+  --duration-120: 120ms;
+  --duration-180: 180ms;
+  --duration-240: 240ms;
+  --duration-500: 500ms;
+
+  /* Animations */
+  --animate-count-up: countUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pin-drop: pinDrop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  --animate-skeleton-shimmer: shimmer 1.5s infinite;
+
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pinDrop {
+    0% { opacity: 0; transform: scale(0) translateY(-20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
 
 html {
