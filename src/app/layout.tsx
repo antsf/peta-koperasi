@@ -25,7 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className="h-full flex flex-col bg-bg antialiased font-body">
         <LocaleProvider>
           <Header />
-          <main className="flex-1 flex flex-col min-h-0">
+          <main className="flex-1 flex flex-col min-h-0 overflow-y-auto">
             {children}
           </main>
           <Footer />
