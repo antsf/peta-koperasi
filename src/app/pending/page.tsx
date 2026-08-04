@@ -24,7 +24,7 @@ export default async function PendingPage() {
   const { points } = await getPendingPoints()
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div>
     <div className="max-w-4xl mx-auto w-full px-4 py-8">
       <div className="mb-8">
         <h1 className="font-heading font-semibold text-3xl text-text-primary mb-2">

@@ -32,7 +32,7 @@ export default async function PointDetailPage({ params }: Props) {
   const canVote = point.status === 'pending' || point.status === 'flagged'
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div>
     <div className="max-w-2xl mx-auto w-full px-4 py-8">
       {/* Back */}
       <Link
