@@ -20,6 +20,7 @@ export function SubmitForm() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [photoName, setPhotoName] = useState<string | null>(null)
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<L.Map | null>(null)
   const pinMarkerRef = useRef<L.Marker | null>(null)
@@ -65,8 +66,9 @@ export function SubmitForm() {
 
     return () => {
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
+      if (photoPreview) { URL.revokeObjectURL(photoPreview) }
     }
-  }, [])
+  }, [photoPreview])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -96,6 +98,7 @@ export function SubmitForm() {
       form.reset()
       setPin(null)
       setPhotoName(null)
+      setPhotoPreview(null)
       if (pinMarkerRef.current) { pinMarkerRef.current.remove(); pinMarkerRef.current = null }
     } catch {
       setError('Gagal mengirim. Periksa koneksi internet Anda.')
@@ -245,8 +248,43 @@ export function SubmitForm() {
           id="photo" name="photo" type="file"
           accept="image/jpeg,image/png,image/webp"
           className="sr-only"
-          onChange={e => setPhotoName(e.target.files?.[0]?.name ?? null)}
+          onChange={e => {
+            const file = e.target.files?.[0]
+            if (file) {
+              setPhotoName(file.name)
+              if (photoPreview) { URL.revokeObjectURL(photoPreview) }
+              setPhotoPreview(URL.createObjectURL(file))
+            } else {
+              setPhotoName(null)
+              setPhotoPreview(null)
+            }
+          }}
         />
+        {photoPreview && (
+          <div className="mt-3 relative">
+            <img
+              src={photoPreview}
+              alt="Preview foto koperasi"
+              className="w-full h-48 object-cover rounded-xl border-2 border-border"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (photoPreview) { URL.revokeObjectURL(photoPreview) }
+                setPhotoPreview(null)
+                setPhotoName(null)
+                const input = document.getElementById('photo') as HTMLInputElement
+                if (input) { input.value = '' }
+              }}
+              className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors duration-120"
+              aria-label="Hapus foto"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {error && (

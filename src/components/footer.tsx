@@ -6,7 +6,7 @@ export function Footer() {
   const { t } = useTranslation()
 
   return (
-    <footer className="border-t border-border bg-surface py-4 px-4 shrink-0">
+    <footer className="border-t border-border bg-surface py-4 px-4 shrink-0 mt-auto">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-disabled">
         <span>
           © {new Date().getFullYear()} Peta Koperasi Desa Merah Putih ·{' '}
