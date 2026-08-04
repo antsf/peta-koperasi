@@ -107,7 +107,7 @@ These are locked. Do not change, bypass, or "temporarily disable" any of these:
 ```bash
 # 1. Clone and install
 git clone <repo-url>
-cd koperasi-map
+cd peta-koperasi
 npm install
 
 # 2. Set up environment
