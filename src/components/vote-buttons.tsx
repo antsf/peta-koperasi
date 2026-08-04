@@ -41,7 +41,6 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status 
       const json = await res.json()
 
       if (res.status === 409) {
-        // Already voted — show shake feedback
         setShake(true)
         setTimeout(() => setShake(false), 400)
         setError('Anda sudah memilih')
@@ -65,38 +64,51 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status 
     }
   }
 
+  const baseBtn = [
+    'min-h-[44px] min-w-[80px]',
+    'flex items-center justify-center gap-2',
+    'px-4 py-2 rounded-button border',
+    'text-sm font-medium',
+    'transition-[border-color,background-color,color,transform] duration-160 ease-out',
+    'active:scale-[0.96]',
+  ].join(' ')
+
   return (
     <div className="flex flex-col gap-2">
       <div className={`flex items-center gap-3 ${shake ? 'animate-shake' : ''}`}>
         <button
           onClick={() => castVote('up')}
           disabled={!canVote}
-          className={`min-h-[44px] min-w-[80px] flex items-center justify-center gap-2 px-4 py-2 rounded-button border text-sm font-medium transition-all duration-180 ${
+          className={`${baseBtn} ${
             voted && upvotes > initialUpvotes
-              ? 'bg-green-100 border-green-400 text-green-800'
+              ? 'bg-status-approved-bg border-status-approved-border text-status-approved-text'
               : canVote
               ? 'border-border text-text-secondary hover:border-primary hover:text-primary hover:bg-surface-raised'
-              : 'border-border text-text-disabled cursor-not-allowed opacity-60'
+              : 'border-border text-text-disabled cursor-not-allowed opacity-60 active:scale-100'
           }`}
-          aria-label={`Upvote — ${upvotes} votes`}
+          aria-label={`Upvote — ${upvotes} suara`}
         >
-          <span aria-hidden="true">▲</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 4l8 16H4z"/>
+          </svg>
           <span>{upvotes}</span>
         </button>
 
         <button
           onClick={() => castVote('down')}
           disabled={!canVote}
-          className={`min-h-[44px] min-w-[80px] flex items-center justify-center gap-2 px-4 py-2 rounded-button border text-sm font-medium transition-all duration-180 ${
+          className={`${baseBtn} ${
             voted && downvotes > initialDownvotes
-              ? 'bg-red-100 border-red-400 text-red-800'
+              ? 'bg-red-50 border-red-300 text-red-700'
               : canVote
               ? 'border-border text-text-secondary hover:border-danger hover:text-danger hover:bg-red-50'
-              : 'border-border text-text-disabled cursor-not-allowed opacity-60'
+              : 'border-border text-text-disabled cursor-not-allowed opacity-60 active:scale-100'
           }`}
-          aria-label={`Downvote — ${downvotes} votes`}
+          aria-label={`Downvote — ${downvotes} suara`}
         >
-          <span aria-hidden="true">▼</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 20l-8-16h16z"/>
+          </svg>
           <span>{downvotes}</span>
         </button>
       </div>

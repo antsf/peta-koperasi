@@ -102,6 +102,30 @@ body {
 ::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #A8A29E; }
 
+/* Enter animations for dynamic UI elements */
+.submit-success {
+  animation: fadeSlideIn 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.submit-error {
+  animation: fadeSlideIn 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.submit-pin-confirm {
+  animation: fadeSlideIn 160ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Vote button shake animation */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

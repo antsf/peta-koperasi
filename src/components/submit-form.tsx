@@ -5,6 +5,15 @@ import { getFingerprint } from '@/lib/fingerprint'
 
 interface LatLng { lat: number; lng: number }
 
+const inputClass = [
+  'w-full h-11 px-3',
+  'border-2 border-border rounded-lg',
+  'text-sm text-text-primary bg-surface',
+  'outline-none',
+  'transition-[border-color] duration-120 ease-out',
+  'focus:border-primary',
+].join(' ')
+
 export function SubmitForm() {
   const [pin, setPin] = useState<LatLng | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -16,7 +25,6 @@ export function SubmitForm() {
   const pinMarkerRef = useRef<L.Marker | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
-  // Initialize mini map for pin placement
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return
 
@@ -44,7 +52,7 @@ export function SubmitForm() {
           pinMarkerRef.current = L.marker([lat, lng], {
             icon: L.divIcon({
               className: '',
-              html: `<div style="width:24px;height:32px;background:#0B6E4F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 6px rgba(28,25,23,0.3)" />`,
+              html: `<div style="width:24px;height:32px;background:#0B6E4F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(11,110,79,0.35)" />`,
               iconSize: [24, 32],
               iconAnchor: [12, 32],
             }),
@@ -98,15 +106,23 @@ export function SubmitForm() {
 
   if (success) {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-card p-8 text-center">
-        <div className="text-4xl mb-4" aria-hidden="true">✓</div>
-        <h2 className="font-heading font-semibold text-xl text-green-800 mb-2">Terima kasih!</h2>
-        <p className="text-green-700 mb-6">
-          Data koperasi Anda sudah diterima dan sedang menunggu verifikasi dari komunitas.
+      <div className="submit-success bg-status-approved-bg border border-status-approved-border rounded-card p-8 text-center">
+        <div
+          className="w-14 h-14 rounded-full bg-status-approved-bg border-2 border-status-approved-border flex items-center justify-center mx-auto mb-4"
+          aria-hidden="true"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#14532D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h2 className="font-heading font-semibold text-xl text-status-approved-text mb-2">Terima kasih!</h2>
+        <p className="text-status-approved-text/80 mb-6 text-sm leading-relaxed">
+          Data koperasi sudah diterima dan sedang menunggu verifikasi dari komunitas.
+          Dibutuhkan 3 suara setuju untuk ditampilkan di peta.
         </p>
         <button
           onClick={() => setSuccess(false)}
-          className="px-6 py-2.5 bg-primary text-white font-medium rounded-button hover:bg-primary-hover transition-colors duration-180"
+          className="px-6 py-2.5 bg-primary text-white font-medium rounded-button text-sm transition-[background-color,transform] duration-180 ease-out hover:bg-primary-hover active:scale-[0.97]"
         >
           Tambah Koperasi Lain
         </button>
@@ -115,7 +131,7 @@ export function SubmitForm() {
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 pb-8" noValidate>
       {/* Map pin picker */}
       <div>
         <label className="block text-sm font-medium text-text-primary mb-1">
@@ -129,8 +145,10 @@ export function SubmitForm() {
           role="application"
         />
         {pin && (
-          <p className="mt-1 text-xs text-green-700 flex items-center gap-1">
-            <span aria-hidden="true">✓</span>
+          <p className="mt-1.5 text-xs text-status-approved-text flex items-center gap-1.5 submit-pin-confirm">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
             Lokasi dipilih: {pin.lat.toFixed(5)}, {pin.lng.toFixed(5)}
           </p>
         )}
@@ -141,10 +159,10 @@ export function SubmitForm() {
         <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-1">
           Nama Koperasi <span className="text-danger text-xs">(wajib)</span>
         </label>
-        <p className="text-xs text-text-secondary mb-1.5">Nama lengkap koperasi sesuai akta atau papan nama</p>
+        <p className="text-xs text-text-secondary mb-1.5">Nama lengkap sesuai akta atau papan nama</p>
         <input
           id="name" name="name" type="text" required maxLength={200} autoComplete="off"
-          className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
+          className={inputClass}
           placeholder="cth. Koperasi Simpan Pinjam Maju Bersama"
         />
       </div>
@@ -156,70 +174,50 @@ export function SubmitForm() {
         </label>
         <input
           id="address" name="address" type="text" required
-          className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
+          className={inputClass}
           placeholder="cth. Jl. Raya Desa No. 12"
         />
       </div>
 
-      {/* Region fields — 2-column on desktop */}
+      {/* Region fields */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="kelurahan" className="block text-sm font-medium text-text-primary mb-1">
-            Kelurahan / Desa
-          </label>
-          <input
-            id="kelurahan" name="kelurahan" type="text"
-            className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
-          />
+          <label htmlFor="kelurahan" className="block text-sm font-medium text-text-primary mb-1">Kelurahan / Desa</label>
+          <input id="kelurahan" name="kelurahan" type="text" className={inputClass} />
         </div>
         <div>
-          <label htmlFor="kecamatan" className="block text-sm font-medium text-text-primary mb-1">
-            Kecamatan
-          </label>
-          <input
-            id="kecamatan" name="kecamatan" type="text"
-            className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
-          />
+          <label htmlFor="kecamatan" className="block text-sm font-medium text-text-primary mb-1">Kecamatan</label>
+          <input id="kecamatan" name="kecamatan" type="text" className={inputClass} />
         </div>
         <div>
           <label htmlFor="kabupaten" className="block text-sm font-medium text-text-primary mb-1">
             Kabupaten / Kota <span className="text-danger text-xs">(wajib)</span>
           </label>
-          <input
-            id="kabupaten" name="kabupaten" type="text" required
-            className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
-          />
+          <input id="kabupaten" name="kabupaten" type="text" required className={inputClass} />
         </div>
         <div>
           <label htmlFor="provinsi" className="block text-sm font-medium text-text-primary mb-1">
             Provinsi <span className="text-danger text-xs">(wajib)</span>
           </label>
-          <input
-            id="provinsi" name="provinsi" type="text" required
-            className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
-          />
+          <input id="provinsi" name="provinsi" type="text" required className={inputClass} />
         </div>
       </div>
 
       {/* Contact */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-1">
-            Nomor Telepon
-          </label>
+          <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-1">Nomor Telepon</label>
           <input
             id="phone" name="phone" type="tel" autoComplete="tel"
-            className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm font-mono text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
+            className={`${inputClass} font-mono`}
             placeholder="cth. 0812-3456-7890"
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-1">
-            Email
-          </label>
+          <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-1">Email</label>
           <input
             id="email" name="email" type="email" autoComplete="email"
-            className="w-full h-11 px-3 border-2 border-border rounded-lg text-sm text-text-primary bg-surface focus:outline-none focus:border-primary transition-colors duration-120"
+            className={inputClass}
           />
         </div>
       </div>
@@ -230,14 +228,16 @@ export function SubmitForm() {
           Foto Koperasi
         </label>
         <p className="text-xs text-text-secondary mb-1.5">
-          Foto gedung atau kegiatan koperasi. Maksimal 5MB (JPG, PNG, WebP).
+          Foto gedung atau kegiatan koperasi. Maks. 5MB (JPG, PNG, WebP).
         </p>
         <label
           htmlFor="photo"
-          className="flex items-center gap-3 h-11 px-3 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors duration-120 bg-surface"
+          className="flex items-center gap-3 h-11 px-3 border-2 border-dashed border-border rounded-lg cursor-pointer bg-surface transition-[border-color,background-color] duration-120 ease-out hover:border-primary hover:bg-surface-raised"
         >
-          <span className="text-text-disabled text-sm" aria-hidden="true">📷</span>
-          <span className="text-sm text-text-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-text-disabled shrink-0" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span className="text-sm text-text-secondary truncate">
             {photoName ?? 'Pilih foto...'}
           </span>
         </label>
@@ -250,7 +250,10 @@ export function SubmitForm() {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-danger" role="alert">
+        <div
+          className="submit-error bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-danger"
+          role="alert"
+        >
           {error}
         </div>
       )}
@@ -258,11 +261,11 @@ export function SubmitForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full h-12 bg-primary text-white font-medium rounded-button hover:bg-primary-hover disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-180 flex items-center justify-center gap-2"
+        className="w-full h-12 bg-primary text-white font-medium rounded-button text-sm transition-[background-color,transform,opacity] duration-180 ease-out hover:bg-primary-hover active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2"
       >
         {submitting ? (
           <>
-            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+            <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" aria-hidden="true" />
             Mengirim...
           </>
         ) : 'Kirim Data'}
