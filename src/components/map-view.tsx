@@ -113,6 +113,9 @@ export function MapView({
     ;(async () => {
       const L = await import('leaflet')
       await import('leaflet/dist/leaflet.css')
+      await import('leaflet.markercluster')
+      await import('leaflet.markercluster/dist/MarkerCluster.css')
+      await import('leaflet.markercluster/dist/MarkerCluster.Default.css')
 
       // Fix broken default icons in webpack
       delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl
