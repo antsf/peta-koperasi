@@ -17,7 +17,7 @@ Read `soul.md` for project philosophy. Read `SPEC.md` for full technical specifi
 - **Framework:** Next.js 14+ (App Router) deployed on Vercel
 - **Database:** Supabase (PostgreSQL + PostGIS extension)
 - **Storage:** Supabase Storage (photos)
-- **Map:** Leaflet + OpenStreetMap tiles (no paid tile providers)
+- **Map:** Leaflet + OpenStreetMap tiles (no paid tile providers). Plain markers (markercluster removed due to Turbopack CJS incompatibility).
 - **Language:** TypeScript (strict mode)
 - **Styling:** Tailwind CSS
 - **Validation:** Zod
@@ -48,7 +48,7 @@ These are locked. Do not change, bypass, or "temporarily disable" any of these:
 
 2. **Photos are hidden until approved.** The `photo_url` field must return `null` for any point where `status != 'approved'`. This applies to both the API response and the UI. Never render a photo for a pending/flagged/removed point.
 
-3. **PostGIS viewport queries.** Always use `ST_Within(location, ST_MakeEnvelope(...))` for fetching points by map viewport. Never load all points and filter client-side. This is critical for scaling to 75k+ pins.
+3. **PostGIS viewport queries.** Currently uses latitude/longitude column comparisons (`.gte/.lte`). Migrate to `ST_Within(location, ST_MakeEnvelope(...))` for scaling to 75k+ pins. This is required before large-scale deployment.
 
 4. **No authentication.** There is no login, no user accounts, no session management. All actions are anonymous. Do not add auth middleware, Supabase Auth, NextAuth, or any auth library.
 
@@ -61,6 +61,14 @@ These are locked. Do not change, bypass, or "temporarily disable" any of these:
 8. **Indonesia bounds validation.** Latitude must be between -11.0 and 6.0, longitude between 95.0 and 141.0. Reject submissions outside these bounds at the API level.
 
 9. **Status transitions follow the spec.** `pending → approved` (3 upvotes), `pending → flagged` (3 downvotes), `flagged → removed` (6 downvotes), `flagged → approved` (5 upvotes, community override). No other transitions are valid.
+
+---
+
+## Layout Approach
+
+- **Home page (map):** Uses `calc(100vh - 4rem)` height to fill viewport. Map fills remaining space. Footer at viewport bottom.
+- **Other pages:** Content flows naturally. No `overflow-y-auto` on page wrappers. Footer sits below content.
+- **Root layout:** `min-h-full flex flex-col` on body. `flex-1` on main. Footer has `shrink-0`.
 
 ---
 

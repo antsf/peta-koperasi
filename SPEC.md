@@ -26,9 +26,9 @@ Indonesia has 120,000+ cooperatives, most invisible online. No unified, public, 
 
 | ID | Story |
 |----|-------|
-| C1 | As a contributor, I can submit a new cooperative by filling a form with name, location (click on map or enter address), contact, and optional photo. |
+| C1 | As a contributor, I can submit a new cooperative by filling a form with name, location (click on map), contact, and optional photo with preview. |
 | C2 | As a contributor, I see a confirmation that my submission is pending community review. |
-| C3 | As a contributor, I can place the pin by clicking on the map or by entering an address that geocodes to coordinates. |
+| C3 | As a contributor, I can place the pin by clicking on the map. |
 
 ### 2.3 Community Voter (unauthenticated, verifies data)
 
@@ -331,7 +331,7 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 
 | Component | Description |
 |-----------|-------------|
-| `MapView` | Leaflet map, loads pins via viewport bounding box, clusters at zoom-out |
+| `MapView` | Leaflet map, loads pins via viewport bounding box, plain markers (no clustering in v1) |
 | `MapPin` | Individual pin with popup (name, kabupaten, status indicator) |
 | `PointCard` | Card showing cooperative details (used in detail page and pending list) |
 | `SubmitForm` | Form with fields matching POST /api/points, includes map pin dropper |
@@ -393,16 +393,15 @@ peta-koperasi/
 │   │           └── route.ts
 │   ├── components/
 │   │   ├── map-view.tsx
-│   │   ├── map-pin.tsx
-│   │   ├── point-card.tsx
 │   │   ├── submit-form.tsx
+│   │   ├── submit-page-client.tsx
 │   │   ├── vote-buttons.tsx
 │   │   ├── region-filter.tsx
-│   │   ├── search-bar.tsx
-│   │   ├── language-toggle.tsx
 │   │   ├── photo-display.tsx
+│   │   ├── status-badge.tsx
 │   │   ├── header.tsx
-│   │   └── footer.tsx
+│   │   ├── footer.tsx
+│   │   └── locale-provider.tsx
 │   ├── lib/
 │   │   ├── supabase/
 │   │   │   ├── client.ts           # Browser Supabase client
