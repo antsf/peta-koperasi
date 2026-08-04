@@ -1,0 +1,109 @@
+'use client'
+
+import { useState } from 'react'
+import { getFingerprint } from '@/lib/fingerprint'
+import type { VoteType, PointStatus } from '@/types'
+
+interface VoteButtonsProps {
+  pointId: string
+  initialUpvotes: number
+  initialDownvotes: number
+  status: PointStatus
+}
+
+export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status }: VoteButtonsProps) {
+  const [upvotes, setUpvotes] = useState(initialUpvotes)
+  const [downvotes, setDownvotes] = useState(initialDownvotes)
+  const [voted, setVoted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [shake, setShake] = useState(false)
+  const [currentStatus, setCurrentStatus] = useState<PointStatus>(status)
+
+  const canVote = !voted && !loading && (currentStatus === 'pending' || currentStatus === 'flagged')
+
+  async function castVote(voteType: VoteType) {
+    if (!canVote) return
+    setLoading(true)
+    setError(null)
+
+    try {
+      const fingerprint = await getFingerprint()
+      const res = await fetch(`/api/points/${pointId}/vote`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-fingerprint': fingerprint,
+        },
+        body: JSON.stringify({ vote_type: voteType }),
+      })
+
+      const json = await res.json()
+
+      if (res.status === 409) {
+        // Already voted — show shake feedback
+        setShake(true)
+        setTimeout(() => setShake(false), 400)
+        setError('Anda sudah memilih')
+        setVoted(true)
+        return
+      }
+
+      if (!res.ok) {
+        setError(json.error ?? 'Gagal mencatat suara')
+        return
+      }
+
+      setUpvotes(json.data.upvotes)
+      setDownvotes(json.data.downvotes)
+      setCurrentStatus(json.data.status)
+      setVoted(true)
+    } catch {
+      setError('Gagal mencatat suara')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className={`flex items-center gap-3 ${shake ? 'animate-shake' : ''}`}>
+        <button
+          onClick={() => castVote('up')}
+          disabled={!canVote}
+          className={`min-h-[44px] min-w-[80px] flex items-center justify-center gap-2 px-4 py-2 rounded-button border text-sm font-medium transition-all duration-180 ${
+            voted && upvotes > initialUpvotes
+              ? 'bg-green-100 border-green-400 text-green-800'
+              : canVote
+              ? 'border-border text-text-secondary hover:border-primary hover:text-primary hover:bg-surface-raised'
+              : 'border-border text-text-disabled cursor-not-allowed opacity-60'
+          }`}
+          aria-label={`Upvote — ${upvotes} votes`}
+        >
+          <span aria-hidden="true">▲</span>
+          <span>{upvotes}</span>
+        </button>
+
+        <button
+          onClick={() => castVote('down')}
+          disabled={!canVote}
+          className={`min-h-[44px] min-w-[80px] flex items-center justify-center gap-2 px-4 py-2 rounded-button border text-sm font-medium transition-all duration-180 ${
+            voted && downvotes > initialDownvotes
+              ? 'bg-red-100 border-red-400 text-red-800'
+              : canVote
+              ? 'border-border text-text-secondary hover:border-danger hover:text-danger hover:bg-red-50'
+              : 'border-border text-text-disabled cursor-not-allowed opacity-60'
+          }`}
+          aria-label={`Downvote — ${downvotes} votes`}
+        >
+          <span aria-hidden="true">▼</span>
+          <span>{downvotes}</span>
+        </button>
+      </div>
+
+      {error && (
+        <p className="text-xs text-danger" role="alert">{error}</p>
+      )}
+    </div>
+  )
+}

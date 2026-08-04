@@ -1,0 +1,115 @@
+{
+  "common": {
+    "app_name": "Peta Koperasi Merah Putih",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "retry": "Coba lagi",
+    "close": "Tutup",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "back": "Kembali",
+    "required": "wajib diisi",
+    "optional": "opsional",
+    "see_detail": "Lihat Detail",
+    "language": "Bahasa"
+  },
+  "status": {
+    "pending": "Menunggu Verifikasi",
+    "approved": "Terverifikasi",
+    "flagged": "Ditandai",
+    "removed": "Dihapus"
+  },
+  "nav": {
+    "home": "Peta",
+    "submit": "Tambah Koperasi",
+    "pending": "Verifikasi",
+    "github": "GitHub"
+  },
+  "home": {
+    "title": "Peta Koperasi Desa Merah Putih",
+    "subtitle": "Temukan koperasi di sekitar Anda",
+    "total_cooperatives": "koperasi terdata",
+    "search_placeholder": "Cari koperasi atau wilayah...",
+    "zoom_in_prompt": "Perbesar peta untuk melihat koperasi di area ini",
+    "empty_state_title": "Belum ada koperasi di area ini",
+    "empty_state_body": "Jadilah yang pertama menambahkan koperasi di wilayah ini.",
+    "empty_state_cta": "Tambah Koperasi"
+  },
+  "submit": {
+    "title": "Tambah Koperasi",
+    "subtitle": "Data yang Anda kirim akan ditinjau oleh komunitas sebelum ditampilkan di peta.",
+    "field_name": "Nama Koperasi",
+    "field_name_hint": "Nama lengkap koperasi sesuai akta atau papan nama",
+    "field_address": "Alamat",
+    "field_address_hint": "Alamat jalan atau lokasi terdekat",
+    "field_kelurahan": "Kelurahan / Desa",
+    "field_kecamatan": "Kecamatan",
+    "field_kabupaten": "Kabupaten / Kota",
+    "field_provinsi": "Provinsi",
+    "field_phone": "Nomor Telepon",
+    "field_phone_hint": "Nomor telepon yang bisa dihubungi",
+    "field_email": "Email",
+    "field_photo": "Foto Koperasi",
+    "field_photo_hint": "Foto gedung atau kegiatan koperasi. Maksimal 5MB (JPG, PNG, WebP).",
+    "field_location": "Lokasi di Peta",
+    "field_location_hint": "Klik pada peta untuk menentukan lokasi koperasi",
+    "field_location_selected": "Lokasi sudah ditentukan",
+    "submit_button": "Kirim Data",
+    "submitting": "Mengirim...",
+    "success_title": "Terima kasih!",
+    "success_body": "Data koperasi Anda sudah diterima dan sedang menunggu verifikasi dari komunitas.",
+    "error_generic": "Gagal mengirim data. Silakan coba lagi.",
+    "error_rate_limit": "Terlalu banyak pengiriman. Silakan tunggu beberapa saat.",
+    "validation_name_required": "Nama koperasi harus diisi",
+    "validation_name_too_long": "Nama koperasi maksimal 200 karakter",
+    "validation_address_required": "Alamat harus diisi",
+    "validation_kabupaten_required": "Kabupaten/Kota harus diisi",
+    "validation_provinsi_required": "Provinsi harus diisi",
+    "validation_location_required": "Lokasi di peta harus ditentukan",
+    "validation_bounds": "Lokasi harus berada di wilayah Indonesia"
+  },
+  "pending": {
+    "title": "Verifikasi Koperasi",
+    "subtitle": "Bantu komunitas memverifikasi data koperasi baru. Data yang mendapat 3 suara setuju akan otomatis tampil di peta.",
+    "empty_title": "Semua data sudah diverifikasi",
+    "empty_body": "Tidak ada koperasi yang menunggu verifikasi saat ini. Terima kasih atas kontribusi komunitas!",
+    "votes_needed": "suara lagi untuk diverifikasi",
+    "submitted_at": "Dikirim",
+    "total_pending": "menunggu verifikasi"
+  },
+  "vote": {
+    "upvote": "Setuju",
+    "downvote": "Tidak Setuju",
+    "already_voted": "Anda sudah memilih",
+    "vote_recorded": "Suara tercatat",
+    "error_generic": "Gagal mencatat suara"
+  },
+  "detail": {
+    "title": "Detail Koperasi",
+    "address": "Alamat",
+    "contact": "Kontak",
+    "phone": "Telepon",
+    "email": "Email",
+    "region": "Wilayah",
+    "province": "Provinsi",
+    "kabupaten": "Kabupaten/Kota",
+    "kecamatan": "Kecamatan",
+    "kelurahan": "Kelurahan/Desa",
+    "submitted": "Ditambahkan",
+    "photo_alt": "Foto koperasi",
+    "no_photo": "Belum ada foto",
+    "votes": "Verifikasi komunitas",
+    "not_found": "Koperasi tidak ditemukan"
+  },
+  "filter": {
+    "all_provinces": "Semua Provinsi",
+    "all_kabupaten": "Semua Kabupaten/Kota",
+    "filter_by_region": "Filter Wilayah",
+    "clear": "Hapus Filter"
+  },
+  "footer": {
+    "license": "MIT License",
+    "contribute": "Kontribusi di GitHub",
+    "about": "Tentang proyek ini"
+  }
+}
