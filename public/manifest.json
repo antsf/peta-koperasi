@@ -1,0 +1,16 @@
+{
+  "name": "Peta Koperasi Desa Merah Putih",
+  "short_name": "Koperasi Map",
+  "description": "Peta terbuka koperasi desa di seluruh Indonesia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF9",
+  "theme_color": "#DC2626",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

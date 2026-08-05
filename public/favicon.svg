@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="pinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444"/>
+      <stop offset="100%" style="stop-color:#DC2626"/>
+    </linearGradient>
+  </defs>
+  <!-- Pin shape -->
+  <path d="M16 0C7.163 0 0 7.163 0 16c0 12 16 16 16 16s16-4 16-16C32 7.163 24.837 0 16 0z" fill="url(#pinGradient)"/>
+  <!-- White circle (Putih) -->
+  <circle cx="16" cy="14" r="7" fill="white"/>
+  <!-- Small red dot in center -->
+  <circle cx="16" cy="14" r="3" fill="#DC2626"/>
+</svg>

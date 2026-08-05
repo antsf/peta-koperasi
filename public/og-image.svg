@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF2F2"/>
+      <stop offset="100%" style="stop-color:#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="pin" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444"/>
+      <stop offset="100%" style="stop-color:#DC2626"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Decorative dots pattern -->
+  <g opacity="0.1">
+    <circle cx="100" cy="100" r="4" fill="#DC2626"/>
+    <circle cx="140" cy="100" r="4" fill="#DC2626"/>
+    <circle cx="180" cy="100" r="4" fill="#DC2626"/>
+    <circle cx="100" cy="140" r="4" fill="#DC2626"/>
+    <circle cx="140" cy="140" r="4" fill="#DC2626"/>
+    <circle cx="180" cy="140" r="4" fill="#DC2626"/>
+  </g>
+  
+  <!-- Large pin icon -->
+  <g transform="translate(850, 180)">
+    <path d="M100 0C44.77 0 0 44.77 0 100c0 75 100 125 100 125s100-50 100-125C200 44.77 155.23 0 100 0z" fill="url(#pin)"/>
+    <circle cx="100" cy="90" r="45" fill="white"/>
+    <circle cx="100" cy="90" r="20" fill="#DC2626"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="80" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#1C1917">
+    Peta Koperasi
+  </text>
+  <text x="80" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#DC2626">
+    Desa Merah Putih
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="80" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#57534E">
+    Peta crowdsource koperasi desa di seluruh Indonesia
+  </text>
+  
+  <!-- Tagline -->
+  <text x="80" y="480" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#0B6E4F" font-weight="500">
+    Gratis • Open Source • Tanpa Login
+  </text>
+  
+  <!-- Bottom accent line -->
+  <rect x="80" y="520" width="200" height="4" rx="2" fill="#DC2626"/>
+</svg>
