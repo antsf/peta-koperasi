@@ -70,7 +70,7 @@ export default async function PendingPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
                       <StatusBadge status={point.status} />
-                      <span className="text-xs text-text-disabled">
+                      <span className="text-sm text-text-disabled">
                         {point.upvotes > 0 && `${3 - point.upvotes} ${t('pending.votes_needed')}`}
                       </span>
                     </div>
@@ -94,7 +94,7 @@ export default async function PendingPage() {
                     />
                     <Link
                       href={`/point/${point.id}`}
-                      className="text-xs text-primary hover:text-primary-hover transition-colors duration-120"
+                      className="text-sm text-primary hover:text-primary-hover transition-colors duration-120"
                     >
                       {t('common.see_detail')} →
                     </Link>

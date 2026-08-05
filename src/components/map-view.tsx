@@ -166,14 +166,14 @@ export function MapView({
       />
 
       {loading && (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] bg-surface px-3 py-1.5 rounded-full shadow-popup text-xs text-text-secondary flex items-center gap-2">
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] bg-surface px-3 py-1.5 rounded-full shadow-popup text-sm text-text-secondary flex items-center gap-2">
           <span className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" aria-hidden="true" />
           {t('common.loading')}
         </div>
       )}
 
       {limited && !loading && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[1000] bg-surface/95 px-4 py-2 rounded-full shadow-popup text-xs text-text-secondary">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[1000] bg-surface/95 px-4 py-2 rounded-full shadow-popup text-sm text-text-secondary">
           {t('home.zoom_in_prompt')}
         </div>
       )}

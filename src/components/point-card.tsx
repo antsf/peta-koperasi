@@ -20,9 +20,9 @@ export async function PointCard({ point, locale = 'id', showVotes = false }: Poi
       <div className="flex items-start justify-between gap-3 mb-3">
         <StatusBadge status={point.status} locale={locale} />
         {showVotes && (
-          <div className="flex items-center gap-3 text-xs text-text-secondary">
+          <div className="flex items-center gap-3 text-sm text-text-secondary">
             <span className="flex items-center gap-1">
-              <span className="text-green-600" aria-hidden="true">▲</span>
+              <span className="text-status-approved-text" aria-hidden="true">▲</span>
               <span aria-label={`${point.upvotes} upvotes`}>{point.upvotes}</span>
             </span>
             <span className="flex items-center gap-1">

@@ -47,7 +47,7 @@ export function StatsCounter() {
   return (
     <span
       ref={ref}
-      className="hidden md:inline-flex items-center gap-1 text-xs text-text-secondary bg-surface-raised px-2 py-1 rounded-full"
+      className="inline-flex items-center gap-1.5 text-sm text-text-secondary bg-surface-raised px-2.5 py-1 rounded-full"
     >
       <span className="font-mono font-medium text-primary">{displayCount.toLocaleString('id-ID')}</span>
       <span>{t('home.total_cooperatives')}</span>

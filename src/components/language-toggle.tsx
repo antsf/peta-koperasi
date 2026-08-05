@@ -9,7 +9,7 @@ export function LanguageToggle() {
     <div className="flex items-center gap-0.5 bg-surface-raised rounded-lg p-0.5">
       <button
         onClick={() => setLocale('id')}
-        className={`min-h-11 min-w-11 px-2 py-1 text-xs font-medium rounded-md transition-all duration-120 ${
+        className={`min-h-11 min-w-11 px-2 py-1 text-sm font-medium rounded-md transition-all duration-120 ${
           locale === 'id'
             ? 'bg-surface text-primary shadow-card'
             : 'text-text-secondary hover:text-text-primary'
@@ -21,7 +21,7 @@ export function LanguageToggle() {
       </button>
       <button
         onClick={() => setLocale('en')}
-        className={`min-h-11 min-w-11 px-2 py-1 text-xs font-medium rounded-md transition-all duration-120 ${
+        className={`min-h-11 min-w-11 px-2 py-1 text-sm font-medium rounded-md transition-all duration-120 ${
           locale === 'en'
             ? 'bg-surface text-primary shadow-card'
             : 'text-text-secondary hover:text-text-primary'

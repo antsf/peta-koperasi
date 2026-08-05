@@ -305,9 +305,9 @@ export function SubmitForm() {
       {/* Name — first field */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-1">
-          Nama Koperasi <span className="text-danger text-xs">(wajib)</span>
+          Nama Koperasi <span className="text-primary text-xs">(wajib)</span>
         </label>
-        <p className="text-xs text-text-secondary mb-1.5">Nama lengkap sesuai akta atau papan nama</p>
+        <p className="text-sm text-text-secondary mb-1.5">Nama lengkap sesuai akta atau papan nama</p>
         <input
           id="name" name="name" type="text" required maxLength={200} autoComplete="off"
           className={inputClass}
@@ -318,9 +318,9 @@ export function SubmitForm() {
       {/* Map pin picker */}
       <div>
         <label className="block text-sm font-medium text-text-primary mb-1">
-          Lokasi di Peta <span className="text-danger text-xs">(wajib)</span>
+          Lokasi di Peta <span className="text-primary text-xs">(wajib)</span>
         </label>
-        <p className="text-xs text-text-secondary mb-2">Klik pada peta, gunakan lokasi saya, atau isi koordinat manual</p>
+        <p className="text-sm text-text-secondary mb-2">Klik pada peta, gunakan lokasi saya, atau isi koordinat manual</p>
         <div className="relative">
           <div
             ref={mapContainerRef}
@@ -347,7 +347,7 @@ export function SubmitForm() {
           </button>
         </div>
         {geoError && (
-          <p className="mt-1.5 text-xs text-danger flex items-center gap-1.5">
+          <p className="mt-1.5 text-sm text-danger flex items-center gap-1.5">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
@@ -360,7 +360,7 @@ export function SubmitForm() {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="latitude" className="block text-sm font-medium text-text-primary mb-1">
-            Latitude <span className="text-danger text-xs">(wajib)</span>
+            Latitude <span className="text-primary text-xs">(wajib)</span>
           </label>
           <input
             id="latitude"
@@ -376,7 +376,7 @@ export function SubmitForm() {
         </div>
         <div>
           <label htmlFor="longitude" className="block text-sm font-medium text-text-primary mb-1">
-            Longitude <span className="text-danger text-xs">(wajib)</span>
+            Longitude <span className="text-primary text-xs">(wajib)</span>
           </label>
           <input
             id="longitude"
@@ -392,7 +392,7 @@ export function SubmitForm() {
         </div>
       </div>
       {coordError && (
-        <p className="text-xs text-danger flex items-center gap-1.5 -mt-4">
+        <p className="text-sm text-danger flex items-center gap-1.5 -mt-4">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
@@ -400,7 +400,7 @@ export function SubmitForm() {
         </p>
       )}
       {pin && !coordError && (
-        <p className="text-xs text-status-approved-text flex items-center gap-1.5 -mt-4">
+        <p className="text-sm text-status-approved-text flex items-center gap-1.5 -mt-4">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12" />
           </svg>
@@ -411,7 +411,7 @@ export function SubmitForm() {
       {/* Address */}
       <div>
         <label htmlFor="address" className="block text-sm font-medium text-text-primary mb-1">
-          Alamat <span className="text-danger text-xs">(wajib)</span>
+          Alamat <span className="text-primary text-xs">(wajib)</span>
         </label>
         <input
           ref={addressRef}
@@ -433,13 +433,13 @@ export function SubmitForm() {
         </div>
         <div>
           <label htmlFor="kabupaten" className="block text-sm font-medium text-text-primary mb-1">
-            Kabupaten / Kota <span className="text-danger text-xs">(wajib)</span>
+            Kabupaten / Kota <span className="text-primary text-xs">(wajib)</span>
           </label>
           <input ref={kabupatenRef} id="kabupaten" name="kabupaten" type="text" required className={inputClass} />
         </div>
         <div>
           <label htmlFor="provinsi" className="block text-sm font-medium text-text-primary mb-1">
-            Provinsi <span className="text-danger text-xs">(wajib)</span>
+            Provinsi <span className="text-primary text-xs">(wajib)</span>
           </label>
           <input ref={provinsiRef} id="provinsi" name="provinsi" type="text" required className={inputClass} />
         </div>
@@ -469,7 +469,7 @@ export function SubmitForm() {
         <label className="block text-sm font-medium text-text-primary mb-1">
           Foto Koperasi
         </label>
-        <p className="text-xs text-text-secondary mb-1.5">
+        <p className="text-sm text-text-secondary mb-1.5">
           Foto gedung atau kegiatan koperasi. Maks. 5MB (JPG, PNG, WebP).
         </p>
         <div
@@ -501,7 +501,7 @@ export function SubmitForm() {
             <button
               type="button"
               onClick={() => document.getElementById('photo-gallery')?.click()}
-              className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-120"
+              className="px-3 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-120"
             >
               <span className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -513,7 +513,7 @@ export function SubmitForm() {
             <button
               type="button"
               onClick={() => document.getElementById('photo-camera')?.click()}
-              className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-120"
+              className="px-3 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-120"
             >
               <span className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -523,7 +523,7 @@ export function SubmitForm() {
               </span>
             </button>
           </div>
-          <span className="text-xs text-text-disabled">JPG, PNG, WebP - Maks 5MB</span>
+          <span className="text-sm text-text-disabled">JPG, PNG, WebP - Maks 5MB</span>
           {/* Gallery input */}
           <input
             id="photo-gallery"
@@ -582,7 +582,7 @@ export function SubmitForm() {
                 if (galleryInput) { galleryInput.value = '' }
                 if (cameraInput) { cameraInput.value = '' }
               }}
-              className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors duration-120"
+              className="absolute top-2 right-2 w-8 h-8 bg-danger text-white rounded-full flex items-center justify-center shadow-lg hover:bg-danger/90 transition-colors duration-120"
               aria-label="Hapus foto"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -595,7 +595,7 @@ export function SubmitForm() {
 
       {error && (
         <div
-          className="submit-error bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-danger"
+          className="submit-error bg-danger/5 border border-danger/30 rounded-lg px-4 py-3 text-sm text-danger"
           role="alert"
         >
           {error}

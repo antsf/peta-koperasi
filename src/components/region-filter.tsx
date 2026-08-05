@@ -86,7 +86,7 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
       )}
 
       {error && (
-        <p className="text-xs text-danger">{error}</p>
+        <p className="text-sm text-danger">{error}</p>
       )}
     </div>
   )

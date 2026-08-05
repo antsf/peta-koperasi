@@ -83,7 +83,7 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status,
           disabled={!canVote}
           className={`${baseBtn} ${
             voted && upvotes > initialUpvotes
-              ? 'bg-status-approved-bg border-status-approved-border text-status-approved-text'
+              ? 'bg-primary border-primary text-white'
               : canVote
               ? 'border-border text-text-secondary hover:border-primary hover:text-primary hover:bg-surface-raised'
               : 'border-border text-text-disabled cursor-not-allowed opacity-60 active:scale-100'
@@ -102,9 +102,9 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status,
           disabled={!canVote}
           className={`${baseBtn} ${
             voted && downvotes > initialDownvotes
-              ? 'bg-red-50 border-red-300 text-red-700'
+              ? 'bg-danger border-danger text-white'
               : canVote
-              ? 'border-border text-text-secondary hover:border-danger hover:text-danger hover:bg-red-50'
+              ? 'border-border text-text-secondary hover:border-danger hover:text-danger hover:bg-surface-raised'
               : 'border-border text-text-disabled cursor-not-allowed opacity-60 active:scale-100'
           }`}
           aria-label={`Tidak setuju — ${downvotes} suara`}
@@ -118,7 +118,7 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status,
       </div>
 
       {error && (
-        <p className="text-xs text-danger" role="alert">{error}</p>
+        <p className="text-sm text-danger" role="alert">{error}</p>
       )}
     </div>
   )

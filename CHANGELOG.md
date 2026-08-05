@@ -28,6 +28,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Map not rendering: height chain fix — changed from min-h-[60vh] to min-h-0, Leaflet container uses absolute positioning
 - Region filter chips broken on mobile: selects now stack vertically on mobile, inline on desktop
 - Toolbar layout adapts to stacked filter on mobile
+- Design-system violations: hardcoded colors → tokens, text-xs → text-sm on body content, required markers → primary, status colors restricted to badges, glassmorphism removed from bottom nav, bottom-nav labels below minimum size
 
 ### Changed
 - Touch targets diperbesar ke minimum 44px (min-h-11/min-w-11) untuk semua tombol interaktif

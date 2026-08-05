@@ -51,7 +51,7 @@ export default function HomePage() {
 
       {/* Tagline — mobile only, below map */}
       <div className="sm:hidden px-4 py-3 bg-surface border-t border-border">
-        <p className="text-xs text-text-secondary text-center">
+        <p className="text-sm text-text-secondary text-center">
           {t('home.subtitle')}
         </p>
       </div>

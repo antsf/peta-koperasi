@@ -1,17 +1,17 @@
 import type { PointStatus } from '@/types'
 
 const STATUS_STYLES: Record<PointStatus, string> = {
-  pending:  'bg-yellow-100 text-yellow-800 border-yellow-300',
-  approved: 'bg-green-100  text-green-800  border-green-300',
-  flagged:  'bg-orange-100 text-orange-800 border-orange-300',
-  removed:  'bg-stone-100  text-stone-600  border-stone-300',
+  pending:  'bg-status-pending-bg text-status-pending-text border-status-pending-border',
+  approved: 'bg-status-approved-bg text-status-approved-text border-status-approved-border',
+  flagged:  'bg-status-flagged-bg text-status-flagged-text border-status-flagged-border',
+  removed:  'bg-status-removed-bg text-status-removed-text border-status-removed-border',
 }
 
 const STATUS_DOT: Record<PointStatus, string> = {
-  pending:  'bg-yellow-500',
-  approved: 'bg-green-600',
-  flagged:  'bg-orange-500',
-  removed:  'bg-stone-400',
+  pending:  'bg-status-pending-text',
+  approved: 'bg-status-approved-text',
+  flagged:  'bg-status-flagged-text',
+  removed:  'bg-status-removed-text',
 }
 
 const STATUS_LABELS: Record<PointStatus, { id: string; en: string }> = {

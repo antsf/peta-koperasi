@@ -54,7 +54,7 @@ export function MobileBottomNav() {
   }
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-lg border-t border-border safe-area-bottom">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-border safe-area-bottom">
       <div className="flex items-center justify-around h-16 px-2">
         {NAV_ITEMS.map(item => {
           const active = isActive(item.href)
@@ -73,7 +73,7 @@ export function MobileBottomNav() {
               }`}>
                 <NavIcon icon={item.icon} isActive={active} />
               </div>
-              <span className={`text-[10px] font-medium ${active ? 'text-primary' : 'text-text-secondary'}`}>
+              <span className={`text-xs font-medium ${active ? 'text-primary' : 'text-text-secondary'}`}>
                 {item.label}
               </span>
             </Link>

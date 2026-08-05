@@ -528,6 +528,25 @@ Added `w-full sm:w-auto` to select elements. Updated toolbar in `page.tsx` to `f
 - Edited: `src/components/region-filter.tsx`
 - Edited: `src/app/page.tsx`
 
+### 11.4 Design-system audit & fixes
+
+**Trigger:** Design review pass using the `design-director` and `design-system-review` skills. The `design-system-review` skill references an outdated palette (slate/red-600); the actual system is defined by `design-director` tokens in `globals.css` (`@theme`), which is authoritative.
+
+**Findings fixed:**
+
+1. **Hardcoded colors → tokens.** `status-badge.tsx` used `bg-yellow-100/bg-green-600/bg-stone-400` instead of `--color-status-*` tokens. `point-card.tsx` and `point/[id]/page.tsx` used `text-green-600`. `submit-form.tsx` used `bg-red-500 hover:bg-red-600` for the photo-remove button and `bg-red-50 border-red-200` for the error box.
+2. **`text-xs` on body content → `text-sm`.** Form hints, errors, `(wajib)` markers' sibling text, detail-page `dt` labels, vote error, stat counter, home tagline, map overlay pills, and vote counts. `text-xs` is now reserved for badges, captions/attribution, and inline label annotations only (per design-director: minimum readable size for content is 0.875rem).
+3. **Required-field markers in red → primary.** Design-director: required marker is an asterisk in primary color, not red.
+4. **Vote button fills.** Status colors are badge-only; upvote fill is `bg-primary text-white`, downvote fill is `bg-danger text-white`.
+5. **Glassmorphism removed.** `mobile-bottom-nav.tsx` dropped `backdrop-blur-lg`; design-director forbids blur on any surface. Uses solid `bg-surface`.
+6. **Micro-label below minimum.** Bottom-nav labels `text-[10px]` → `text-xs`.
+7. **Anti-pattern cleanup.** `stats-counter.tsx` removed `hidden md:inline-flex` (mobile-first rule: no hiding elements) — now always visible with fluid sizing.
+
+**Files:**
+- Edited: `src/components/status-badge.tsx`, `point-card.tsx`, `vote-buttons.tsx`, `submit-form.tsx`, `map-view.tsx`, `region-filter.tsx`, `stats-counter.tsx`, `language-toggle.tsx`, `mobile-bottom-nav.tsx`, `footer.tsx` (unchanged — caption text is allowed), `src/app/page.tsx`, `src/app/pending/page.tsx`, `src/app/point/[id]/page.tsx`
+
+**Verification:** `npx tsc --noEmit`, `npm run build`, `npm test` (53 tests) all pass.
+
 ---
 
 ## Appendix A: Indonesia Bounding Box

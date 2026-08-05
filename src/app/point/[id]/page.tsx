@@ -73,37 +73,37 @@ export default async function PointDetailPage({ params }: Props) {
 
         <dl className="space-y-3">
           <div>
-            <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Alamat</dt>
+            <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Alamat</dt>
             <dd className="text-sm text-text-primary mt-0.5">{point.address}</dd>
           </div>
 
           {point.kelurahan && (
             <div>
-              <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Kelurahan / Desa</dt>
+              <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Kelurahan / Desa</dt>
               <dd className="text-sm text-text-primary mt-0.5">{point.kelurahan}</dd>
             </div>
           )}
 
           {point.kecamatan && (
             <div>
-              <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Kecamatan</dt>
+              <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Kecamatan</dt>
               <dd className="text-sm text-text-primary mt-0.5">{point.kecamatan}</dd>
             </div>
           )}
 
           <div>
-            <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Kabupaten / Kota</dt>
+            <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Kabupaten / Kota</dt>
             <dd className="text-sm text-text-primary mt-0.5">{point.kabupaten}</dd>
           </div>
 
           <div>
-            <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Provinsi</dt>
+            <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Provinsi</dt>
             <dd className="text-sm text-text-primary mt-0.5">{point.provinsi}</dd>
           </div>
 
           {point.phone && (
             <div>
-              <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Telepon</dt>
+              <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Telepon</dt>
               <dd className="mt-0.5">
                 <a
                   href={`tel:${point.phone}`}
@@ -117,7 +117,7 @@ export default async function PointDetailPage({ params }: Props) {
 
           {point.email && (
             <div>
-              <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Email</dt>
+              <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Email</dt>
               <dd className="mt-0.5">
                 <a
                   href={`mailto:${point.email}`}
@@ -130,7 +130,7 @@ export default async function PointDetailPage({ params }: Props) {
           )}
 
           <div>
-            <dt className="text-xs font-medium text-text-secondary uppercase tracking-wide">Ditambahkan</dt>
+            <dt className="text-sm font-medium text-text-secondary uppercase tracking-wide">Ditambahkan</dt>
             <dd className="text-sm text-text-primary mt-0.5 font-mono">
               {new Date(point.created_at).toLocaleDateString('id-ID', {
                 day: 'numeric', month: 'long', year: 'numeric',
@@ -161,7 +161,7 @@ export default async function PointDetailPage({ params }: Props) {
         ) : (
           <div className="flex items-center gap-4 text-sm text-text-secondary">
             <span className="flex items-center gap-1">
-              <span className="text-green-600">▲</span>
+              <span className="text-status-approved-text">▲</span>
               {point.upvotes} setuju
             </span>
             <span className="flex items-center gap-1">
