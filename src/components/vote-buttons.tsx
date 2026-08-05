@@ -67,7 +67,7 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status,
   }
 
   const baseBtn = [
-    'min-h-11 min-w-20',
+    'min-h-11',
     'flex items-center justify-center gap-2',
     'px-4 py-2 rounded-button border',
     'text-sm font-medium',

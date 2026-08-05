@@ -41,7 +41,7 @@ export default function HomePage() {
       </div>
 
       {/* Map — fills remaining viewport */}
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 relative">
         <MapView
           status="approved"
           filterProvinsi={filterProvinsi}

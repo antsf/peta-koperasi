@@ -157,7 +157,7 @@ export function MapView({
   }, [filterProvinsi, filterKabupaten, fetchAndRenderPoints])
 
   return (
-    <div className="relative w-full h-full">
+    <div className="absolute inset-0">
       <div
         ref={containerRef}
         className="absolute inset-0 bg-surface-raised"
