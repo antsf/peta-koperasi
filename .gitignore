@@ -18,6 +18,10 @@ supabase/.temp
 tsconfig.tsbuildinfo
 next-env.d.ts
 
+# Dev logs
+dev.log
+*.log
+
 # OS
 .DS_Store
 Thumbs.db

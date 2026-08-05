@@ -148,7 +148,7 @@ Butuh Supabase project sendiri untuk development lokal:
 
 1. Daftar di [supabase.com](https://supabase.com) (gratis)
 2. Buat project baru, region Singapore (`ap-southeast-1`)
-3. SQL Editor → jalankan `supabase/migrations/001_initial_schema.sql`
+3. SQL Editor → jalankan `supabase/migrations/001_initial_schema.sql`, lalu `002_viewport_query.sql`
 4. Storage → buat bucket `koperasi-photos` (public: on)
 5. Project Settings → API → copy URL + keys ke `.env.local`
 
