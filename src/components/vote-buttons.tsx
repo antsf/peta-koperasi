@@ -9,9 +9,10 @@ interface VoteButtonsProps {
   initialUpvotes: number
   initialDownvotes: number
   status: PointStatus
+  onVoteComplete?: () => void
 }
 
-export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status }: VoteButtonsProps) {
+export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status, onVoteComplete }: VoteButtonsProps) {
   const [upvotes, setUpvotes] = useState(initialUpvotes)
   const [downvotes, setDownvotes] = useState(initialDownvotes)
   const [voted, setVoted] = useState(false)
@@ -57,6 +58,7 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status 
       setDownvotes(json.data.downvotes)
       setCurrentStatus(json.data.status)
       setVoted(true)
+      onVoteComplete?.()
     } catch {
       setError('Gagal mencatat suara')
     } finally {
@@ -65,7 +67,7 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status 
   }
 
   const baseBtn = [
-    'min-h-[44px] min-w-[80px]',
+    'min-h-11 min-w-20',
     'flex items-center justify-center gap-2',
     'px-4 py-2 rounded-button border',
     'text-sm font-medium',
@@ -86,11 +88,12 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status 
               ? 'border-border text-text-secondary hover:border-primary hover:text-primary hover:bg-surface-raised'
               : 'border-border text-text-disabled cursor-not-allowed opacity-60 active:scale-100'
           }`}
-          aria-label={`Upvote — ${upvotes} suara`}
+          aria-label={`Setuju — ${upvotes} suara`}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 4l8 16H4z"/>
           </svg>
+          <span>Setuju</span>
           <span>{upvotes}</span>
         </button>
 
@@ -104,11 +107,12 @@ export function VoteButtons({ pointId, initialUpvotes, initialDownvotes, status 
               ? 'border-border text-text-secondary hover:border-danger hover:text-danger hover:bg-red-50'
               : 'border-border text-text-disabled cursor-not-allowed opacity-60 active:scale-100'
           }`}
-          aria-label={`Downvote — ${downvotes} suara`}
+          aria-label={`Tidak setuju — ${downvotes} suara`}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 20l-8-16h16z"/>
           </svg>
+          <span>Tidak</span>
           <span>{downvotes}</span>
         </button>
       </div>

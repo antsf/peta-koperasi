@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getPointsInViewport } from '@/lib/geo'
+import { getTranslation } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 import { VoteButtons } from '@/components/vote-buttons'
@@ -22,19 +23,17 @@ async function getPendingPoints() {
 
 export default async function PendingPage() {
   const { points } = await getPendingPoints()
+  const t = await getTranslation('id')
 
   return (
     <div className="flex-1">
     <div className="max-w-4xl mx-auto w-full px-4 py-8">
       <div className="mb-8">
         <h1 className="font-heading font-semibold text-3xl text-text-primary mb-2">
-          Verifikasi Koperasi
+          {t('pending.title')}
         </h1>
         <p className="text-text-secondary mb-1">
-          Bantu komunitas memverifikasi data koperasi baru.
-        </p>
-        <p className="text-sm text-text-secondary">
-          Data yang mendapat <strong>3 suara setuju</strong> akan otomatis tampil di peta.
+          {t('pending.subtitle')}
         </p>
       </div>
 
@@ -42,23 +41,22 @@ export default async function PendingPage() {
         <div className="text-center py-16">
           <div className="text-5xl mb-4" aria-hidden="true">✓</div>
           <h2 className="font-heading font-semibold text-xl text-text-primary mb-2">
-            Semua data sudah diverifikasi
+            {t('pending.empty_title')}
           </h2>
           <p className="text-text-secondary mb-6">
-            Tidak ada koperasi yang menunggu verifikasi saat ini.
-            Terima kasih atas kontribusi komunitas!
+            {t('pending.empty_body')}
           </p>
           <Link
             href="/submit"
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white font-medium rounded-button hover:bg-primary-hover transition-colors duration-180"
           >
-            Tambah Koperasi Baru
+            {t('nav.submit')}
           </Link>
         </div>
       ) : (
         <>
           <p className="text-sm text-text-secondary mb-6">
-            <span className="font-medium text-text-primary">{points.length}</span> koperasi menunggu verifikasi
+            <span className="font-medium text-text-primary">{points.length}</span> {t('pending.total_pending')}
           </p>
 
           <div className="space-y-4">
@@ -73,7 +71,7 @@ export default async function PendingPage() {
                     <div className="flex items-center gap-2 mb-2">
                       <StatusBadge status={point.status} />
                       <span className="text-xs text-text-disabled">
-                        {point.upvotes > 0 && `${3 - point.upvotes} suara lagi`}
+                        {point.upvotes > 0 && `${3 - point.upvotes} ${t('pending.votes_needed')}`}
                       </span>
                     </div>
                     <h2
@@ -98,7 +96,7 @@ export default async function PendingPage() {
                       href={`/point/${point.id}`}
                       className="text-xs text-primary hover:text-primary-hover transition-colors duration-120"
                     >
-                      Lihat detail →
+                      {t('common.see_detail')} →
                     </Link>
                   </div>
                 </div>

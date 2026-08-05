@@ -117,6 +117,7 @@
   "footer": {
     "license": "MIT License",
     "contribute": "Contribute on GitHub",
-    "about": "About this project"
+    "about": "About this project",
+    "map_data": "Map data from OpenStreetMap"
   }
 }

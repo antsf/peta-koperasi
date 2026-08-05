@@ -282,18 +282,39 @@ export function SubmitForm() {
           Data koperasi sudah diterima dan sedang menunggu verifikasi dari komunitas.
           Dibutuhkan 3 suara setuju untuk ditampilkan di peta.
         </p>
-        <button
-          onClick={() => setSuccess(false)}
-          className="px-6 py-2.5 bg-primary text-white font-medium rounded-button text-sm transition-[background-color,transform] duration-180 ease-out hover:bg-primary-hover active:scale-[0.97]"
-        >
-          Tambah Koperasi Lain
-        </button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onClick={() => setSuccess(false)}
+            className="min-h-11 px-6 py-2.5 bg-primary text-white font-medium rounded-button text-sm transition-[background-color,transform] duration-180 ease-out hover:bg-primary-hover active:scale-[0.97]"
+          >
+            Tambah Koperasi Lain
+          </button>
+          <a
+            href="/"
+            className="min-h-11 px-6 py-2.5 border border-border text-text-secondary font-medium rounded-button text-sm transition-[border-color,color] duration-120 hover:border-primary hover:text-primary flex items-center justify-center"
+          >
+            Kembali ke Peta
+          </a>
+        </div>
       </div>
     )
   }
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 pb-8" noValidate>
+      {/* Name — first field */}
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-1">
+          Nama Koperasi <span className="text-danger text-xs">(wajib)</span>
+        </label>
+        <p className="text-xs text-text-secondary mb-1.5">Nama lengkap sesuai akta atau papan nama</p>
+        <input
+          id="name" name="name" type="text" required maxLength={200} autoComplete="off"
+          className={inputClass}
+          placeholder="cth. Koperasi Simpan Pinjam Maju Bersama"
+        />
+      </div>
+
       {/* Map pin picker */}
       <div>
         <label className="block text-sm font-medium text-text-primary mb-1">
@@ -311,7 +332,7 @@ export function SubmitForm() {
             type="button"
             onClick={handleGeolocation}
             disabled={geoLoading}
-            className="absolute bottom-3 right-3 z-[1000] w-10 h-10 bg-surface border-2 border-border rounded-full shadow-popup flex items-center justify-center transition-[border-color,background-color] duration-120 ease-out hover:border-primary hover:bg-surface-raised disabled:opacity-60 disabled:cursor-not-allowed"
+            className="absolute bottom-3 right-3 z-[1000] min-h-11 min-w-11 bg-surface border-2 border-border rounded-full shadow-popup flex items-center justify-center transition-[border-color,background-color] duration-120 ease-out hover:border-primary hover:bg-surface-raised disabled:opacity-60 disabled:cursor-not-allowed"
             title="Gunakan lokasi saya"
             aria-label="Gunakan lokasi saya"
           >
@@ -386,19 +407,6 @@ export function SubmitForm() {
           Lokasi dipilih: {pin.lat.toFixed(5)}, {pin.lng.toFixed(5)}
         </p>
       )}
-
-      {/* Name */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-1">
-          Nama Koperasi <span className="text-danger text-xs">(wajib)</span>
-        </label>
-        <p className="text-xs text-text-secondary mb-1.5">Nama lengkap sesuai akta atau papan nama</p>
-        <input
-          id="name" name="name" type="text" required maxLength={200} autoComplete="off"
-          className={inputClass}
-          placeholder="cth. Koperasi Simpan Pinjam Maju Bersama"
-        />
-      </div>
 
       {/* Address */}
       <div>

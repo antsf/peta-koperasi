@@ -2,21 +2,24 @@
 
 import { useState, useEffect } from 'react'
 import type { RegionGroup } from '@/types'
+import { useTranslation } from '@/lib/i18n'
 
 interface RegionFilterProps {
   onFilterChange: (provinsi: string, kabupaten: string) => void
 }
 
 export function RegionFilter({ onFilterChange }: RegionFilterProps) {
+  const { t } = useTranslation()
   const [regions, setRegions] = useState<RegionGroup[]>([])
   const [selectedProvinsi, setSelectedProvinsi] = useState('')
   const [selectedKabupaten, setSelectedKabupaten] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/regions')
       .then(r => r.json())
       .then(({ data }) => setRegions(data ?? []))
-      .catch(() => {/* silent — filter just won't populate */})
+      .catch(() => setError('Gagal memuat data wilayah'))
   }, [])
 
   const kabupatenList =
@@ -44,12 +47,12 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
       <select
         value={selectedProvinsi}
         onChange={e => handleProvinsi(e.target.value)}
-        className="h-9 pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
+        className="min-h-11 pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
         aria-label="Filter by province"
         role="combobox"
         aria-expanded="false"
       >
-        <option value="">Semua Provinsi</option>
+        <option value="">{t('filter.all_provinces')}</option>
         {regions.map(r => (
           <option key={r.provinsi} value={r.provinsi}>{r.provinsi}</option>
         ))}
@@ -59,12 +62,12 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
         <select
           value={selectedKabupaten}
           onChange={e => handleKabupaten(e.target.value)}
-          className="h-9 pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
+          className="min-h-11 pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
           aria-label="Filter by kabupaten"
           role="combobox"
           aria-expanded="false"
         >
-          <option value="">Semua Kabupaten</option>
+          <option value="">{t('filter.all_kabupaten')}</option>
           {kabupatenList.map(k => (
             <option key={k} value={k}>{k}</option>
           ))}
@@ -74,12 +77,16 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
       {(selectedProvinsi || selectedKabupaten) && (
         <button
           onClick={clearFilter}
-          className="h-9 px-3 text-sm text-text-secondary hover:text-danger transition-colors duration-120 flex items-center gap-1"
+          className="min-h-11 px-3 text-sm text-text-secondary hover:text-danger transition-colors duration-120 flex items-center gap-1"
           aria-label="Clear region filter"
         >
           <span aria-hidden="true">✕</span>
-          Hapus Filter
+          {t('filter.clear')}
         </button>
+      )}
+
+      {error && (
+        <p className="text-xs text-danger">{error}</p>
       )}
     </div>
   )

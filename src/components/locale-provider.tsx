@@ -10,16 +10,23 @@ import {
   type Messages,
 } from '@/lib/i18n'
 import type { Locale } from '@/types'
+import idMessages from '../../messages/id.json'
+import enMessages from '../../messages/en.json'
+
+const messagesByLocale: Record<Locale, Messages> = {
+  id: idMessages as Messages,
+  en: enMessages as Messages,
+}
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE)
-  const [messages, setMessages] = useState<Messages>({})
+  const [messages, setMessages] = useState<Messages>(messagesByLocale.id)
 
   useEffect(() => {
     const stored = localStorage.getItem(LOCALE_KEY) as Locale | null
     const active: Locale = stored === 'en' ? 'en' : 'id'
     setLocaleState(active)
-    loadMessages(active).then(setMessages)
+    setMessages(messagesByLocale[active])
   }, [])
 
   const setLocale = useCallback((next: Locale) => {

@@ -18,10 +18,17 @@ export type Messages = { [key: string]: string | Messages }
 // In-memory cache so each locale file loads once per session
 const cache: Partial<Record<Locale, Messages>> = {}
 
+import idMessages from '../../messages/id.json'
+import enMessages from '../../messages/en.json'
+
+const messagesByLocale: Record<Locale, Messages> = {
+  id: idMessages as Messages,
+  en: enMessages as Messages,
+}
+
 export async function loadMessages(locale: Locale): Promise<Messages> {
   if (cache[locale]) return cache[locale]!
-  const mod = await import(`../../messages/${locale}.json`)
-  cache[locale] = mod.default as Messages
+  cache[locale] = messagesByLocale[locale] ?? messagesByLocale.id
   return cache[locale]!
 }
 

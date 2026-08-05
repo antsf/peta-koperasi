@@ -30,25 +30,15 @@ export async function getPointsInViewport(
 ): Promise<PointsQueryResult> {
   const supabase = createServerClient()
 
-  let query = supabase
-    .from('koperasi_points')
-    .select('id, name, latitude, longitude, kabupaten, provinsi, status, upvotes, downvotes')
-    .eq('status', status)
-    // PostGIS viewport filter via RPC — ST_Within(location, ST_MakeEnvelope(...))
-    .gte('latitude', viewport.south)
-    .lte('latitude', viewport.north)
-    .gte('longitude', viewport.west)
-    .lte('longitude', viewport.east)
-    .limit(MAX_POINTS_PER_REQUEST + 1) // fetch one extra to detect overflow
-
-  if (filters?.provinsi) {
-    query = query.eq('provinsi', filters.provinsi)
-  }
-  if (filters?.kabupaten) {
-    query = query.eq('kabupaten', filters.kabupaten)
-  }
-
-  const { data, error } = await query
+  const { data, error } = await supabase.rpc('get_points_in_viewport', {
+    p_south: viewport.south,
+    p_north: viewport.north,
+    p_west: viewport.west,
+    p_east: viewport.east,
+    p_status: status,
+    p_provinsi: filters?.provinsi ?? null,
+    p_kabupaten: filters?.kabupaten ?? null,
+  })
 
   if (error) throw new Error(`getPointsInViewport: ${error.message}`)
 

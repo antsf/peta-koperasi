@@ -117,6 +117,7 @@
   "footer": {
     "license": "MIT License",
     "contribute": "Kontribusi di GitHub",
-    "about": "Tentang proyek ini"
+    "about": "Tentang proyek ini",
+    "map_data": "Peta dari OpenStreetMap"
   }
 }

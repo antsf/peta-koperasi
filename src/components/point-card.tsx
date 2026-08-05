@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { StatusBadge } from './status-badge'
 import type { KoperasiPoint } from '@/types'
+import { getTranslation } from '@/lib/i18n'
 
 interface PointCardProps {
   point: KoperasiPoint
@@ -9,7 +10,8 @@ interface PointCardProps {
   showVotes?: boolean
 }
 
-export function PointCard({ point, locale = 'id', showVotes = false }: PointCardProps) {
+export async function PointCard({ point, locale = 'id', showVotes = false }: PointCardProps) {
+  const t = await getTranslation(locale)
   return (
     <article
       className="bg-surface border border-border rounded-card p-6 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-180 ease-out-custom"
@@ -58,7 +60,7 @@ export function PointCard({ point, locale = 'id', showVotes = false }: PointCard
       {!point.photo_url && (
         <div className="w-full aspect-video rounded-lg mb-4 bg-surface-raised flex items-center justify-center">
           <span className="text-text-disabled text-sm" aria-hidden="true">
-            {point.status === 'approved' ? 'Belum ada foto' : '—'}
+            {point.status === 'approved' ? t('detail.no_photo') : '—'}
           </span>
         </div>
       )}
@@ -87,7 +89,7 @@ export function PointCard({ point, locale = 'id', showVotes = false }: PointCard
           href={`/point/${point.id}`}
           className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover transition-colors duration-120"
         >
-          Lihat Detail
+          {t('common.see_detail')}
           <span aria-hidden="true">→</span>
         </Link>
       </div>

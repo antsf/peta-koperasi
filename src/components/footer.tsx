@@ -32,7 +32,7 @@ export function Footer() {
             {t('nav.github')}
           </a>
           <span aria-hidden="true">·</span>
-          <span>Peta dari OpenStreetMap</span>
+          <span>{t('footer.map_data')}</span>
         </div>
       </div>
     </footer>
