@@ -28,7 +28,7 @@ Indonesia has 120,000+ cooperatives, most invisible online. No unified, public, 
 |----|-------|
 | C1 | As a contributor, I can submit a new cooperative by filling a form with name, location, contact, and optional photo with preview. |
 | C2 | As a contributor, I see a confirmation that my submission is pending community review. |
-| C3 | As a contributor, I can place the pin by clicking on the map. |
+| C3 | As a contributor, I can place the pin by clicking on the map or dragging the marker. |
 | C4 | As a contributor, I can enter latitude and longitude manually in dedicated input fields. |
 | C5 | As a contributor, I can use the "Use my location" button to auto-fill coordinates from my device's GPS. |
 | C6 | As a contributor, I see inline validation errors if coordinates are outside Indonesia bounds. |
@@ -338,7 +338,7 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 | `MapView` | Leaflet map, loads pins via viewport bounding box, plain markers (no clustering in v1) |
 | `MapPin` | Individual pin with popup (name, kabupaten, status indicator) |
 | `PointCard` | Card showing cooperative details (used in detail page and pending list) |
-| `SubmitForm` | Form with fields matching POST /api/points, includes map pin picker, manual lat/lng input, geolocation button, and reverse geocoding auto-fill |
+| `SubmitForm` | Form with fields matching POST /api/points, includes draggable map pin, manual lat/lng input, geolocation button, reverse geocoding auto-fill, and photo drag-and-drop zone |
 | `VoteButtons` | Upvote/downvote buttons with counts, disabled after voting |
 | `RegionFilter` | Province + kabupaten cascading dropdowns |
 | `SearchBar` | Text search + region filter combined |

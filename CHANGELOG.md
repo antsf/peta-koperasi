@@ -12,6 +12,8 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Validasi koordinat inline (client-side) untuk memastikan lokasi di wilayah Indonesia
 - Sinkronisasi otomatis antara klik peta, input manual, dan geolokasi
 - Reverse geocoding (Nominatim/OpenStreetMap) untuk auto-fill alamat, kelurahan, kecamatan, kabupaten, dan provinsi dari koordinat
+- Pin draggable di peta submit — bisa di-drag atau klik untuk pilih lokasi
+- Photo picker diganti jadi dropzone — bisa drag & drop atau klik untuk memilih
 
 ## [0.1.0] — 2026-08-04
 

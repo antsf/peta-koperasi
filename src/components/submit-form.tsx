@@ -44,6 +44,7 @@ export function SubmitForm() {
   const [error, setError] = useState<string | null>(null)
   const [photoName, setPhotoName] = useState<string | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [dragOver, setDragOver] = useState(false)
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<L.Map | null>(null)
   const pinMarkerRef = useRef<L.Marker | null>(null)
@@ -68,14 +69,37 @@ export function SubmitForm() {
     if (pinMarkerRef.current) {
       pinMarkerRef.current.setLatLng([lat, lng])
     } else {
-      pinMarkerRef.current = L.marker([lat, lng], {
+      const marker = L.marker([lat, lng], {
         icon: L.divIcon({
           className: '',
-          html: `<div style="width:24px;height:32px;background:#0B6E4F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(11,110,79,0.35)" />`,
+          html: `<div style="width:24px;height:32px;background:#0B6E4F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(11,110,79,0.35);cursor:grab" />`,
           iconSize: [24, 32],
           iconAnchor: [12, 32],
         }),
-      }).addTo(map)
+        draggable: true,
+      })
+
+      marker.on('dragend', () => {
+        const pos = marker.getLatLng()
+        setPin({ lat: pos.lat, lng: pos.lng })
+        setLatInput(pos.lat.toFixed(5))
+        setLngInput(pos.lng.toFixed(5))
+        setCoordError(null)
+        setGeocoding(true)
+        reverseGeocode(pos.lat, pos.lng).then(result => {
+          if (result) {
+            if (addressRef.current) addressRef.current.value = result.address
+            if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan
+            if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan
+            if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten
+            if (provinsiRef.current) provinsiRef.current.value = result.provinsi
+          }
+          setGeocoding(false)
+        })
+      })
+
+      marker.addTo(map)
+      pinMarkerRef.current = marker
     }
   }, [])
 
@@ -432,7 +456,7 @@ export function SubmitForm() {
         </div>
       </div>
 
-      {/* Photo */}
+      {/* Photo dropzone */}
       <div>
         <label htmlFor="photo" className="block text-sm font-medium text-text-primary mb-1">
           Foto Koperasi
@@ -440,33 +464,49 @@ export function SubmitForm() {
         <p className="text-xs text-text-secondary mb-1.5">
           Foto gedung atau kegiatan koperasi. Maks. 5MB (JPG, PNG, WebP).
         </p>
-        <label
-          htmlFor="photo"
-          className="flex items-center gap-3 h-11 px-3 border-2 border-dashed border-border rounded-lg cursor-pointer bg-surface transition-[border-color,background-color] duration-120 ease-out hover:border-primary hover:bg-surface-raised"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-text-disabled shrink-0" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-          </svg>
-          <span className="text-sm text-text-secondary truncate">
-            {photoName ?? 'Pilih foto...'}
-          </span>
-        </label>
-        <input
-          id="photo" name="photo" type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="sr-only"
-          onChange={e => {
-            const file = e.target.files?.[0]
-            if (file) {
+        <div
+          onDragOver={e => { e.preventDefault(); setDragOver(true) }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={e => {
+            e.preventDefault()
+            setDragOver(false)
+            const file = e.dataTransfer.files?.[0]
+            if (file && file.type.startsWith('image/')) {
               setPhotoName(file.name)
               if (photoPreview) { URL.revokeObjectURL(photoPreview) }
               setPhotoPreview(URL.createObjectURL(file))
-            } else {
-              setPhotoName(null)
-              setPhotoPreview(null)
             }
           }}
-        />
+          className={`relative flex flex-col items-center justify-center gap-2 h-36 px-4 border-2 border-dashed rounded-xl cursor-pointer bg-surface transition-[border-color,background-color] duration-120 ease-out ${
+            dragOver
+              ? 'border-primary bg-primary/5'
+              : 'border-border hover:border-primary hover:bg-surface-raised'
+          }`}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-text-disabled" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span className="text-sm text-text-secondary text-center">
+            {dragOver ? 'Lepaskan foto di sini...' : photoName ?? 'Seret & lepas foto, atau klik untuk memilih'}
+          </span>
+          <span className="text-xs text-text-disabled">JPG, PNG, WebP - Maks 5MB</span>
+          <input
+            id="photo" name="photo" type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="sr-only"
+            onChange={e => {
+              const file = e.target.files?.[0]
+              if (file) {
+                setPhotoName(file.name)
+                if (photoPreview) { URL.revokeObjectURL(photoPreview) }
+                setPhotoPreview(URL.createObjectURL(file))
+              } else {
+                setPhotoName(null)
+                setPhotoPreview(null)
+              }
+            }}
+          />
+        </div>
         {photoPreview && (
           <div className="mt-3 relative">
             <img
