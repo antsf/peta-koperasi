@@ -124,7 +124,7 @@ This project uses: Next.js, Supabase client, Leaflet, Tailwind, Zod, Fingerprint
 Every architectural decision must be evaluated from the perspective of:
 
 - A **serious developer** who wants to add a significant feature.
-- A **vibe coder** who wants to fix a typo or add a translation string.
+- A **vibe coder** who wants to fix a typo or improve a UI string.
 - A **non-coder** who wants to improve documentation or file an issue.
 
 Ask: "Does this change make the codebase harder for any of these three to engage with?" If yes, document the tradeoff explicitly.
@@ -202,9 +202,9 @@ Enforce this via Supabase RLS: only the service role key can UPDATE the `status`
 
 Hash IP and fingerprint at the absolute edge — inside the route handler, before the data even touches a Supabase query. The `hash.ts` utility must be called in exactly two places: `POST /api/points` and `POST /api/points/[id]/vote`. No other module should ever handle raw IP or fingerprint strings.
 
-### Pattern: i18n as Data, Not Logic
+### Pattern: Bahasa Indonesia as a Single Source
 
-All i18n logic is in `src/lib/i18n.ts`. Components import the `useTranslation()` hook or `getTranslation()` function and use string keys. Components never contain `if (locale === 'id')` branching. Language switching is localStorage state read at the client component boundary.
+This project is Bahasa Indonesia only. UI strings are hardcoded directly in the components — there is no i18n system, no message files, no locale switching. Write all user-facing text in Indonesian directly in JSX.
 
 ---
 
@@ -251,7 +251,7 @@ The `GET /api/regions` endpoint derives distinct values from existing data. If a
 | Status change outside vote route | `UPDATE koperasi_points SET status = ...` in a component or non-vote handler | Only `vote/route.ts` touches status |
 | Photo URL without status check | Returning `photo_path` when `status != 'approved'` | Explicit null if not approved |
 | Adding a dependency to solve a one-time problem | Installing `lodash` for `_.debounce` | Use native `setTimeout` or inline 5-line debounce |
-| New page route with no i18n strings | Hardcoded English text in a component | All strings via `useTranslation()` |
+| New page with hardcoded English text | English UI string in a component | All user-facing strings in Bahasa Indonesia |
 | Using Supabase Auth for "something small" | "Let's just use Auth for..." | No. Auth is architecturally excluded. |
 
 ---
@@ -286,7 +286,7 @@ After completing an architectural decision, route work to the relevant specialis
 [ ] No paid services or APIs introduced
 [ ] New dependencies: bundle cost justified (< 50kB gzipped)
 [ ] Module boundaries: passable by a contributor in 1 day
-[ ] i18n: all user-facing strings use message keys
+[ ] Language: all user-facing strings hardcoded in Bahasa Indonesia
 [ ] PostGIS queries: viewport-bounded, never full-table-scan
 [ ] Server components used by default; "use client" justified
 [ ] No new global state management

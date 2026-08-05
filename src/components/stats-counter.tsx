@@ -1,10 +1,8 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { useTranslation } from '@/lib/i18n'
 
 export function StatsCounter() {
-  const { t } = useTranslation()
   const [count, setCount] = useState<number | null>(null)
   const [displayCount, setDisplayCount] = useState(0)
   const hasAnimated = useRef(false)
@@ -50,7 +48,7 @@ export function StatsCounter() {
       className="inline-flex items-center gap-1.5 text-sm text-text-secondary bg-surface-raised px-2.5 py-1 rounded-full"
     >
       <span className="font-mono font-medium text-primary">{displayCount.toLocaleString('id-ID')}</span>
-      <span>{t('home.total_cooperatives')}</span>
+      <span>koperasi terdata</span>
     </span>
   )
 }

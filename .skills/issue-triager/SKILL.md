@@ -82,19 +82,19 @@ This is a civic project. Some issues will come from people who have never filed 
 4. If it needs specification before implementation: label `needs-spec`.
 5. If it is a good small enhancement: consider also labeling `good first issue` if appropriate.
 
-### 4. Translation Issue
+### 4. UI Text Issse
 
-**Signal**: Missing or incorrect text in the Indonesian or English translations.
+**Signal**: Incorrect or awkward Indonesian text in the interface.
 
 **Common examples**:
 - "Teks di halaman pending masih dalam Bahasa Inggris" / "The text on the pending page is still in English."
-- "Terjemahan ini kurang tepat" / "This translation is not quite right."
+- "Kalimat ini kurang pas" / "This sentence is not quite right."
 
 **Triage actions**:
-1. Label: `translation`.
+1. Label: `ui-text`.
 2. If the fix is obvious and small, also label `good first issue`.
-3. Verify the issue by checking `messages/id.json` and `messages/en.json`.
-4. Respond with encouragement — translation contributions are often overlooked.
+3. Verify the issue by checking the relevant component in `src/components/*.tsx` (strings are hardcoded there — no i18n system).
+4. Respond with encouragement — copy improvements are often overlooked.
 
 ### 5. Documentation Issue
 
@@ -355,10 +355,10 @@ Run through this for every new issue:
 ## Initial Assessment
 [ ] Read the full issue (including any screenshots or links)
 [ ] Identify the language — respond in the same language (or bilingually)
-[ ] Categorize: bug / data-quality / feature-request / translation / documentation / question / out-of-scope
+[ ] Categorize: bug / data-quality / feature-request / ui-copy / documentation / question / out-of-scope
 
 ## Labeling
-[ ] Apply type label (bug, enhancement, translation, data-quality, documentation, out-of-scope)
+[ ] Apply type label (bug, enhancement, ui-copy, data-quality, documentation, out-of-scope)
 [ ] Apply domain label if applicable (api, ui, map, database)
 [ ] Apply priority if applicable (critical for data integrity or security issues)
 [ ] Apply good-first-issue if the fix is small and self-contained

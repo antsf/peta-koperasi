@@ -16,7 +16,7 @@ This project follows the [Keep a Changelog](https://keepachangelog.com/) format.
 
 - A new version is being tagged or released.
 - A batch of changes has accumulated in the `Unreleased` section and needs to be organized.
-- A PR has been merged that adds a user-visible feature, fixes a bug, changes the API, changes the data model, or adds a new translation.
+- A PR has been merged that adds a user-visible feature, fixes a bug, changes the API, changes the data model, or adds new user-facing copy.
 - A dependency update has user-visible impact (e.g., Leaflet upgrade changes map behavior).
 
 ## When NOT to Invoke
@@ -88,7 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 | Section | Use for | Example |
 |---------|---------|---------|
-| Added | New features, new endpoints, new UI elements, new translations | "Region filter: filter map pins by province and kabupaten" |
+| Added | New features, new endpoints, new UI elements, new user-facing copy | "Region filter: filter map pins by province and kabupaten" |
 | Changed | Modifications to existing features, API response shape changes, behavior changes | "Vote buttons now disable immediately after voting (was delayed)" |
 | Fixed | Bug fixes | "Fixed: pins outside Indonesia bounds were accepted by the form" |
 | Removed | Features or endpoints removed | "Removed: legacy /api/v0/points endpoint" |
@@ -163,7 +163,7 @@ The English line is the primary entry (developers). The Indonesian line is the c
 - New API endpoints or changes to existing endpoint behavior
 - Bug fixes that affected users (broken form, incorrect vote count, map not loading)
 - Data model changes (new column, changed constraint) — framed as impact, not schema
-- New translations (new language support, or significant additions to existing translations)
+- New user-facing copy that changes what users read in the app
 - Significant dependency updates with user-visible impact (Leaflet major version, Next.js major version)
 - Performance improvements users can feel (map loads faster, search responds quicker)
 
@@ -180,9 +180,8 @@ The English line is the primary entry (developers). The Indonesian line is the c
 
 ### Edge cases:
 
-- **i18n string additions for existing features:** Do not log. The feature was already logged when it shipped. Adding the Indonesian translation for existing strings is maintenance.
-- **i18n string additions for NEW features:** Log as part of the feature entry, not separately.
-- **First-time translation of a language:** Log. "Added: Bahasa Indonesia translations for all UI strings" is a feature.
+- **Indonesian copy improvements for existing features:** Do not log. The feature was already logged when it shipped. Rewording an existing string is maintenance.
+- **Indonesian copy additions for NEW features:** Log as part of the feature entry, not separately.
 - **Major dependency upgrade with no user-visible change:** Do not log. If Next.js 15 ships and everything looks the same to users, it is an internal change.
 - **Major dependency upgrade WITH visible change:** Log the visible change, not the upgrade. "Map tiles now load progressively (Leaflet 1.10 upgrade)" not "Upgraded Leaflet from 1.9 to 1.10."
 
@@ -287,8 +286,8 @@ Fix: Only log dependency changes with user-visible impact. "Map loads 2x faster 
   *Filter wilayah: saring titik koperasi berdasarkan provinsi dan kabupaten*
 - Statistics page showing total koperasi count, verified count, and votes cast
   *Halaman statistik menampilkan jumlah total koperasi, jumlah terverifikasi, dan suara yang diberikan*
-- Bahasa Indonesia translations for voting status messages
-  *Terjemahan Bahasa Indonesia untuk pesan status pemungutan suara*
+- Clearer Indonesian wording for voting status messages
+  *Wording Bahasa Indonesia yang lebih jelas untuk pesan status pemungutan suara*
 
 ### Changed
 - **BREAKING:** API: GET /api/points response now includes `status` field in each point object
@@ -345,7 +344,7 @@ Fix: Only log dependency changes with user-visible impact. "Map loads 2x faster 
 | API change logged | `api-doc-generator` to update /docs/api.md and inline JSDoc |
 | Version being tagged | Review full Unreleased section, move to versioned section |
 | Breaking change logged | Verify `api-doc-generator` has updated the affected route docs |
-| New translation logged | Verify both `messages/id.json` and `messages/en.json` are consistent |
+| UI copy changed | Verify the new/edited strings are hardcoded in Bahasa Indonesia |
 
 ---
 

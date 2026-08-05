@@ -461,7 +461,7 @@ TYPOGRAPHY
 [ ] IBM Plex Sans for headings, Inter for body
 [ ] No text-xs for content (only for attribution/caption)
 [ ] Label above every input (no placeholder-only labels)
-[ ] All strings via i18n keys (id.json + en.json)
+[ ] All user-facing strings hardcoded in Bahasa Indonesia
 
 SPACING
 [ ] All spacing values on the 4px grid

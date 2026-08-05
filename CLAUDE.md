@@ -22,7 +22,7 @@ Read `soul.md` for project philosophy. Read `SPEC.md` for full technical specifi
 - **Styling:** Tailwind CSS
 - **Validation:** Zod
 - **Fingerprinting:** FingerprintJS (free/open-source tier)
-- **i18n:** JSON message files in `messages/id.json` and `messages/en.json`
+- **Language:** Bahasa Indonesia only (no i18n system — all UI strings hardcoded in Indonesian)
 
 ---
 
@@ -70,17 +70,6 @@ These are locked. Do not change, bypass, or "temporarily disable" any of these:
 - **Home page (map):** Uses `calc(100vh - 4rem)` height to fill viewport. Map fills remaining space. Footer at viewport bottom.
 - **Other pages:** Content flows naturally. No `overflow-y-auto` on page wrappers. Footer sits below content.
 - **Root layout:** `min-h-full flex flex-col` on body. `flex-1` on main. Footer has `shrink-0`.
-
----
-
-## Bilingual i18n Approach
-
-- Two JSON files: `messages/id.json` (Bahasa Indonesia, default) and `messages/en.json`.
-- Keys are nested by page/component: `{ "home": { "title": "...", "search_placeholder": "..." }, "submit": { ... } }`.
-- Language preference is stored in `localStorage` under key `locale` (value: `"id"` or `"en"`).
-- The `i18n.ts` module exports a `useTranslation()` hook for client components and a `getTranslation(locale)` function for server components.
-- All user-facing strings must come from the message files. Never hardcode Indonesian or English text in components.
-- Cooperative data (names, addresses) is NOT translated — it stays in whatever language the contributor used.
 
 ---
 
@@ -154,8 +143,6 @@ npm test
 | Supabase clients | `src/lib/supabase/` |
 | PostGIS query helpers | `src/lib/geo.ts` |
 | Validation schemas | `src/lib/validation.ts` |
-| i18n strings | `messages/id.json`, `messages/en.json` |
-| i18n utilities | `src/lib/i18n.ts` |
 
 <!-- BEGIN:nextjs-agent-rules -->
 

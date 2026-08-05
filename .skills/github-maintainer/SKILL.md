@@ -69,10 +69,10 @@ Create four issue templates in `.github/ISSUE_TEMPLATE/`:
 - Fields: koperasi name, location/region, what is wrong (wrong location, fake entry, duplicate, wrong name), evidence
 - This template is designed for non-developers. Language is plain, no jargon.
 
-**4. Translation (`translation.yml`)**
-- Title prefix: `[i18n]`
-- Fields: language (id/en), which page or component, current text, suggested text
-- Include a note: "Translation contributions are highly valued. Thank you!"
+**4. UI Copy (`ui-copy.yml`)**
+- Title prefix: `[ui-copy]`
+- Fields: which page or component, current text, suggested text
+- Include a note: "Copy improvements are highly valued. Thank you!"
 
 ### PR Template
 
@@ -95,7 +95,7 @@ Create `.github/pull_request_template.md`:
 
 - [ ] I have read CONTRIBUTING.md
 - [ ] My changes follow the code style in CLAUDE.md
-- [ ] I have added/updated i18n strings in both `messages/id.json` and `messages/en.json` (if applicable)
+- [ ] New user-facing strings are hardcoded in Bahasa Indonesia (no i18n system)
 - [ ] I have added tests for logic changes (if applicable)
 - [ ] I have tested locally with `npm run dev`
 - [ ] This PR has a small, focused scope (one concern per PR)
@@ -123,7 +123,6 @@ Create `.github/labeler.yml` for `actions/labeler`:
 
 | Path pattern | Label |
 |---|---|
-| `messages/**` | `translation` |
 | `src/app/api/**` | `api` |
 | `src/components/**` | `ui` |
 | `supabase/**` | `database` |
@@ -142,7 +141,6 @@ main (deployed to Vercel)
   +-- feature/improve-search-ux     (enhancement)
   +-- fix/vote-dedup-race-condition  (bug fix)
   +-- hotfix/null-island-bypass      (urgent production fix)
-  +-- i18n/add-missing-en-strings   (translation work)
   +-- docs/update-contributing       (documentation)
 ```
 
@@ -152,7 +150,6 @@ main (deployed to Vercel)
 - **Feature branches**: `feature/<description>` — for new functionality or significant enhancements.
 - **Fix branches**: `fix/<description>` — for bug fixes.
 - **Hotfix branches**: `hotfix/<description>` — for urgent production fixes. These get expedited review (same-day merge target).
-- **i18n branches**: `i18n/<description>` — for translation additions or corrections.
 - **Docs branches**: `docs/<description>` — for documentation improvements.
 - **Branch names**: kebab-case, descriptive, no issue numbers in the branch name (link the issue in the PR instead).
 - **Delete branches after merge.** Enable "Automatically delete head branches" in repo settings.
@@ -168,7 +165,7 @@ A PR is ready for review when it meets ALL of these criteria:
 1. **Small scope**: one logical change per PR. A PR that adds a feature AND refactors an unrelated file is two PRs.
 2. **Clear description**: the PR template is filled in, the "what" and "why" are explained.
 3. **Tests for logic changes**: if the PR changes API route logic, validation, or voting behavior, it has tests.
-4. **i18n strings updated**: if the PR adds user-facing text, both `messages/id.json` and `messages/en.json` are updated.
+4. **UI text in Bahasa Indonesia**: if the PR adds user-facing text, it is hardcoded in Bahasa Indonesia (no i18n system).
 5. **CI passes**: lint, type-check, and tests all green.
 6. **No unrelated changes**: no formatting-only diffs, no dependency bumps mixed with feature code.
 
@@ -179,7 +176,7 @@ Request changes when:
 - The PR violates one of the 9 locked architectural rules in CLAUDE.md.
 - The PR is out of scope per SPEC.md section 10.
 - Tests are missing for logic changes.
-- i18n strings are hardcoded instead of using message keys.
+- User-facing strings are in English instead of Bahasa Indonesia.
 - The PR introduces a new dependency without justification.
 - The PR stores raw IP or fingerprint data.
 - The PR loads all map points without viewport filtering.
@@ -197,7 +194,7 @@ Do NOT block a PR for style preferences. If CI passes and the logic is correct, 
 
 ### When to Merge Immediately
 
-- Translation-only PRs (changes only in `messages/id.json` or `messages/en.json`).
+- Indonesian copy fix in a component (changes only to UI strings).
 - Typo fixes in documentation.
 - README improvements.
 - These still require CI to pass, but do not need a deep code review.
@@ -213,7 +210,7 @@ Do NOT block a PR for style preferences. If CI passes and the logic is correct, 
 | `bug` | `#d73a4a` | Something is broken |
 | `enhancement` | `#a2eeef` | New feature or improvement |
 | `good first issue` | `#7057ff` | Good for newcomers |
-| `translation` | `#0075ca` | i18n string additions or fixes |
+| `ui-copy` | `#0075ca` | UI copy additions or fixes |
 | `data-quality` | `#e4e669` | Wrong/fake/duplicate map data |
 | `needs-spec` | `#fbca04` | Requires specification before implementation |
 | `documentation` | `#0075ca` | Documentation improvements |
@@ -256,7 +253,7 @@ Semantic versioning: `vMAJOR.MINOR.PATCH`
 
 - **MAJOR**: breaking changes to the API or data model (unlikely in v1).
 - **MINOR**: new features, new pages, significant enhancements.
-- **PATCH**: bug fixes, translation updates, documentation improvements.
+- **PATCH**: bug fixes, Indonesian copy improvements, documentation improvements.
 
 ### Release Notes Format
 
@@ -269,7 +266,7 @@ Semantic versioning: `vMAJOR.MINOR.PATCH`
 
 ### Fixed
 - Vote button not disabling after voting on mobile Safari (#45)
-- Indonesian translation missing for pending page header (#41)
+- English UI string in pending page header — now hardcoded in Bahasa Indonesia (#41)
 
 ### Improved
 - Map loads 40% faster on initial viewport with optimized PostGIS query (#43)
@@ -346,8 +343,7 @@ A good first issue for this project must be:
 
 | Issue | Why it is good | Files involved |
 |---|---|---|
-| Add missing Indonesian translation for [specific key] | Single file edit, clear before/after | `messages/id.json` |
-| Add missing English translation for [specific key] | Single file edit, clear before/after | `messages/en.json` |
+| Improve an Indonesian UI string in [component] | Single file edit, clear before/after | Component file |
 | Fix typo in README | No code knowledge needed | `README.md` |
 | Add alt text to map marker images | Accessibility improvement, clear scope | Component files |
 | Update CONTRIBUTING.md with [specific section] | Documentation, no code | `CONTRIBUTING.md` |
@@ -366,7 +362,7 @@ A good first issue for this project must be:
 1. When creating a good first issue, write the issue body as a mini-tutorial: explain what the file does, where to find it, what to change, and how to verify the change works.
 2. Include the exact file path(s) involved.
 3. If possible, include a code snippet showing the area to modify.
-4. Add both `good first issue` and the relevant domain label (`translation`, `documentation`, `ui`, etc.).
+4. Add both `good first issue` and the relevant domain label (`ui-copy`, `documentation`, `ui`, etc.).
 
 ---
 
@@ -386,7 +382,7 @@ Run through this checklist for every PR before approving:
 [ ] Not out of scope per SPEC.md section 10
 [ ] No new dependencies without justification
 [ ] No raw IP or fingerprint storage
-[ ] No hardcoded user-facing strings (i18n keys used)
+[ ] No user-facing strings in English (must be Bahasa Indonesia)
 
 ## Code Quality
 [ ] TypeScript strict mode — no `any` without TODO comment
@@ -396,7 +392,7 @@ Run through this checklist for every PR before approving:
 
 ## For UI Changes
 [ ] Responsive on mobile and desktop
-[ ] Both languages tested (id and en)
+[ ] All user-facing strings hardcoded in Bahasa Indonesia (no English text)
 [ ] Accessibility basics (alt text, aria labels, keyboard navigation)
 
 ## For API Changes
@@ -404,10 +400,9 @@ Run through this checklist for every PR before approving:
 [ ] Viewport-bounded PostGIS queries (no full table scans)
 [ ] PII hashed before storage
 
-## For Translation Changes
-[ ] Both id.json and en.json updated
-[ ] Keys are nested correctly under the right component namespace
-[ ] No orphaned keys (keys that exist in one file but not the other)
+## For Language/Copy Changes
+[ ] New user-facing strings are hardcoded in Bahasa Indonesia
+[ ] No English strings left in components or API responses
 ```
 
 ---
@@ -418,7 +413,7 @@ The github-maintainer task is complete when:
 
 1. All repository setup checklist items are configured and verified.
 2. Branch protection rules are active on `main`.
-3. Issue templates exist for all four types (bug, feature, data quality, translation).
+3. Issue templates exist for all four types (bug, feature, data quality, ui-copy).
 4. PR template exists and is auto-populated on new PRs.
 5. CI workflow runs on all PRs and blocks merge on failure.
 6. Auto-labeler is configured and labeling PRs correctly.

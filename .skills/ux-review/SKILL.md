@@ -80,7 +80,7 @@ Review `SubmitForm`:
 
 ### 7. Error message language
 
-- All validation error messages must exist in both `id.json` and `en.json`.
+- All validation error messages are hardcoded in Bahasa Indonesia (no English strings).
 - Error messages must use plain language: "Nama koperasi harus diisi" not "Field required" or "Validation error".
 - Check that error messages appear near the field, not in a toast or alert at the top of the page.
 

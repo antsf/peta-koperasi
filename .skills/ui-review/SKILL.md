@@ -4,7 +4,7 @@ Visual and component-level UI review for the Koperasi Desa Merah Putih Map proje
 
 ## When to use
 
-Run this skill when reviewing any PR or change that touches components, pages, layouts, Tailwind classes, or translation files. Also run proactively before any release milestone.
+Run this skill when reviewing any PR or change that touches components, pages, layouts, Tailwind classes, or UI strings. Also run proactively before any release milestone.
 
 ## Instructions
 
@@ -44,11 +44,10 @@ Only these components should have `"use client"` at the top:
 
 All other components must be server components (no `"use client"` directive). Flag any component that has `"use client"` but is not in the list above. Also flag any component in the list above that is missing `"use client"`.
 
-### 5. i18n completeness
+### 5. Language consistency (Bahasa Indonesia)
 
-- Every user-facing string in JSX must use `useTranslation()` or `getTranslation()` — not hardcoded text.
-- Search all `.tsx` files for string literals inside JSX (between `>` and `<`, or in attributes like `placeholder=`, `aria-label=`, `title=`). Exclude technical strings (CSS classes, HTML tags, component names). Flag any human-readable text not going through i18n.
-- Open `id.json` and `en.json` (or equivalent locale files). Verify every key in one exists in the other. List missing keys.
+- Every user-facing string in JSX must be hardcoded in Bahasa Indonesia — not English, and no i18n hook (the project has no i18n system).
+- Search all `.tsx` files for string literals inside JSX (between `>` and `<`, or in attributes like `placeholder=`, `aria-label=`, `title=`). Exclude technical strings (CSS classes, HTML tags, component names). Flag any human-readable English text or any i18n hook usage.
 
 ### 6. Photo display safety
 
@@ -74,9 +73,9 @@ Review at 375px viewport width:
 
 ### 9. Empty states
 
-- `/pending` with zero pending submissions: must show a friendly message like "No pending submissions" — not a blank page or a spinner that never resolves.
+- `/pending` with zero pending submissions: must show a friendly message like "Belum ada pengajuan" — not a blank page or a spinner that never resolves.
 - Main map `/` with zero approved points: must show a message or prompt, not just an empty map with no explanation.
-- Check that empty states are translated (exist in both `id.json` and `en.json`).
+- Check that empty state messages are hardcoded in Bahasa Indonesia (no English text).
 
 ## Review output format
 
@@ -104,6 +103,6 @@ X passes, Y failures, Z warnings
 The review is complete when:
 - Every section of the checklist has been evaluated with PASS or FAIL
 - Every FAIL has a concrete, actionable fix described
-- No user-facing string is hardcoded outside i18n
+- Every user-facing string is hardcoded in Bahasa Indonesia
 - No client component fetches data without loading + error states
 - The review output table is filled in completely

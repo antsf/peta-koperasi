@@ -326,7 +326,7 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 
 | Route | Description |
 |-------|-------------|
-| `/` | Home — full-screen map with pins, search bar, language toggle |
+| `/` | Home — full-screen map with pins, search bar, region filter |
 | `/submit` | Submit form — map picker + form fields |
 | `/pending` | List/map of pending submissions with vote buttons |
 | `/point/[id]` | Detail page for a single cooperative point |
@@ -342,9 +342,8 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 | `VoteButtons` | Upvote/downvote buttons with counts, disabled after voting |
 | `RegionFilter` | Province + kabupaten cascading dropdowns |
 | `SearchBar` | Text search + region filter combined |
-| `LanguageToggle` | ID/EN switcher, persisted to localStorage |
 | `PhotoDisplay` | Shows photo only for approved points, placeholder otherwise |
-| `Header` | Logo, nav links, language toggle, stats counter |
+| `Header` | Logo, nav links, stats counter |
 | `Footer` | MIT license note, GitHub link |
 
 ### 6.3 Client-Only Components
@@ -370,9 +369,6 @@ peta-koperasi/
 │   ├── marker-default.svg
 │   ├── marker-pending.svg
 │   └── og-image.png
-├── messages/
-│   ├── id.json                     # Bahasa Indonesia i18n strings
-│   └── en.json                     # English i18n strings
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx              # Root layout, font, metadata
@@ -405,7 +401,6 @@ peta-koperasi/
 │   │   ├── status-badge.tsx
 │   │   ├── header.tsx
 │   │   ├── footer.tsx
-│   │   └── locale-provider.tsx
 │   ├── lib/
 │   │   ├── supabase/
 │   │   │   ├── client.ts           # Browser Supabase client
@@ -415,8 +410,6 @@ peta-koperasi/
 │   │   ├── geo.ts                  # PostGIS query builders
 │   │   ├── validation.ts           # Zod schemas for API input
 │   │   ├── hash.ts                 # SHA-256 hashing utility
-│   │   ├── i18n.ts                 # i18n loader and hook (client components)
-│   │   └── i18n-server.ts         # Server-side i18n (no 'use client')
 │   └── types/
 │       └── index.ts                # Shared TypeScript types
 └── supabase/
@@ -461,7 +454,7 @@ peta-koperasi/
 3. Vote on it 3 times from different browsers/IPs. Verify it transitions to `approved`.
 4. Verify the photo becomes visible only after approval.
 5. Test region filter dropdown populates from actual data.
-6. Test language toggle switches all UI text.
+6. Verify all UI text is in Bahasa Indonesia (no hardcoded English).
 
 ---
 
@@ -492,13 +485,13 @@ These are explicitly excluded from the MVP:
 
 **Symptom:** `/pending` returns an error or blank page.
 
-**Root cause:** `pending/page.tsx` is a server component that imports `getTranslation` from `@/lib/i18n`, which is marked `'use client'`. The `getTranslation` function returns a closure `(key) => resolve(messages, key)`. Closures cannot be serialized across the server/client boundary in Next.js App Router, causing a runtime error.
+**Root cause:** `pending/page.tsx` is a server component that imported `getTranslation` from `@/lib/i18n`, which was marked `'use client'`. The `getTranslation` function returns a closure `(key) => resolve(messages, key)`. Closures cannot be serialized across the server/client boundary in Next.js App Router, causing a runtime error.
 
-**Fix:** Created `src/lib/i18n-server.ts` — a pure server-side translation module with no `'use client'` directive and no React imports. Exports `getServerTranslation(locale)` that directly imports JSON messages and returns a resolver function. Updated `pending/page.tsx` to import from `i18n-server` instead of `i18n`.
+**Fix (historical):** Created `src/lib/i18n-server.ts` — a pure server-side translation module with no `'use client'` directive and no React imports. Exports `getServerTranslation(locale)`. Updated `pending/page.tsx` to import from `i18n-server` instead of `i18n`.
 
-**Files:**
-- Created: `src/lib/i18n-server.ts`
-- Edited: `src/app/pending/page.tsx`
+**Superseded:** The bilingual i18n system was later removed entirely (project is Bahasa Indonesia only). UI strings are now hardcoded in Indonesian; `i18n.ts`, `i18n-server.ts`, and the `messages/` files no longer exist.
+
+**Files (current):** `src/app/pending/page.tsx`
 
 ### 11.2 Map not rendering on home page
 
@@ -543,7 +536,7 @@ Added `w-full sm:w-auto` to select elements. Updated toolbar in `page.tsx` to `f
 7. **Anti-pattern cleanup.** `stats-counter.tsx` removed `hidden md:inline-flex` (mobile-first rule: no hiding elements) — now always visible with fluid sizing.
 
 **Files:**
-- Edited: `src/components/status-badge.tsx`, `point-card.tsx`, `vote-buttons.tsx`, `submit-form.tsx`, `map-view.tsx`, `region-filter.tsx`, `stats-counter.tsx`, `language-toggle.tsx`, `mobile-bottom-nav.tsx`, `footer.tsx` (unchanged — caption text is allowed), `src/app/page.tsx`, `src/app/pending/page.tsx`, `src/app/point/[id]/page.tsx`
+- Edited: `src/components/status-badge.tsx`, `point-card.tsx`, `vote-buttons.tsx`, `submit-form.tsx`, `map-view.tsx`, `region-filter.tsx`, `stats-counter.tsx`, `mobile-bottom-nav.tsx`, `footer.tsx` (unchanged — caption text is allowed), `src/app/page.tsx`, `src/app/pending/page.tsx`, `src/app/point/[id]/page.tsx`
 
 **Verification:** `npx tsc --noEmit`, `npm run build`, `npm test` (53 tests) all pass.
 

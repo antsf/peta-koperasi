@@ -135,7 +135,6 @@ Any module imported in `layout.tsx` (the root layout) becomes part of the shared
 3. For each import, determine if it is needed on every page:
    - `globals.css` — yes, needed
    - Header component — yes, if header is on every page
-   - i18n provider — yes, if language toggle is global
    - Anything else — question it
 
 4. Search for heavy dependencies in the import chain. If layout imports a component that imports a heavy library, that library is in the shared chunk.
@@ -176,7 +175,7 @@ Any dependency should be rejected if:
 
 1. **Size > 50kB gzipped** without explicit justification documented in a comment or PR description
 2. **Duplicate functionality:** two date libraries, two icon sets, two HTTP clients, two validation libraries
-3. **Client-side i18n framework** (next-intl, react-i18next, etc.) when the project uses a simple JSON + custom hook approach — these frameworks add 15-40kB for functionality the project does not need
+3. **i18n framework** (next-intl, react-i18next, etc.) — the project is Bahasa Indonesia only and has no i18n system; there is nothing to internationalize. These frameworks add 15-40kB for functionality the project does not need
 4. **UI component library** (MUI, Chakra, Ant Design) — the project uses Tailwind. A component library would add 50-200kB and conflict with the styling approach
 5. **State management library** (Redux, MobX, Zustand) — the project's state needs are simple enough for React useState/useContext
 6. **Animation library** (Framer Motion, GSAP) — the project has no animations by design (soul.md: simplicity)

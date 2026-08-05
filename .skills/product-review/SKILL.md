@@ -95,7 +95,7 @@ Go through all 9 locked rules in CLAUDE.md. Not just the ones that seem relevant
 Review the code from the perspective of three contributor personas:
 
 - **Serious developer** (wants to add a feature): Can they understand the module boundaries? Can they find where to make their change? Are dependencies between files obvious or hidden?
-- **Vibe coder** (wants to fix a typo or add a translation): Can they find the file they need to edit? Is the file structure obvious from the directory listing? Are there surprising conventions?
+- **Vibe coder** (wants to fix a typo or improve a UI string): Can they find the file they need to edit? Is the file structure obvious from the directory listing? Are there surprising conventions?
 - **Non-coder** (wants to file an issue or improve docs): Does the PR change any README, SPEC.md, or CLAUDE.md content? Is it accurate?
 
 Specific things to check:
@@ -117,7 +117,7 @@ Ask: "If nobody touches this code for a year and then a contributor needs to mod
 - **Coupling:** Does this change create a dependency between two modules that were previously independent? If `map-view.tsx` now imports from `vote-buttons.tsx`, that is coupling that did not exist before. Is it justified?
 - **Test coverage:** Does this change include tests? For this project, the required test coverage is: API route handlers (Vitest), Zod schemas, voting state machine logic. Components are tested only for complex stateful behavior.
 - **Migration reversibility:** If this adds a DB migration, can it be reversed? What happens to existing data?
-- **i18n debt:** Does this add user-facing strings? Are they in both `messages/id.json` and `messages/en.json`? Missing translations are not "we will add them later" — they are a blocker.
+- **Language consistency:** Does this change add user-facing strings? They must be hardcoded in Bahasa Indonesia (the project has no i18n system). Hardcoded English text is a blocker, not something to fix later.
 
 **Failure at this lens:** "This will work today but create problems in [specific scenario]. Consider: [specific mitigation]."
 
@@ -194,19 +194,17 @@ Does the query fetch multiple points for rendering on a map?
     NO  → BLOCK. This violates CLAUDE.md rule 3.
 ```
 
-### i18n completeness
+### Language consistency (Bahasa Indonesia)
 
 Every code path that renders user-facing text must be checked:
 
 ```
 Does the component render text visible to users?
-  YES → Does the text come from useTranslation() or getTranslation()?
-    YES → Is the key present in BOTH messages/id.json AND messages/en.json?
+  YES → Is it cooperative data (name, address) from the database?
+    YES → Pass (data stays as contributed)
+    NO  → Is the string hardcoded in Bahasa Indonesia?
       YES → Pass
-      NO  → BLOCK. Missing translation in one language file.
-    NO  → Is it cooperative data (name, address) from the database?
-      YES → Pass (data is not translated)
-      NO  → BLOCK. Hardcoded string.
+      NO  → BLOCK. Hardcoded English (or any non-Indonesian) string.
 ```
 
 ---
@@ -261,7 +259,7 @@ The PR is correct, follows all rules, and can be merged. You have suggestions th
 
 The PR has one or more issues that must be resolved before merge, but the overall direction is correct. The contributor should be able to fix these without re-architecting.
 
-**Threshold:** One or more BLOCKs, but they are specific and fixable. The soul alignment and spec compliance are sound. The issues are implementation-level (missing status check, unhashed PII, missing i18n key).
+**Threshold:** One or more BLOCKs, but they are specific and fixable. The soul alignment and spec compliance are sound. The issues are implementation-level (missing status check, unhashed PII, English UI string).
 
 **How to communicate:** "This is heading in the right direction. I have [N] items that need to change before merge — all are specific and I have included the fix for each. Once these are addressed, I will approve."
 
@@ -317,9 +315,9 @@ Apply this checklist to every PR. Check every item, not just the ones that seem 
 [ ] No CSS modules or styled-components — Tailwind only
 [ ] Zod validation at top of every API route handler
 [ ] Supabase queries go through src/lib/supabase/ or src/lib/geo.ts — not inline in components
-[ ] No new global state (React Context only for locale, nothing else)
-[ ] i18n: all user-facing strings come from messages/ files, present in both id.json and en.json
-[ ] No hardcoded Indonesian or English text in components
+[ ] No new global state (React Context only if truly shared, nothing else)
+[ ] Language: all user-facing strings hardcoded in Bahasa Indonesia
+[ ] No English UI strings in components
 [ ] No unnecessary npm dependency added (check bundle size impact)
 [ ] Tests: API routes tested with valid/invalid/edge-case inputs
 [ ] Tests: Zod schemas tested with valid and invalid payloads
@@ -338,11 +336,11 @@ Apply this checklist to every PR. Check every item, not just the ones that seem 
 
 **Fix:** Always apply Lens 3 (locked rules) before Lens 4 (legibility). A perfectly styled component that leaks pending photos is worse than an ugly component that does not.
 
-### Mistake 2: Not checking i18n
+### Mistake 2: Not checking language consistency
 
 **Symptom:** PR adds a new button with text "Submit" hardcoded in English. Reviewer approves. Indonesian users see English-only UI.
 
-**Fix:** The i18n check is a BLOCK, not a SUGGEST. Every user-facing string must come from the message files. Check both files. Bilingual UI is a core feature, not a nice-to-have.
+**Fix:** The language check is a BLOCK, not a SUGGEST. Every user-facing string must be hardcoded in Bahasa Indonesia. The app is Bahasa Indonesia only.
 
 ### Mistake 3: Reviewing only the happy path
 
@@ -382,7 +380,7 @@ A PR is approved for merge when ALL of the following are true:
 
 1. **All five lenses pass.** Soul alignment, spec compliance, architectural rules, contributor legibility, and long-term maintainability.
 2. **Zero BLOCK comments remain unresolved.** Every BLOCK has been addressed with a code change, not just a comment reply.
-3. **i18n is complete.** Every user-facing string exists in both `messages/id.json` and `messages/en.json`.
+3. **Language is consistent.** Every user-facing string is hardcoded in Bahasa Indonesia.
 4. **Tests exist for new logic.** API routes, Zod schemas, and state machine changes have corresponding test cases that cover valid, invalid, and edge-case inputs.
 5. **No locked rule is violated.** All 9 rules in CLAUDE.md have been checked against the diff.
 6. **No out-of-scope feature has been introduced.** SPEC.md §10 has been checked.

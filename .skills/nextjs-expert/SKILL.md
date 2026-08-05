@@ -231,30 +231,9 @@ const handleViewportChange = useCallback((viewport: Viewport) => {
 
 ## i18n Pattern
 
-### Server components — use `getTranslation()`
-```typescript
-// src/app/pending/page.tsx
-import { getTranslation } from "@/lib/i18n";
+This project is **Bahasa Indonesia only** — there is no i18n system. UI strings are hardcoded in Indonesian directly in the components. No `messages/` files, no translation hooks, no locale provider.
 
-export default async function PendingPage() {
-  const t = await getTranslation();
-  return <h1>{t("pending.title")}</h1>;
-}
-```
-
-### Client components — use `useTranslation()` hook
-```typescript
-// src/components/submit-form.tsx
-"use client";
-import { useTranslation } from "@/lib/i18n";
-
-export function SubmitForm() {
-  const { t } = useTranslation();
-  return <button>{t("submit.button")}</button>;
-}
-```
-
-Translation files live at `messages/id.json` and `messages/en.json`. Keys are dot-notated and grouped by page/feature.
+Write all user-facing text in Bahasa Indonesia directly in JSX.
 
 ---
 
@@ -295,7 +274,7 @@ Translation files live at `messages/id.json` and `messages/en.json`. Keys are do
 - [ ] No `any` types (or has a `// TODO:` comment explaining why)?
 - [ ] All Supabase queries go through `src/lib/supabase/` functions, not inline?
 - [ ] PII is hashed before storage and absent from client-facing responses?
-- [ ] i18n: uses `getTranslation()` (server) or `useTranslation()` (client), not hardcoded strings?
+- [ ] Language: user-facing strings hardcoded in Bahasa Indonesia, not English? (no i18n system)
 - [ ] File name is kebab-case?
 - [ ] One component per file, named export (except `page.tsx`)?
 - [ ] Tailwind only — no CSS modules, no `style=` objects?
@@ -311,5 +290,5 @@ A task using this skill is complete when:
 4. API routes follow the Zod-first pattern with typed responses.
 5. No PII leaks in client-facing responses.
 6. All DB access goes through `src/lib/supabase/` functions.
-7. i18n strings are externalized to `messages/*.json`.
+7. All user-facing strings are hardcoded in Bahasa Indonesia.
 8. The checklist above has zero unchecked items for every file touched.

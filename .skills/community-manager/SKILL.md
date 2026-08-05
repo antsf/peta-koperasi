@@ -43,8 +43,8 @@ Most open-source projects are developer communities. This one is not — or at l
 |---|---|---|---|
 | Village cooperative members | Their koperasi on the map | Map point submissions, data corrections | Simple tools, Indonesian language, no jargon |
 | Local government / NGO staff | Civic data for their region | Data quality reports, regional verification | Trust that the data is taken seriously |
-| Students | Learning, portfolio, civic interest | Code PRs, translations, documentation | Patience, mentorship, clear good-first-issues |
-| Vibe coders | Fun, community, visible impact | Small PRs, translations, UI tweaks | Welcoming tone, quick feedback, visible results |
+| Students | Learning, portfolio, civic interest | Code PRs, UI copy improvements, documentation | Patience, mentorship, clear good-first-issues |
+| Vibe coders | Fun, community, visible impact | Small PRs, UI copy improvements, UI tweaks | Welcoming tone, quick feedback, visible results |
 | Casual developers | Contributing to a meaningful project | Feature PRs, bug fixes, code review | Clear architecture docs, reasonable PR turnaround |
 | Serious developers | Building something important, well | Architecture, performance, complex features | Respect for their expertise, autonomy on implementation |
 
@@ -70,7 +70,7 @@ Selamat datang di proyek Koperasi Desa Merah Putih Map! Terima kasih sudah berga
 
 Welcome to the Koperasi Desa Merah Putih Map project! Thank you for joining.
 
-Every contribution matters — whether it's adding a cooperative to the map, fixing a translation, or writing code. We're glad you're here.
+Every contribution matters — whether it's adding a cooperative to the map, improving the UI copy, or writing code. We're glad you're here.
 
 Setiap kontribusi berarti — baik itu menambahkan koperasi ke peta, memperbaiki terjemahan, atau menulis kode. Kami senang Anda ada di sini.
 ```
@@ -89,7 +89,7 @@ Terima kasih telah membantu menjaga keakuratan peta. Laporan seperti ini yang me
 
 ### All Contributions Count
 
-This is the most important principle. In this project, a translation fix is as valuable as a feature PR. A data quality report is as valuable as a performance optimization. Recognition must reflect this.
+This is the most important principle. In this project, a UI copy improvement is as valuable as a feature PR. A data quality report is as valuable as a performance optimization. Recognition must reflect this.
 
 ### What to Recognize
 
@@ -111,7 +111,7 @@ Every release should have a Contributors section that lists everyone who contrib
 ### Contributors
 Thank you to everyone who contributed to this release:
 - @developer1 — region filter implementation
-- @translator1 — Indonesian translation improvements
+- @translator1 — Indonesian UI copy improvements
 - @reporter1 — data quality reports for Jawa Barat region
 - @reviewer1 — thorough code reviews
 ```
@@ -199,7 +199,7 @@ Two contributors have different approaches to the same problem.
 
 **Signal**: Translation PRs get one-word approvals while code PRs get detailed review and discussion. Data quality reports get closed quickly without follow-up.
 
-**Fix**: Give translation PRs the same attention. Comment on specific improvements. For data quality reports, explain what will happen next and follow up.
+**Fix**: Give UI copy PRs the same attention. Comment on specific improvements. For data quality reports, explain what will happen next and follow up.
 
 ### 3. Letting Perfect Be the Enemy of Good
 
@@ -233,8 +233,8 @@ Two contributors have different approaches to the same problem.
 
 | Channel | Purpose | What belongs here | What does NOT belong here |
 |---|---|---|---|
-| **GitHub Issues** | Bug reports, data quality reports, translation requests, documentation issues | Specific, actionable items with clear scope | Feature discussion, architecture debate, general questions |
-| **GitHub Pull Requests** | Code changes, translation changes, documentation changes | Implementation, code review | Feature proposals (open a Discussion first) |
+| **GitHub Issues** | Bug reports, data quality reports, UI copy requests, documentation issues | Specific, actionable items with clear scope | Feature discussion, architecture debate, general questions |
+| **GitHub Pull Requests** | Code changes, UI copy changes, documentation changes | Implementation, code review | Feature proposals (open a Discussion first) |
 | **GitHub Discussions** | Feature proposals, architecture RFCs, community questions, feedback | Open-ended conversation, brainstorming, community input | Bug reports (file an issue instead) |
 
 ### Redirecting Misplaced Communication
@@ -279,7 +279,7 @@ Identify contributors who show consistent interest in specific areas and give th
 
 | Domain | Owner | Responsibility |
 |---|---|---|
-| Translations | Contributor A | Reviews all translation PRs, maintains i18n quality |
+| Indonesian copy | Contributor A | Reviews UI-copy PRs, maintains Bahasa Indonesia quality |
 | Data quality | Contributor B | Triages data quality reports, monitors fake entries |
 | Map/geo features | Contributor C | Reviews map-related PRs, maintains Leaflet code |
 | API/backend | Contributor D | Reviews API PRs, maintains Supabase queries |
@@ -342,7 +342,7 @@ Run this checklist monthly (or after any significant community event):
 ## Contribution Diversity
 [ ] Number of unique contributors in the last 3 months: ___ (target: 3+)
 [ ] Percentage of commits by top contributor: ___% (warning if > 70%)
-[ ] Number of non-code contributions (translations, data reports, docs): ___
+[ ] Number of non-code contributions (UI copy, data reports, docs): ___
 [ ] Any new contributors who made a 2nd contribution? (retention signal)
 
 ## Sustainability
@@ -376,7 +376,7 @@ The community management task is complete when:
 5. At least 2 people have merge access, Supabase access, and Vercel access.
 6. Domain ownership is established for at least 2 areas.
 7. First-time contributors are being welcomed and retained.
-8. Non-code contributions (translations, data reports, docs) are being recognized.
+8. Non-code contributions (UI copy, data reports, docs) are being recognized.
 9. The monthly community health checklist has been run and all items are addressed.
 10. No active conflicts remain unresolved.
 11. The primary maintainer has a sustainable review cadence and is not showing burnout signals.

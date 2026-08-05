@@ -95,7 +95,7 @@ The guide for anyone who wants to help. Must serve four distinct contributor typ
 
 2. **How to submit a map point (non-technical)** — Step-by-step with screenshots if possible. This is for village residents and community workers. No terminal commands. Explain: go to the website, click submit, fill in the form, what happens after submission (pending status, community voting). Explain the voting/verification system using the gotong royong framing: "The community verifies each submission together."
 
-3. **How to add a translation** — Step-by-step for editing `messages/id.json` and `messages/en.json`. Explain the JSON key structure. Show a before/after example. This is for bilingual contributors who may not be developers but can edit a JSON file on GitHub.
+3. **How to improve an Indonesian UI string** — Explain where user-facing text lives (directly in `src/components/*.tsx`) and how to propose a wording improvement. Show a before/after example. The app is Bahasa Indonesia only — there is no translation system. This is for contributors who want to improve the copy but may not be developers.
 
 4. **How to report a data quality issue** — Explain what a data quality issue is (wrong location, closed koperasi, duplicate pin). Explain how to use GitHub Issues with a template. Explain how downvoting works as a community mechanism.
 
@@ -303,7 +303,7 @@ Fix: Every PR that changes behavior should include a docs update check. This ski
 [ ] Links: all internal links (to other docs, to SPEC.md, to soul.md) are valid
 [ ] Voting system: described in gotong royong terms, no implementation details exposed
 [ ] README: has project summary, quick start, contribution types, license
-[ ] CONTRIBUTING: has non-technical guide, translation guide, developer setup, PR guidelines
+[ ] CONTRIBUTING: has non-technical guide, UI copy improvement guide, developer setup, PR guidelines
 [ ] No duplicate information — each fact lives in one place, others link to it
 ```
 
@@ -317,7 +317,7 @@ Fix: Every PR that changes behavior should include a docs update check. This ski
 | New feature shipped | `changelog-writer` for the changelog entry |
 | Voting rules changed | Update `/docs/voting-system.md` + verify against SPEC.md section 5 |
 | New component or page added | Check if README or CONTRIBUTING needs updating |
-| i18n strings added | Verify `messages/id.json` and `messages/en.json` are both updated |
+| User-facing text added | Verify strings are hardcoded in Bahasa Indonesia |
 
 ---
 

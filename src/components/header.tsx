@@ -1,13 +1,7 @@
-'use client'
-
 import Link from 'next/link'
-import { LanguageToggle } from './language-toggle'
 import { StatsCounter } from './stats-counter'
-import { useTranslation } from '@/lib/i18n'
 
 export function Header() {
-  const { t } = useTranslation()
-
   return (
     <header className="h-16 shrink-0 bg-surface border-b border-border flex items-center px-4 gap-4 shadow-card z-50 relative">
       <Link
@@ -15,7 +9,7 @@ export function Header() {
         className="flex items-center gap-2 font-heading font-semibold text-text-primary transition-colors duration-120 hover:text-primary active:scale-[0.97]"
       >
         <span className="text-primary text-xl leading-none" aria-hidden="true">●</span>
-        <span className="text-sm sm:text-base truncate">{t('common.app_name')}</span>
+        <span className="text-sm sm:text-base truncate">Peta Koperasi Desa Merah Putih</span>
       </Link>
 
       <div className="flex items-center gap-2 ml-auto">
@@ -25,18 +19,16 @@ export function Header() {
             href="/submit"
             className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
           >
-            + {t('nav.submit')}
+            + Tambah Koperasi
           </Link>
           <Link
             href="/pending"
             className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
           >
-            {t('nav.pending')}
+            Verifikasi
           </Link>
           <StatsCounter />
         </nav>
-        {/* Language toggle — always visible */}
-        <LanguageToggle />
       </div>
     </header>
   )

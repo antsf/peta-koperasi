@@ -37,32 +37,27 @@ This project has a wider contributor base than a typical open-source project. Ma
 
 **Onboarding Path:**
 
-1. **Submit a map point**: Direct them to the live site's submission form. No GitHub needed. No technical knowledge needed. Walk them through: open the site, click "Tambah Koperasi" / "Add Cooperative," fill in the form, place the pin, submit.
+1. **Submit a map point**: Direct them to the live site's submission form. No GitHub needed. No technical knowledge needed. Walk them through: open the site, click "Tambah Koperasi," fill in the form, place the pin, submit.
 
 2. **Report bad data**: If they found incorrect data (wrong location, fake cooperative, duplicate), they have two options:
    - **On the site**: Use the downvote/flag mechanism on the point's detail view.
    - **On GitHub**: File a Data Quality Report issue using the template. Help them create a GitHub account if needed.
 
-3. **Improve translations**: The Indonesian translations in `messages/id.json` can always be improved. Guide them to edit the file directly on GitHub (no local setup needed):
-   - Navigate to `messages/id.json` in the GitHub web UI.
-   - Click the pencil icon to edit.
-   - Find the key that needs improvement, change the value.
-   - Click "Propose changes" — GitHub creates a fork and PR automatically.
-   - No terminal, no git commands, no local setup.
+3. **Report a UI text issue**: The app is Bahasa Indonesia only. If they spot incorrect or awkward Indonesian wording, they can file an issue describing the exact text and the suggested fix. Write user-facing strings directly in the components (`src/components/*.tsx`).
 
 4. **Response template for non-coders:**
 
 ```
-Terima kasih sudah tertarik dengan proyek ini! / Thank you for your interest in this project!
+Terima kasih sudah tertarik dengan proyek ini!
 
-Anda tidak perlu menjadi programmer untuk berkontribusi. / You don't need to be a programmer to contribute.
+Anda tidak perlu menjadi programmer untuk berkontribusi.
 
-Berikut cara Anda bisa membantu: / Here's how you can help:
-- Tambahkan koperasi desa Anda ke peta / Add your village cooperative to the map: [link to submission page]
-- Laporkan data yang salah / Report incorrect data: [link to data quality issue template]
-- Perbaiki terjemahan Bahasa Indonesia / Improve Indonesian translations: [link to messages/id.json]
+Berikut cara Anda bisa membantu:
+- Tambahkan koperasi desa Anda ke peta: [link to submission page]
+- Laporkan data yang salah: [link to data quality issue template]
+- Laporkan typo / kalimat yang kurang pas di antarmuka: [link to issues]
 
-Setiap kontribusi sangat berarti. / Every contribution matters.
+Setiap kontribusi sangat berarti.
 ```
 
 ### Type 2: Vibe Coder
@@ -85,21 +80,21 @@ Setiap kontribusi sangat berarti. / Every contribution matters.
    ```
 
 3. **The "make a small visible change" strategy**: Their first contribution should produce a visible result they can screenshot. Good candidates:
-   - Add or fix a translation string (they see the text change on the page).
    - Fix a UI alignment issue (they see the visual fix).
+   - Improve an Indonesian UI string in a component (they see the text change on the page).
    - Add an aria-label (they can verify with browser dev tools).
 
 4. **The first PR workflow (simplified)**:
    ```bash
-   git checkout -b i18n/fix-missing-translation
+   git checkout -b fix/ui-text
    # Make the change
-   git add messages/id.json
-   git commit -m "fix: add missing Indonesian translation for submit page header"
-   git push origin i18n/fix-missing-translation
+   git add src/components/submit-form.tsx
+   git commit -m "fix: improve Indonesian wording in submit form header"
+   git push origin fix/ui-text
    # Open GitHub, click "Create Pull Request", fill in the template
    ```
 
-5. **What they need to hear**: "Your contribution matters. A translation fix is a real contribution. You don't need to understand the whole codebase to help."
+5. **What they need to hear**: "Your contribution matters. Improving the Indonesian copy is a real contribution. You don't need to understand the whole codebase to help."
 
 ### Type 3: Casual Contributor
 
@@ -227,8 +222,8 @@ If you feel strongly about this feature for a future version, you're welcome to 
 
 ### What to Expect
 
-- **Review turnaround**: target 3 business days for first response. Translation-only PRs may be faster.
-- **Type of feedback**: expect suggestions, not demands. Comments like "Consider renaming this to X for clarity" or "Could you also add the English translation?" — not "This is wrong."
+- **Review turnaround**: target 3 business days for first response. Small copy-only PRs may be faster.
+- **Type of feedback**: expect suggestions, not demands. Comments like "Consider renaming this to X for clarity" or "Could you reword this error message in simpler Indonesian?" — not "This is wrong."
 - **Iteration**: most first PRs need 1-2 rounds of feedback. This is normal and expected.
 
 ### How to Address Feedback
@@ -258,7 +253,6 @@ The `CONTRIBUTING.md` file must have:
 
 1. **Indonesian summary at the top** — a 10-line summary in Bahasa Indonesia covering: what the project is, how to contribute without coding, how to contribute with code, and where to ask questions.
 2. **Full English guide** — the detailed contributing guide in English.
-3. **Translation contribution guide** — step-by-step with screenshots for editing `messages/id.json` via the GitHub web UI.
 
 ### Language Policy
 

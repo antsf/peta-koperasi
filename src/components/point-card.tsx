@@ -2,23 +2,20 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { StatusBadge } from './status-badge'
 import type { KoperasiPoint } from '@/types'
-import { getTranslation } from '@/lib/i18n'
 
 interface PointCardProps {
   point: KoperasiPoint
-  locale?: 'id' | 'en'
   showVotes?: boolean
 }
 
-export async function PointCard({ point, locale = 'id', showVotes = false }: PointCardProps) {
-  const t = await getTranslation(locale)
+export async function PointCard({ point, showVotes = false }: PointCardProps) {
   return (
     <article
       className="bg-surface border border-border rounded-card p-6 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-180 ease-out-custom"
       aria-labelledby={`point-${point.id}-name`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <StatusBadge status={point.status} locale={locale} />
+        <StatusBadge status={point.status} />
         {showVotes && (
           <div className="flex items-center gap-3 text-sm text-text-secondary">
             <span className="flex items-center gap-1">
@@ -60,7 +57,7 @@ export async function PointCard({ point, locale = 'id', showVotes = false }: Poi
       {!point.photo_url && (
         <div className="w-full aspect-video rounded-lg mb-4 bg-surface-raised flex items-center justify-center">
           <span className="text-text-disabled text-sm" aria-hidden="true">
-            {point.status === 'approved' ? t('detail.no_photo') : '—'}
+            {point.status === 'approved' ? 'Belum ada foto' : '—'}
           </span>
         </div>
       )}
@@ -89,7 +86,7 @@ export async function PointCard({ point, locale = 'id', showVotes = false }: Poi
           href={`/point/${point.id}`}
           className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary-hover transition-colors duration-120"
         >
-          {t('common.see_detail')}
+          Lihat Detail
           <span aria-hidden="true">→</span>
         </Link>
       </div>

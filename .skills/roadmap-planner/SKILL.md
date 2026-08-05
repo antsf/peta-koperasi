@@ -26,7 +26,7 @@ Roadmap planning in civic tech without a product team, without revenue, and with
 - For implementation planning of an already-decided feature (use `feature-planner`).
 - For architectural decisions about how to build something (use `architect`).
 - For reviewing completed work (use `product-review`).
-- For a single bug fix or translation improvement.
+- For a single bug fix or UI copy improvement.
 
 ---
 
@@ -288,7 +288,7 @@ Some items cannot enter Now without running the `architect` skill first. These a
 7. **Any item estimated at L-size by `feature-planner`.** If it is too large for a single PR, the architect must validate the decomposition.
 
 Items that do NOT need architect sign-off:
-- New i18n strings
+- Indonesian copy fixes
 - Tailwind styling changes
 - Bug fixes within existing modules
 - Documentation improvements

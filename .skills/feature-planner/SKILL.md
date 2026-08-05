@@ -23,7 +23,7 @@ This is not a project management tool. It is an engineering decomposition tool. 
 
 ## When NOT to Invoke
 
-- A single-file change (typo, translation string, color tweak).
+- A single-file change (typo, Indonesian copy tweak, color tweak).
 - A pure refactor within one module.
 - A bug fix with a clear, isolated root cause.
 - You already have a plan and just need implementation guidance — use `nextjs-expert`, `postgis-expert`, etc. directly.
@@ -112,8 +112,7 @@ Layer 2: Server-side lib (geo.ts, validation.ts, supabase/server.ts)
 Layer 3: API route handler (app/api/.../route.ts)
 Layer 4: Server component (app/.../page.tsx)
 Layer 5: Client component (components/*.tsx)
-Layer 6: i18n strings (messages/id.json + messages/en.json)
-Layer 7: Tests (*.test.ts colocated with source)
+Layer 6: Tests (*.test.ts colocated with source)
 ```
 
 Each layer can be implemented and verified independently. Tasks should map to layers, not to "frontend" vs "backend" (which is too coarse).
@@ -140,7 +139,6 @@ Which tasks have no dependency on each other? These can be worked on simultaneou
 
 Common parallelizable pairs in this project:
 - API route + component shell (component renders loading state while route is built)
-- Two independent i18n string additions
 - DB migration + Zod validation schema (both define the same data shape, from different angles)
 
 ### Step 6 — Write the test plan before the implementation tasks
@@ -167,7 +165,7 @@ Order of tasks:
 5. Update `POST /api/points` to accept and store new field
 6. Update `PointCard` component to display new field
 7. Update `SubmitForm` component to include new field input
-8. Add i18n strings for field label in both `messages/` files
+8. Add field label as hardcoded Bahasa Indonesia in the component
 9. Write tests for new Zod schema rules and API response shape
 
 **Critical check:** Does the new field contain any PII? If yes, add hashing at Layer 2 (hash.ts) before the validation schema.
@@ -179,7 +177,7 @@ Order of tasks:
 2. Update PostGIS query in `src/lib/geo.ts`
 3. Update `RegionFilter` or `SearchBar` component state
 4. Update `MapView` to re-fetch on filter change
-5. Add i18n strings for new filter labels
+5. Add new filter labels as hardcoded Bahasa Indonesia
 6. Write tests for: Zod param validation, geo query builder, component filter state
 
 **Critical check:** Is the filter using viewport bounds? Any new filter that ignores the bounding box risks loading too many points.
@@ -192,7 +190,7 @@ Order of tasks:
 3. Create required API routes if not yet existing
 4. Create any new components (client components with `"use client"` only if needed)
 5. Add link to page in `Header` component
-6. Add i18n strings for page title, description, any UI labels
+6. Add page title, description, and UI labels as hardcoded Bahasa Indonesia
 7. Write tests for the new API routes
 8. Manual test via SPEC.md §9 deployment checklist steps
 
@@ -218,7 +216,7 @@ If approved, the only files that change:
 [ ] No task is L-sized (> 100 lines) — decomposed further if so
 [ ] Parallel tasks identified and labeled
 [ ] Test plan written before implementation tasks finalized
-[ ] i18n strings task included (both id.json and en.json)
+[ ] Bahasa Indonesia copy task included (all new UI strings hardcoded in Indonesian)
 [ ] No new auth, admin routes, or paid services introduced
 [ ] Photo visibility rule checked: photo_url null unless status = 'approved'
 [ ] PII handling checked: any new stored data must be reviewed for IP/fingerprint
@@ -243,11 +241,11 @@ Symptoms: "Implement the region filter feature" as a single task. No acceptance 
 
 Fix: If a task description contains "and," split it. If you cannot write a 1-sentence acceptance criterion, the task is too large.
 
-### Mistake 3: Forgetting i18n
+### Mistake 3: Forgetting to use Bahasa Indonesia
 
-Symptoms: PR adds a new UI feature in English only. Contributor realizes too late there is no Indonesian translation.
+Symptoms: PR adds a new UI feature in English only. Contributor realizes too late the UI is inconsistent.
 
-Fix: Every feature plan must include a task explicitly for `messages/id.json` and `messages/en.json`. It is always an S-sized task. There is no excuse to forget it.
+Fix: Every feature plan must include a task to write all new user-facing strings in Bahasa Indonesia directly in the component. This project has no i18n system — strings are hardcoded in Indonesian. It is always an S-sized task. There is no excuse to forget it.
 
 ### Mistake 4: Planning new behavior without planning the test
 
@@ -290,8 +288,7 @@ User selects provinsi dropdown
 - Layer 4: None (home page.tsx is already server component shell, no change)
 - Layer 5: Update `RegionFilter` component + wire to `MapView` re-fetch
 - Layer 5: Update `SearchBar` to include `RegionFilter`
-- Layer 6: i18n strings for dropdown labels and placeholder text
-- Layer 7: Tests for Zod schema (valid/invalid params), geo.ts filter query
+- Layer 6: Tests for Zod schema (valid/invalid params), geo.ts filter query
 
 **Tasks:**
 
@@ -302,7 +299,7 @@ User selects provinsi dropdown
 | 3 | Update `GET /api/points` route to pass region params to geo.ts | `src/app/api/points/route.ts` | API returns filtered results for valid region params | S |
 | 4 | Build `RegionFilter` component with cascading province → kabupaten dropdowns | `src/components/region-filter.tsx` | Selecting province populates kabupaten options; clear resets filter | M |
 | 5 | Wire `RegionFilter` into `MapView` re-fetch on filter change | `src/components/map-view.tsx` | Map pins update when filter changes; viewport bounds preserved | M |
-| 6 | Add region filter i18n strings | `messages/id.json`, `messages/en.json` | All dropdown labels render in both languages | S |
+| 6 | Ensure `RegionFilter` labels are hardcoded in Bahasa Indonesia | `src/components/region-filter.tsx` | All dropdown labels render in Bahasa Indonesia | S |
 | 7 | Unit tests for validation schema + geo.ts filter query | `src/lib/validation.test.ts`, `src/lib/geo.test.ts` | Tests cover: no filter, province only, both province+kabupaten, invalid input | M |
 
 **Parallel tasks:** 4 and 1/2/3 can be parallelized (component can render with mock data while API is built).
@@ -332,7 +329,7 @@ A feature plan is complete when:
 
 1. All tasks are S or M sized (no L tasks).
 2. Every task has: one-sentence description, specific file path(s), acceptance criterion.
-3. i18n task is present (both files).
+3. Bahasa Indonesia copy task is present for every new UI string.
 4. Test task is present for every logic or data-display change.
 5. Checklist above is fully checked.
 6. Plan has been reviewed against SPEC.md: no contradictions, no out-of-scope items.

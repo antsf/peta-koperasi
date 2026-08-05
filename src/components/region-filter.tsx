@@ -2,14 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import type { RegionGroup } from '@/types'
-import { useTranslation } from '@/lib/i18n'
 
 interface RegionFilterProps {
   onFilterChange: (provinsi: string, kabupaten: string) => void
 }
 
 export function RegionFilter({ onFilterChange }: RegionFilterProps) {
-  const { t } = useTranslation()
   const [regions, setRegions] = useState<RegionGroup[]>([])
   const [selectedProvinsi, setSelectedProvinsi] = useState('')
   const [selectedKabupaten, setSelectedKabupaten] = useState('')
@@ -48,11 +46,11 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
         value={selectedProvinsi}
         onChange={e => handleProvinsi(e.target.value)}
         className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
-        aria-label="Filter by province"
+        aria-label="Filter berdasarkan provinsi"
         role="combobox"
         aria-expanded="false"
       >
-        <option value="">{t('filter.all_provinces')}</option>
+        <option value="">Semua Provinsi</option>
         {regions.map(r => (
           <option key={r.provinsi} value={r.provinsi}>{r.provinsi}</option>
         ))}
@@ -63,11 +61,11 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
           value={selectedKabupaten}
           onChange={e => handleKabupaten(e.target.value)}
           className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
-          aria-label="Filter by kabupaten"
+          aria-label="Filter berdasarkan kabupaten"
           role="combobox"
           aria-expanded="false"
         >
-          <option value="">{t('filter.all_kabupaten')}</option>
+          <option value="">Semua Kabupaten/Kota</option>
           {kabupatenList.map(k => (
             <option key={k} value={k}>{k}</option>
           ))}
@@ -78,10 +76,10 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
         <button
           onClick={clearFilter}
           className="min-h-11 px-3 text-sm text-text-secondary hover:text-danger transition-colors duration-120 flex items-center justify-center sm:justify-start gap-1"
-          aria-label="Clear region filter"
+          aria-label="Hapus filter wilayah"
         >
           <span aria-hidden="true">✕</span>
-          {t('filter.clear')}
+          Hapus Filter
         </button>
       )}
 

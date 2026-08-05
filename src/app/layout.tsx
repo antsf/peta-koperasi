@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { LocaleProvider } from '@/components/locale-provider'
 import { MobileBottomNav } from '@/components/mobile-bottom-nav'
 
 export const metadata: Metadata = {
@@ -55,14 +54,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="id" className="min-h-screen">
       <body className="min-h-screen flex flex-col bg-bg antialiased font-body">
-        <LocaleProvider>
-          <Header />
-          <main className="flex-1 flex flex-col sm:pb-0 pb-16">
-            {children}
-          </main>
-          <Footer />
-          <MobileBottomNav />
-        </LocaleProvider>
+        <Header />
+        <main className="flex-1 flex flex-col sm:pb-0 pb-16">
+          {children}
+        </main>
+        <Footer />
+        <MobileBottomNav />
       </body>
     </html>
   )

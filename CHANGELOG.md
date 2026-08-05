@@ -40,6 +40,11 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - VoteButtons: menambahkan callback onVoteComplete untuk reload data
 - Map wrapper: height chain diubah dari flex-1 min-h-[60vh] ke flex-1 min-h-0
 
+### Removed
+- Sistem i18n bilingual dihapus — aplikasi kini Bahasa Indonesia only, semua UI strings hardcode dalam Bahasa Indonesia
+- Dihapus: `messages/id.json`, `messages/en.json`, `src/lib/i18n.ts`, `src/lib/i18n-server.ts`, `src/components/locale-provider.tsx`, `src/components/language-toggle.tsx`
+- Language toggle dihapus dari header
+
 ### Fixed
 - Semua hardcoded strings diganti dengan i18n (footer, point-card, pending page)
 - Footer: "Peta dari OpenStreetMap" menggunakan i18n

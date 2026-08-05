@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { RegionFilter } from '@/components/region-filter'
 import Link from 'next/link'
-import { useTranslation } from '@/lib/i18n'
 
 // Leaflet is SSR-incompatible — must be dynamically imported with ssr:false
 const MapView = dynamic(
@@ -23,7 +22,6 @@ const MapView = dynamic(
 )
 
 export default function HomePage() {
-  const { t } = useTranslation()
   const [filterProvinsi, setFilterProvinsi] = useState('')
   const [filterKabupaten, setFilterKabupaten] = useState('')
 
@@ -36,7 +34,7 @@ export default function HomePage() {
           href="/submit"
           className="sm:hidden flex items-center justify-center gap-1 min-h-11 px-4 bg-primary text-white text-sm font-medium rounded-button hover:bg-primary-hover transition-colors duration-180"
         >
-          + {t('nav.submit')}
+          + Tambah Koperasi
         </Link>
       </div>
 
@@ -52,7 +50,7 @@ export default function HomePage() {
       {/* Tagline — mobile only, below map */}
       <div className="sm:hidden px-4 py-3 bg-surface border-t border-border">
         <p className="text-sm text-text-secondary text-center">
-          {t('home.subtitle')}
+          Temukan koperasi di sekitar Anda
         </p>
       </div>
     </div>

@@ -14,21 +14,20 @@ const STATUS_DOT: Record<PointStatus, string> = {
   removed:  'bg-status-removed-text',
 }
 
-const STATUS_LABELS: Record<PointStatus, { id: string; en: string }> = {
-  pending:  { id: 'Menunggu', en: 'Pending' },
-  approved: { id: 'Terverifikasi', en: 'Verified' },
-  flagged:  { id: 'Ditandai', en: 'Flagged' },
-  removed:  { id: 'Dihapus', en: 'Removed' },
+const STATUS_LABELS: Record<PointStatus, string> = {
+  pending:  'Menunggu',
+  approved: 'Terverifikasi',
+  flagged:  'Ditandai',
+  removed:  'Dihapus',
 }
 
 interface StatusBadgeProps {
   status: PointStatus
-  locale?: 'id' | 'en'
   size?: 'sm' | 'md'
 }
 
-export function StatusBadge({ status, locale = 'id', size = 'sm' }: StatusBadgeProps) {
-  const label = STATUS_LABELS[status][locale]
+export function StatusBadge({ status, size = 'sm' }: StatusBadgeProps) {
+  const label = STATUS_LABELS[status]
   const sizeClasses = size === 'sm'
     ? 'text-xs px-2 py-0.5'
     : 'text-sm px-2.5 py-1'

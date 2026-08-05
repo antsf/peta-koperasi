@@ -80,6 +80,3 @@ export interface ApiError {
 }
 
 export type ApiResponse<T> = ApiSuccess<T> | ApiError
-
-// i18n
-export type Locale = 'id' | 'en'
