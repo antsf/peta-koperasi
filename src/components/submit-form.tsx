@@ -1,9 +1,16 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { getFingerprint } from '@/lib/fingerprint'
 
 interface LatLng { lat: number; lng: number }
+
+const INDONESIA_BOUNDS = { latMin: -11, latMax: 6, lngMin: 95, lngMax: 141 }
+
+function isInsideIndonesia(lat: number, lng: number): boolean {
+  return lat >= INDONESIA_BOUNDS.latMin && lat <= INDONESIA_BOUNDS.latMax
+    && lng >= INDONESIA_BOUNDS.lngMin && lng <= INDONESIA_BOUNDS.lngMax
+}
 
 const inputClass = [
   'w-full h-11 px-3',
@@ -14,8 +21,22 @@ const inputClass = [
   'focus:border-primary',
 ].join(' ')
 
+const coordInputClass = [
+  'w-full h-11 px-3 pr-10',
+  'border-2 border-border rounded-lg',
+  'text-sm text-text-primary bg-surface font-mono',
+  'outline-none',
+  'transition-[border-color] duration-120 ease-out',
+  'focus:border-primary',
+].join(' ')
+
 export function SubmitForm() {
   const [pin, setPin] = useState<LatLng | null>(null)
+  const [latInput, setLatInput] = useState('')
+  const [lngInput, setLngInput] = useState('')
+  const [coordError, setCoordError] = useState<string | null>(null)
+  const [geoLoading, setGeoLoading] = useState(false)
+  const [geoError, setGeoError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -25,6 +46,71 @@ export function SubmitForm() {
   const mapRef = useRef<L.Map | null>(null)
   const pinMarkerRef = useRef<L.Marker | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const settingFromMap = useRef(false)
+
+  const validateCoords = useCallback((lat: number, lng: number): string | null => {
+    if (isNaN(lat) || isNaN(lng)) return 'Koordinat tidak valid'
+    if (!isInsideIndonesia(lat, lng)) return 'Koordinat harus di wilayah Indonesia'
+    return null
+  }, [])
+
+  const placePin = useCallback((map: L.Map, lat: number, lng: number) => {
+    const L = (window as any).LeafletLib
+    if (!L) return
+
+    if (pinMarkerRef.current) {
+      pinMarkerRef.current.setLatLng([lat, lng])
+    } else {
+      pinMarkerRef.current = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: '',
+          html: `<div style="width:24px;height:32px;background:#0B6E4F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(11,110,79,0.35)" />`,
+          iconSize: [24, 32],
+          iconAnchor: [12, 32],
+        }),
+      }).addTo(map)
+    }
+  }, [])
+
+  const updatePinFromCoords = useCallback((lat: number, lng: number, fromMap = false) => {
+    setPin({ lat, lng })
+    setLatInput(lat.toFixed(5))
+    setLngInput(lng.toFixed(5))
+    setCoordError(null)
+    if (!fromMap && mapRef.current) {
+      mapRef.current.setView([lat, lng], 14)
+      placePin(mapRef.current, lat, lng)
+    }
+  }, [placePin])
+
+  const handleGeolocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      setGeoError('Browser tidak mendukung geolokasi')
+      return
+    }
+
+    setGeoLoading(true)
+    setGeoError(null)
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+        updatePinFromCoords(latitude, longitude)
+        setGeoLoading(false)
+      },
+      (err) => {
+        setGeoLoading(false)
+        if (err.code === 1) {
+          setGeoError('Izin lokasi ditolak. Aktifkan di pengaturan browser.')
+        } else if (err.code === 2) {
+          setGeoError('Lokasi tidak tersedia. Coba lagi nanti.')
+        } else {
+          setGeoError('Gagal mendapatkan lokasi. Coba lagi.')
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    )
+  }, [updatePinFromCoords])
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return
@@ -45,20 +131,10 @@ export function SubmitForm() {
 
       map.on('click', (e) => {
         const { lat, lng } = e.latlng
-        setPin({ lat, lng })
-
-        if (pinMarkerRef.current) {
-          pinMarkerRef.current.setLatLng([lat, lng])
-        } else {
-          pinMarkerRef.current = L.marker([lat, lng], {
-            icon: L.divIcon({
-              className: '',
-              html: `<div style="width:24px;height:32px;background:#0B6E4F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(11,110,79,0.35)" />`,
-              iconSize: [24, 32],
-              iconAnchor: [12, 32],
-            }),
-          }).addTo(map)
-        }
+        settingFromMap.current = true
+        updatePinFromCoords(lat, lng, true)
+        placePin(map, lat, lng)
+        settingFromMap.current = false
       })
 
       mapRef.current = map
@@ -68,19 +144,57 @@ export function SubmitForm() {
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
       if (photoPreview) { URL.revokeObjectURL(photoPreview) }
     }
-  }, [photoPreview])
+  }, [photoPreview, updatePinFromCoords, placePin])
+
+  const handleLatChange = (value: string) => {
+    setLatInput(value)
+    const lat = parseFloat(value)
+    const lng = parseFloat(lngInput)
+    if (!isNaN(lat) && !isNaN(lng)) {
+      const err = validateCoords(lat, lng)
+      setCoordError(err)
+      if (!err && mapRef.current) {
+        updatePinFromCoords(lat, lng)
+      }
+    } else {
+      setCoordError(null)
+    }
+  }
+
+  const handleLngChange = (value: string) => {
+    setLngInput(value)
+    const lat = parseFloat(latInput)
+    const lng = parseFloat(value)
+    if (!isNaN(lat) && !isNaN(lng)) {
+      const err = validateCoords(lat, lng)
+      setCoordError(err)
+      if (!err && mapRef.current) {
+        updatePinFromCoords(lat, lng)
+      }
+    } else {
+      setCoordError(null)
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!pin) { setError('Pilih lokasi koperasi di peta'); return }
+    const lat = parseFloat(latInput)
+    const lng = parseFloat(lngInput)
+
+    if (isNaN(lat) || isNaN(lng)) {
+      setError('Lokasi di peta harus ditentukan'); return
+    }
+    if (!isInsideIndonesia(lat, lng)) {
+      setError('Lokasi harus berada di wilayah Indonesia'); return
+    }
 
     setSubmitting(true)
     setError(null)
 
     const form = e.currentTarget
     const formData = new FormData(form)
-    formData.set('latitude', String(pin.lat))
-    formData.set('longitude', String(pin.lng))
+    formData.set('latitude', String(lat))
+    formData.set('longitude', String(lng))
 
     try {
       const fingerprint = await getFingerprint()
@@ -97,6 +211,8 @@ export function SubmitForm() {
       setSuccess(true)
       form.reset()
       setPin(null)
+      setLatInput('')
+      setLngInput('')
       setPhotoName(null)
       setPhotoPreview(null)
       if (pinMarkerRef.current) { pinMarkerRef.current.remove(); pinMarkerRef.current = null }
@@ -140,22 +256,93 @@ export function SubmitForm() {
         <label className="block text-sm font-medium text-text-primary mb-1">
           Lokasi di Peta <span className="text-danger text-xs">(wajib)</span>
         </label>
-        <p className="text-xs text-text-secondary mb-2">Klik pada peta untuk menentukan lokasi koperasi</p>
-        <div
-          ref={mapContainerRef}
-          className="w-full h-56 rounded-xl border-2 border-border bg-surface-raised overflow-hidden"
-          aria-label="Peta untuk menentukan lokasi"
-          role="application"
-        />
-        {pin && (
-          <p className="mt-1.5 text-xs text-status-approved-text flex items-center gap-1.5 submit-pin-confirm">
+        <p className="text-xs text-text-secondary mb-2">Klik pada peta, gunakan lokasi saya, atau isi koordinat manual</p>
+        <div className="relative">
+          <div
+            ref={mapContainerRef}
+            className="w-full h-56 rounded-xl border-2 border-border bg-surface-raised overflow-hidden"
+            aria-label="Peta untuk menentukan lokasi"
+            role="application"
+          />
+          <button
+            type="button"
+            onClick={handleGeolocation}
+            disabled={geoLoading}
+            className="absolute bottom-3 right-3 z-[1000] w-10 h-10 bg-surface border-2 border-border rounded-full shadow-popup flex items-center justify-center transition-[border-color,background-color] duration-120 ease-out hover:border-primary hover:bg-surface-raised disabled:opacity-60 disabled:cursor-not-allowed"
+            title="Gunakan lokasi saya"
+            aria-label="Gunakan lokasi saya"
+          >
+            {geoLoading ? (
+              <span className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B6E4F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
+              </svg>
+            )}
+          </button>
+        </div>
+        {geoError && (
+          <p className="mt-1.5 text-xs text-danger flex items-center gap-1.5">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="20 6 9 17 4 12" />
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
-            Lokasi dipilih: {pin.lat.toFixed(5)}, {pin.lng.toFixed(5)}
+            {geoError}
           </p>
         )}
       </div>
+
+      {/* Lat/Lng manual input */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label htmlFor="latitude" className="block text-sm font-medium text-text-primary mb-1">
+            Latitude <span className="text-danger text-xs">(wajib)</span>
+          </label>
+          <input
+            id="latitude"
+            name="latitude"
+            type="number"
+            step="any"
+            required
+            value={latInput}
+            onChange={e => handleLatChange(e.target.value)}
+            className={coordInputClass}
+            placeholder="-6.12345"
+          />
+        </div>
+        <div>
+          <label htmlFor="longitude" className="block text-sm font-medium text-text-primary mb-1">
+            Longitude <span className="text-danger text-xs">(wajib)</span>
+          </label>
+          <input
+            id="longitude"
+            name="longitude"
+            type="number"
+            step="any"
+            required
+            value={lngInput}
+            onChange={e => handleLngChange(e.target.value)}
+            className={coordInputClass}
+            placeholder="106.45678"
+          />
+        </div>
+      </div>
+      {coordError && (
+        <p className="text-xs text-danger flex items-center gap-1.5 -mt-4">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {coordError}
+        </p>
+      )}
+      {pin && !coordError && (
+        <p className="text-xs text-status-approved-text flex items-center gap-1.5 -mt-4">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          Lokasi dipilih: {pin.lat.toFixed(5)}, {pin.lng.toFixed(5)}
+        </p>
+      )}
 
       {/* Name */}
       <div>
