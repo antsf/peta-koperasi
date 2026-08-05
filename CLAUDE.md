@@ -28,6 +28,7 @@ Read `soul.md` for project philosophy. Read `SPEC.md` for full technical specifi
 
 ## Code Style Rules
 
+- **Mobile First + Dynamic Design.** Most users access via mobile browser. Design starts from mobile. Use fluid/flexible layouts that adapt dynamically to any screen size — NOT breakpoint-based responsive design. Avoid `hidden sm:flex`, `md:hidden`, etc. All elements should always be visible; let their size and spacing adapt fluidly. Touch targets minimum 44px. Reference: `mobile-bottom-nav.tsx` for mobile navigation pattern.
 - TypeScript strict mode (`"strict": true` in tsconfig). No `any` types unless absolutely unavoidable — if used, add a `// TODO: type properly` comment.
 - Tailwind CSS for all styling. No CSS modules, no styled-components, no inline style objects.
 - Server components by default. Only add `"use client"` when the component genuinely needs browser APIs (Leaflet, event handlers, useState/useEffect).
