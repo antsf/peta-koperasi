@@ -458,7 +458,7 @@ export function SubmitForm() {
 
       {/* Photo dropzone */}
       <div>
-        <label htmlFor="photo" className="block text-sm font-medium text-text-primary mb-1">
+        <label className="block text-sm font-medium text-text-primary mb-1">
           Foto Koperasi
         </label>
         <p className="text-xs text-text-secondary mb-1.5">
@@ -477,7 +477,7 @@ export function SubmitForm() {
               setPhotoPreview(URL.createObjectURL(file))
             }
           }}
-          className={`relative flex flex-col items-center justify-center gap-2 h-36 px-4 border-2 border-dashed rounded-xl cursor-pointer bg-surface transition-[border-color,background-color] duration-120 ease-out ${
+          className={`relative flex flex-col items-center justify-center gap-2 h-36 px-4 border-2 border-dashed rounded-xl bg-surface transition-[border-color,background-color] duration-120 ease-out ${
             dragOver
               ? 'border-primary bg-primary/5'
               : 'border-border hover:border-primary hover:bg-surface-raised'
@@ -487,12 +487,61 @@ export function SubmitForm() {
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
           </svg>
           <span className="text-sm text-text-secondary text-center">
-            {dragOver ? 'Lepaskan foto di sini...' : photoName ?? 'Seret & lepas foto, atau klik untuk memilih'}
+            {dragOver ? 'Lepaskan foto di sini...' : photoName ?? 'Seret & lepas foto ke sini'}
           </span>
+          <div className="flex items-center gap-2 mt-1">
+            <button
+              type="button"
+              onClick={() => document.getElementById('photo-gallery')?.click()}
+              className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-120"
+            >
+              <span className="flex items-center gap-1.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                </svg>
+                Gallery
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => document.getElementById('photo-camera')?.click()}
+              className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors duration-120"
+            >
+              <span className="flex items-center gap-1.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+                </svg>
+                Kamera
+              </span>
+            </button>
+          </div>
           <span className="text-xs text-text-disabled">JPG, PNG, WebP - Maks 5MB</span>
+          {/* Gallery input */}
           <input
-            id="photo" name="photo" type="file"
+            id="photo-gallery"
+            name="photo"
+            type="file"
             accept="image/jpeg,image/png,image/webp"
+            className="sr-only"
+            onChange={e => {
+              const file = e.target.files?.[0]
+              if (file) {
+                setPhotoName(file.name)
+                if (photoPreview) { URL.revokeObjectURL(photoPreview) }
+                setPhotoPreview(URL.createObjectURL(file))
+              } else {
+                setPhotoName(null)
+                setPhotoPreview(null)
+              }
+            }}
+          />
+          {/* Camera input */}
+          <input
+            id="photo-camera"
+            name="photo"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            capture="environment"
             className="sr-only"
             onChange={e => {
               const file = e.target.files?.[0]
@@ -520,8 +569,10 @@ export function SubmitForm() {
                 if (photoPreview) { URL.revokeObjectURL(photoPreview) }
                 setPhotoPreview(null)
                 setPhotoName(null)
-                const input = document.getElementById('photo') as HTMLInputElement
-                if (input) { input.value = '' }
+                const galleryInput = document.getElementById('photo-gallery') as HTMLInputElement
+                const cameraInput = document.getElementById('photo-camera') as HTMLInputElement
+                if (galleryInput) { galleryInput.value = '' }
+                if (cameraInput) { cameraInput.value = '' }
               }}
               className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors duration-120"
               aria-label="Hapus foto"
