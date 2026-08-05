@@ -11,6 +11,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Tombol "Gunakan Lokasi Saya" untuk auto-fill koordinat dari GPS perangkat
 - Validasi koordinat inline (client-side) untuk memastikan lokasi di wilayah Indonesia
 - Sinkronisasi otomatis antara klik peta, input manual, dan geolokasi
+- Reverse geocoding (Nominatim/OpenStreetMap) untuk auto-fill alamat, kelurahan, kecamatan, kabupaten, dan provinsi dari koordinat
 
 ## [0.1.0] — 2026-08-04
 

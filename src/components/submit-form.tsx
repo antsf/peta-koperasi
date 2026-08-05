@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getFingerprint } from '@/lib/fingerprint'
+import { reverseGeocode } from '@/lib/geocode'
 
 interface LatLng { lat: number; lng: number }
 
@@ -37,6 +38,7 @@ export function SubmitForm() {
   const [coordError, setCoordError] = useState<string | null>(null)
   const [geoLoading, setGeoLoading] = useState(false)
   const [geoError, setGeoError] = useState<string | null>(null)
+  const [geocoding, setGeocoding] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +49,11 @@ export function SubmitForm() {
   const pinMarkerRef = useRef<L.Marker | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const settingFromMap = useRef(false)
+  const addressRef = useRef<HTMLInputElement>(null)
+  const kelurahanRef = useRef<HTMLInputElement>(null)
+  const kecamatanRef = useRef<HTMLInputElement>(null)
+  const kabupatenRef = useRef<HTMLInputElement>(null)
+  const provinsiRef = useRef<HTMLInputElement>(null)
 
   const validateCoords = useCallback((lat: number, lng: number): string | null => {
     if (isNaN(lat) || isNaN(lng)) return 'Koordinat tidak valid'
@@ -81,6 +88,18 @@ export function SubmitForm() {
       mapRef.current.setView([lat, lng], 14)
       placePin(mapRef.current, lat, lng)
     }
+
+    setGeocoding(true)
+    reverseGeocode(lat, lng).then(result => {
+      if (result) {
+        if (addressRef.current) addressRef.current.value = result.address
+        if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan
+        if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan
+        if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten
+        if (provinsiRef.current) provinsiRef.current.value = result.provinsi
+      }
+      setGeocoding(false)
+    })
   }, [placePin])
 
   const handleGeolocation = useCallback(() => {
@@ -363,9 +382,10 @@ export function SubmitForm() {
           Alamat <span className="text-danger text-xs">(wajib)</span>
         </label>
         <input
+          ref={addressRef}
           id="address" name="address" type="text" required
           className={inputClass}
-          placeholder="cth. Jl. Raya Desa No. 12"
+          placeholder={geocoding ? 'Memuat alamat...' : 'cth. Jl. Raya Desa No. 12'}
         />
       </div>
 
@@ -373,23 +393,23 @@ export function SubmitForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="kelurahan" className="block text-sm font-medium text-text-primary mb-1">Kelurahan / Desa</label>
-          <input id="kelurahan" name="kelurahan" type="text" className={inputClass} />
+          <input ref={kelurahanRef} id="kelurahan" name="kelurahan" type="text" className={inputClass} />
         </div>
         <div>
           <label htmlFor="kecamatan" className="block text-sm font-medium text-text-primary mb-1">Kecamatan</label>
-          <input id="kecamatan" name="kecamatan" type="text" className={inputClass} />
+          <input ref={kecamatanRef} id="kecamatan" name="kecamatan" type="text" className={inputClass} />
         </div>
         <div>
           <label htmlFor="kabupaten" className="block text-sm font-medium text-text-primary mb-1">
             Kabupaten / Kota <span className="text-danger text-xs">(wajib)</span>
           </label>
-          <input id="kabupaten" name="kabupaten" type="text" required className={inputClass} />
+          <input ref={kabupatenRef} id="kabupaten" name="kabupaten" type="text" required className={inputClass} />
         </div>
         <div>
           <label htmlFor="provinsi" className="block text-sm font-medium text-text-primary mb-1">
             Provinsi <span className="text-danger text-xs">(wajib)</span>
           </label>
-          <input id="provinsi" name="provinsi" type="text" required className={inputClass} />
+          <input ref={provinsiRef} id="provinsi" name="provinsi" type="text" required className={inputClass} />
         </div>
       </div>
 

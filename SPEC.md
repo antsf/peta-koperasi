@@ -32,6 +32,7 @@ Indonesia has 120,000+ cooperatives, most invisible online. No unified, public, 
 | C4 | As a contributor, I can enter latitude and longitude manually in dedicated input fields. |
 | C5 | As a contributor, I can use the "Use my location" button to auto-fill coordinates from my device's GPS. |
 | C6 | As a contributor, I see inline validation errors if coordinates are outside Indonesia bounds. |
+| C7 | As a contributor, address fields (address, village, district, regency, province) are auto-filled when I select a location on the map, use GPS, or enter coordinates. |
 
 ### 2.3 Community Voter (unauthenticated, verifies data)
 
@@ -337,7 +338,7 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 | `MapView` | Leaflet map, loads pins via viewport bounding box, plain markers (no clustering in v1) |
 | `MapPin` | Individual pin with popup (name, kabupaten, status indicator) |
 | `PointCard` | Card showing cooperative details (used in detail page and pending list) |
-| `SubmitForm` | Form with fields matching POST /api/points, includes map pin picker, manual lat/lng input, and geolocation button |
+| `SubmitForm` | Form with fields matching POST /api/points, includes map pin picker, manual lat/lng input, geolocation button, and reverse geocoding auto-fill |
 | `VoteButtons` | Upvote/downvote buttons with counts, disabled after voting |
 | `RegionFilter` | Province + kabupaten cascading dropdowns |
 | `SearchBar` | Text search + region filter combined |
