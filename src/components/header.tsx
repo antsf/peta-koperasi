@@ -15,27 +15,29 @@ export function Header() {
         className="flex items-center gap-2 font-heading font-semibold text-text-primary transition-colors duration-120 hover:text-primary active:scale-[0.97]"
       >
         <span className="text-primary text-xl leading-none" aria-hidden="true">●</span>
-        <span className="hidden sm:inline text-base">{t('common.app_name')}</span>
-        <span className="sm:hidden text-sm">Koperasi</span>
+        <span className="text-sm sm:text-base truncate">{t('common.app_name')}</span>
       </Link>
 
-      {/* Desktop nav only */}
-      <nav className="hidden sm:flex items-center gap-1 ml-auto">
-        <Link
-          href="/submit"
-          className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
-        >
-          + {t('nav.submit')}
-        </Link>
-        <Link
-          href="/pending"
-          className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
-        >
-          {t('nav.pending')}
-        </Link>
-        <StatsCounter />
+      <div className="flex items-center gap-2 ml-auto">
+        {/* Desktop nav */}
+        <nav className="hidden sm:flex items-center gap-1">
+          <Link
+            href="/submit"
+            className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
+          >
+            + {t('nav.submit')}
+          </Link>
+          <Link
+            href="/pending"
+            className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
+          >
+            {t('nav.pending')}
+          </Link>
+          <StatsCounter />
+        </nav>
+        {/* Language toggle — always visible */}
         <LanguageToggle />
-      </nav>
+      </div>
     </header>
   )
 }

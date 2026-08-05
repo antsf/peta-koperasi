@@ -2,12 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useTranslation } from '@/lib/i18n'
 
 const NAV_ITEMS = [
-  { href: '/', labelKey: 'nav.home', icon: 'map' },
-  { href: '/submit', labelKey: 'nav.submit', icon: 'plus' },
-  { href: '/pending', labelKey: 'nav.pending', icon: 'check' },
+  { href: '/', label: 'Peta', icon: 'map' },
+  { href: '/submit', label: 'Tambah', icon: 'plus' },
+  { href: '/pending', label: 'Verifikasi', icon: 'check' },
 ] as const
 
 function NavIcon({ icon, isActive }: { icon: string; isActive: boolean }) {
@@ -48,7 +47,6 @@ function NavIcon({ icon, isActive }: { icon: string; isActive: boolean }) {
 
 export function MobileBottomNav() {
   const pathname = usePathname()
-  const { locale, setLocale } = useTranslation()
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'
@@ -76,28 +74,11 @@ export function MobileBottomNav() {
                 <NavIcon icon={item.icon} isActive={active} />
               </div>
               <span className={`text-[10px] font-medium ${active ? 'text-primary' : 'text-text-secondary'}`}>
-                {item.labelKey === 'nav.home' ? 'Peta' : 
-                 item.labelKey === 'nav.submit' ? 'Tambah' : 'Verifikasi'}
+                {item.label}
               </span>
             </Link>
           )
         })}
-
-        {/* Language toggle in bottom nav */}
-        <button
-          type="button"
-          onClick={() => setLocale(locale === 'id' ? 'en' : 'id')}
-          className="flex flex-col items-center justify-center gap-0.5 w-16 h-full text-text-secondary hover:text-text-primary transition-all duration-120"
-        >
-          <div className="flex items-center justify-center w-10 h-10">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="2" y1="12" x2="22" y2="12"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
-          </div>
-          <span className="text-[10px] font-medium uppercase">{locale}</span>
-        </button>
       </div>
     </nav>
   )

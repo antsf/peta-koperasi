@@ -26,7 +26,7 @@ export default function HomePage() {
   const [filterKabupaten, setFilterKabupaten] = useState('')
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 4rem)' }}>
+    <div className="flex flex-col">
       {/* Toolbar */}
       <div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-surface z-10">
         <RegionFilter onFilterChange={(p, k) => { setFilterProvinsi(p); setFilterKabupaten(k) }} />
@@ -38,8 +38,8 @@ export default function HomePage() {
         </Link>
       </div>
 
-      {/* Map — fills remaining viewport */}
-      <div className="flex-1 min-h-0">
+      {/* Map — dynamic height: fixed on mobile, fills viewport on desktop */}
+      <div className="w-full h-[50vh] sm:h-[calc(100vh-8rem)] min-h-[300px]">
         <MapView
           status="approved"
           filterProvinsi={filterProvinsi}
