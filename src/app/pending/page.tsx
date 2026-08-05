@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getPointsInViewport } from '@/lib/geo'
-import { getTranslation } from '@/lib/i18n'
+import { getServerTranslation } from '@/lib/i18n-server'
 
 export const dynamic = 'force-dynamic'
 import { VoteButtons } from '@/components/vote-buttons'
@@ -23,7 +23,7 @@ async function getPendingPoints() {
 
 export default async function PendingPage() {
   const { points } = await getPendingPoints()
-  const t = await getTranslation('id')
+  const t = await getServerTranslation('id')
 
   return (
     <div className="flex-1">

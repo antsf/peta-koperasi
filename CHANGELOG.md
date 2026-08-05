@@ -21,16 +21,23 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Success screen di form submit: tombol "Tambah Koperasi Lain" dan link "Kembali ke Peta"
 - Empty state untuk peta (zoom in prompt saat area kosong)
 - Error state untuk region filter
+- Server-side i18n module (`i18n-server.ts`) — safe for server components
+
+### Fixed
+- Pending page crash: server component importing from 'use client' module — now uses i18n-server
+- Map not rendering: height chain fix — changed from min-h-[60vh] to min-h-0, Leaflet container uses absolute positioning
+- Region filter chips broken on mobile: selects now stack vertically on mobile, inline on desktop
+- Toolbar layout adapts to stacked filter on mobile
 
 ### Changed
 - Touch targets diperbesar ke minimum 44px (min-h-11/min-w-11) untuk semua tombol interaktif
 - Vote buttons: teks "Setuju"/"Tidak Setuju" ditambahkan di samping ikon
 - Nama koperasi ditampilkan penuh di mobile (tanpa abbrev)
 - Footer padding ditambah untuk visibility bottom nav
-- Peningkatan tinggi peta di mobile (min-h-[60vh])
 - Form fields: Nama Koperasi dipindahkan ke atas (sebelum peta)
 - Region filter: semua string menggunakan i18n
 - VoteButtons: menambahkan callback onVoteComplete untuk reload data
+- Map wrapper: height chain diubah dari flex-1 min-h-[60vh] ke flex-1 min-h-0
 
 ### Fixed
 - Semua hardcoded strings diganti dengan i18n (footer, point-card, pending page)

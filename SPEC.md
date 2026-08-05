@@ -415,7 +415,8 @@ peta-koperasi/
 │   │   ├── geo.ts                  # PostGIS query builders
 │   │   ├── validation.ts           # Zod schemas for API input
 │   │   ├── hash.ts                 # SHA-256 hashing utility
-│   │   └── i18n.ts                 # i18n loader and hook
+│   │   ├── i18n.ts                 # i18n loader and hook (client components)
+│   │   └── i18n-server.ts         # Server-side i18n (no 'use client')
 │   └── types/
 │       └── index.ts                # Shared TypeScript types
 └── supabase/
@@ -482,6 +483,50 @@ These are explicitly excluded from the MVP:
 - **Rate limiting infrastructure** (Redis, etc.) — basic in-memory or IP-based throttle only.
 - **Automated moderation** (ML spam detection) — future consideration.
 - **Cooperative categories/types** — all treated equally in v1.
+
+---
+
+## 11. Known Issues & Fixes (Resolved)
+
+### 11.1 Pending page fails to load
+
+**Symptom:** `/pending` returns an error or blank page.
+
+**Root cause:** `pending/page.tsx` is a server component that imports `getTranslation` from `@/lib/i18n`, which is marked `'use client'`. The `getTranslation` function returns a closure `(key) => resolve(messages, key)`. Closures cannot be serialized across the server/client boundary in Next.js App Router, causing a runtime error.
+
+**Fix:** Created `src/lib/i18n-server.ts` — a pure server-side translation module with no `'use client'` directive and no React imports. Exports `getServerTranslation(locale)` that directly imports JSON messages and returns a resolver function. Updated `pending/page.tsx` to import from `i18n-server` instead of `i18n`.
+
+**Files:**
+- Created: `src/lib/i18n-server.ts`
+- Edited: `src/app/pending/page.tsx`
+
+### 11.2 Map not rendering on home page
+
+**Symptom:** Map area is blank — no tiles, no markers.
+
+**Root cause:** Fragile height chain. The map wrapper used `flex-1 min-h-[60vh]`, and MapView/Leaflet container used `h-full` (CSS `height: 100%`). The `min-h-[60vh]` is a minimum, not a definite height. In CSS, `height: 100%` requires the parent to have a definite height. When the parent's height is determined by flex layout + min-height, `h-full` may resolve to 0, causing Leaflet to initialize with a 0-height container.
+
+**Fix:** Changed map wrapper from `flex-1 min-h-[60vh]` to `flex-1 min-h-0`. Added `min-h-0` to allow flex shrinkage below content size. Changed Leaflet container from `w-full h-full` to `absolute inset-0` to fill parent via absolute positioning instead of `height: 100%`.
+
+**Files:**
+- Edited: `src/app/page.tsx`
+- Edited: `src/components/map-view.tsx`
+
+### 11.3 Region filter chips broken on mobile
+
+**Symptom:** Filter selects overflow or wrap awkwardly on narrow screens.
+
+**Root cause:** `RegionFilter` used `flex flex-wrap items-center gap-2` with two `<select>` elements that had no width constraint. On mobile, the selects were too wide for the toolbar, causing layout overflow.
+
+**Fix:** Changed RegionFilter wrapper from horizontal `flex-wrap` to vertical stack on mobile:
+- Mobile: `flex flex-col items-stretch gap-2` — selects stack vertically, full-width
+- Desktop (`sm:`): `sm:flex-row sm:flex-wrap sm:items-center` — inline as before
+
+Added `w-full sm:w-auto` to select elements. Updated toolbar in `page.tsx` to `flex-col sm:flex-row` to accommodate stacked filter.
+
+**Files:**
+- Edited: `src/components/region-filter.tsx`
+- Edited: `src/app/page.tsx`
 
 ---
 

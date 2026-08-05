@@ -43,11 +43,11 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2">
       <select
         value={selectedProvinsi}
         onChange={e => handleProvinsi(e.target.value)}
-        className="min-h-11 pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
+        className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
         aria-label="Filter by province"
         role="combobox"
         aria-expanded="false"
@@ -62,7 +62,7 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
         <select
           value={selectedKabupaten}
           onChange={e => handleKabupaten(e.target.value)}
-          className="min-h-11 pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
+          className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
           aria-label="Filter by kabupaten"
           role="combobox"
           aria-expanded="false"
@@ -77,7 +77,7 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
       {(selectedProvinsi || selectedKabupaten) && (
         <button
           onClick={clearFilter}
-          className="min-h-11 px-3 text-sm text-text-secondary hover:text-danger transition-colors duration-120 flex items-center gap-1"
+          className="min-h-11 px-3 text-sm text-text-secondary hover:text-danger transition-colors duration-120 flex items-center justify-center sm:justify-start gap-1"
           aria-label="Clear region filter"
         >
           <span aria-hidden="true">✕</span>

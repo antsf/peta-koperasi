@@ -30,18 +30,18 @@ export default function HomePage() {
   return (
     <div className="flex flex-col flex-1">
       {/* Toolbar */}
-      <div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-surface z-10">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-4 py-2 border-b border-border bg-surface z-10">
         <RegionFilter onFilterChange={(p, k) => { setFilterProvinsi(p); setFilterKabupaten(k) }} />
         <Link
           href="/submit"
-          className="ml-auto sm:hidden flex items-center gap-1 min-h-11 px-4 bg-primary text-white text-sm font-medium rounded-button hover:bg-primary-hover transition-colors duration-180"
+          className="sm:hidden flex items-center justify-center gap-1 min-h-11 px-4 bg-primary text-white text-sm font-medium rounded-button hover:bg-primary-hover transition-colors duration-180"
         >
           + {t('nav.submit')}
         </Link>
       </div>
 
       {/* Map — fills remaining viewport */}
-      <div className="flex-1 min-h-[60vh]">
+      <div className="flex-1 min-h-0">
         <MapView
           status="approved"
           filterProvinsi={filterProvinsi}

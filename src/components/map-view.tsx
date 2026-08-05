@@ -160,7 +160,7 @@ export function MapView({
     <div className="relative w-full h-full">
       <div
         ref={containerRef}
-        className="w-full h-full bg-surface-raised"
+        className="absolute inset-0 bg-surface-raised"
         aria-label="Peta koperasi Indonesia"
         role="application"
       />
