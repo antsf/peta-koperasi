@@ -64,40 +64,37 @@ export default async function PendingPage() {
                 className="bg-surface border border-border rounded-card p-6 shadow-card"
                 aria-labelledby={`pending-${point.id}-name`}
               >
-                <div className="flex items-start justify-between gap-4 flex-wrap">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <StatusBadge status={point.status} />
-                      <span className="text-sm text-text-disabled">
-                        {point.upvotes > 0 && `${3 - point.upvotes} suara lagi untuk diverifikasi`}
-                      </span>
-                    </div>
-                    <h2
-                      id={`pending-${point.id}-name`}
-                      className="font-heading font-semibold text-lg text-text-primary mb-1 truncate"
-                    >
-                      {point.name}
-                    </h2>
-                    <p className="text-sm text-text-secondary">
-                      {point.kabupaten}, {point.provinsi}
-                    </p>
+                <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <StatusBadge status={point.status} />
+                    <span className="text-sm text-text-disabled">
+                      {point.upvotes > 0 && `${3 - point.upvotes} suara lagi untuk diverifikasi`}
+                    </span>
                   </div>
-
-                  <div className="flex flex-col items-end gap-3">
-                    <VoteButtons
-                      pointId={point.id}
-                      initialUpvotes={point.upvotes ?? 0}
-                      initialDownvotes={point.downvotes ?? 0}
-                      status={point.status}
-                    />
-                    <Link
-                      href={`/point/${point.id}`}
-                      className="text-sm text-primary hover:text-primary-hover transition-colors duration-120"
-                    >
-                      Lihat Detail →
-                    </Link>
-                  </div>
+                  <Link
+                    href={`/point/${point.id}`}
+                    className="text-sm text-primary hover:text-primary-hover transition-colors duration-120 shrink-0"
+                  >
+                    Lihat Detail →
+                  </Link>
                 </div>
+
+                <h2
+                  id={`pending-${point.id}-name`}
+                  className="font-heading font-semibold text-lg text-text-primary mb-1 truncate"
+                >
+                  {point.name}
+                </h2>
+                <p className="text-sm text-text-secondary mb-4">
+                  {point.kabupaten}, {point.provinsi}
+                </p>
+
+                <VoteButtons
+                  pointId={point.id}
+                  initialUpvotes={point.upvotes ?? 0}
+                  initialDownvotes={point.downvotes ?? 0}
+                  status={point.status}
+                />
               </article>
             ))}
           </div>
