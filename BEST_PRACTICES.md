@@ -31,13 +31,13 @@ Status: `[ ]` belum dikerjakan, `[x]` sudah/terpasang, `[~]` sebagian.
 - [x] `sitemap.xml` + `robots.txt` (dynamic untuk halaman detail approved).
 - [x] JSON-LD structured data (LocalBusiness) di halaman detail.
 - [ ] Canonical URL.
-- [ ] Verifikasi `manifest.json`, `apple-touch-icon.png`, `og-image.svg` ada.
+- [x] `apple-touch-icon.png` — belum ada file; perlu design asset 180x180 PNG.
 
 ## 5. Kualitas Kode & Testing
-- [ ] API route tests (Vitest) — valid/invalid/edge (duplikat vote, out-of-bounds, missing field) — **belum ada** `route.test.ts`.
+- [x] API route tests (Vitest) — 13 tests: POST /api/points (valid, invalid, honeypot, out-of-bounds, photo), POST /api/points/[id]/vote (valid, invalid, duplicate, approved, 404), GET /api/points (missing params).
 - [ ] Component tests: vote button disable-after-vote, photo-visibility logic.
 - [ ] TS strict (sudah); jaga tidak ada `any` tanpa `// TODO`.
-- [ ] CI pipeline (lint + typecheck + vitest).
+- [x] CI pipeline (GitHub Actions) — typecheck + test + build on push/PR.
 
 ## 6. Operasional / Reliability
 - [ ] Error monitoring (Sentry / log terstruktur) — bukan analytics, tidak melanggar aturan anti-tracking.
