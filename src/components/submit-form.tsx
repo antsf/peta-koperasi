@@ -3,6 +3,38 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getFingerprint } from '@/lib/fingerprint'
 import { reverseGeocode } from '@/lib/geocode'
+import { SubmitPointSchema } from '@/lib/validation'
+import type { ZodIssue } from 'zod'
+
+const FIELD_LABELS: Record<string, string> = {
+  name: 'Nama Koperasi',
+  address: 'Alamat',
+  kelurahan: 'Kelurahan / Desa',
+  kecamatan: 'Kecamatan',
+  kabupaten: 'Kabupaten / Kota',
+  provinsi: 'Provinsi',
+  phone: 'Nomor Telepon',
+  email: 'Email',
+  latitude: 'Latitude',
+  longitude: 'Longitude',
+}
+
+function formatSubmitErrors(errors: ZodIssue[]): string {
+  const lines: string[] = []
+  for (const issue of errors) {
+    const label = FIELD_LABELS[String(issue.path[0])] ?? 'Kolom'
+    let message = `${label}: ${issue.message}`
+    if (issue.code === 'too_small' || issue.code === 'invalid_type') {
+      message = `${label} wajib diisi`
+    } else if (issue.code === 'invalid_format' && issue.format === 'email') {
+      message = `${label} harus format email yang valid`
+    } else if (issue.code === 'too_big' && typeof issue.maximum === 'number') {
+      message = `${label} maksimal ${issue.maximum} karakter`
+    }
+    if (!lines.includes(message)) lines.push(message)
+  }
+  return `Periksa kembali: ${lines.join('; ')}`
+}
 
 interface LatLng { lat: number; lng: number }
 
@@ -258,6 +290,23 @@ export function SubmitForm() {
     }
     if (missing.length > 0) {
       setError(`Kolom wajib belum diisi: ${missing.join(', ')}`)
+      return
+    }
+
+    const parsed = SubmitPointSchema.safeParse({
+      name: String(formData.get('name') ?? ''),
+      latitude: lat,
+      longitude: lng,
+      address: String(formData.get('address') ?? ''),
+      kelurahan: String(formData.get('kelurahan') ?? '').trim() || undefined,
+      kecamatan: String(formData.get('kecamatan') ?? '').trim() || undefined,
+      kabupaten: String(formData.get('kabupaten') ?? ''),
+      provinsi: String(formData.get('provinsi') ?? ''),
+      phone: String(formData.get('phone') ?? '').trim() || undefined,
+      email: String(formData.get('email') ?? '').trim() || undefined,
+    })
+    if (!parsed.success) {
+      setError(formatSubmitErrors(parsed.error.issues))
       return
     }
 
