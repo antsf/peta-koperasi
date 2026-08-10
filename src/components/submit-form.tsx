@@ -19,18 +19,32 @@ const FIELD_LABELS: Record<string, string> = {
   longitude: 'Longitude',
 }
 
+function fieldMessage(issue: ZodIssue): string {
+  const label = FIELD_LABELS[String(issue.path[0])] ?? 'Kolom'
+  if (issue.code === 'too_small' || issue.code === 'invalid_type') {
+    return `${label} wajib diisi`
+  } else if (issue.code === 'invalid_format' && issue.format === 'email') {
+    return `${label} harus format email yang valid`
+  } else if (issue.code === 'too_big' && typeof issue.maximum === 'number') {
+    return `${label} maksimal ${issue.maximum} karakter`
+  }
+  return `${label}: ${issue.message}`
+}
+
+function collectFieldErrors(errors: ZodIssue[]): Record<string, string> {
+  const map: Record<string, string> = {}
+  for (const issue of errors) {
+    const key = String(issue.path[0])
+    const message = fieldMessage(issue)
+    if (!map[key]) map[key] = message
+  }
+  return map
+}
+
 function formatSubmitErrors(errors: ZodIssue[]): string {
   const lines: string[] = []
   for (const issue of errors) {
-    const label = FIELD_LABELS[String(issue.path[0])] ?? 'Kolom'
-    let message = `${label}: ${issue.message}`
-    if (issue.code === 'too_small' || issue.code === 'invalid_type') {
-      message = `${label} wajib diisi`
-    } else if (issue.code === 'invalid_format' && issue.format === 'email') {
-      message = `${label} harus format email yang valid`
-    } else if (issue.code === 'too_big' && typeof issue.maximum === 'number') {
-      message = `${label} maksimal ${issue.maximum} karakter`
-    }
+    const message = fieldMessage(issue)
     if (!lines.includes(message)) lines.push(message)
   }
   return `Periksa kembali: ${lines.join('; ')}`
@@ -74,6 +88,7 @@ export function SubmitForm() {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [photoName, setPhotoName] = useState<string | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [dragOver, setDragOver] = useState(false)
@@ -93,6 +108,15 @@ export function SubmitForm() {
     if (isNaN(lat) || isNaN(lng)) return 'Koordinat tidak valid'
     if (!isInsideIndonesia(lat, lng)) return 'Koordinat harus di wilayah Indonesia'
     return null
+  }, [])
+
+  const clearFieldError = useCallback((key: string) => {
+    setFieldErrors(prev => {
+      if (!prev[key]) return prev
+      const next = { ...prev }
+      delete next[key]
+      return next
+    })
   }, [])
 
   const placePin = useCallback((map: L.Map, lat: number, lng: number) => {
@@ -266,9 +290,11 @@ export function SubmitForm() {
     const lng = parseFloat(lngInput)
 
     if (isNaN(lat) || isNaN(lng)) {
+      setFieldErrors({ latitude: 'Latitude wajib diisi', longitude: 'Longitude wajib diisi' })
       setError('Lokasi di peta harus ditentukan'); return
     }
     if (!isInsideIndonesia(lat, lng)) {
+      setFieldErrors({ latitude: 'Koordinat harus di wilayah Indonesia' })
       setError('Lokasi harus berada di wilayah Indonesia'); return
     }
 
@@ -293,7 +319,7 @@ export function SubmitForm() {
       return
     }
 
-    const parsed = SubmitPointSchema.safeParse({
+    const payload = {
       name: String(formData.get('name') ?? ''),
       latitude: lat,
       longitude: lng,
@@ -304,12 +330,15 @@ export function SubmitForm() {
       provinsi: String(formData.get('provinsi') ?? ''),
       phone: String(formData.get('phone') ?? '').trim() || undefined,
       email: String(formData.get('email') ?? '').trim() || undefined,
-    })
+    }
+    const parsed = SubmitPointSchema.safeParse(payload)
     if (!parsed.success) {
+      setFieldErrors(collectFieldErrors(parsed.error.issues))
       setError(formatSubmitErrors(parsed.error.issues))
       return
     }
 
+    setFieldErrors({})
     setSubmitting(true)
     setError(null)
 
@@ -384,9 +413,14 @@ export function SubmitForm() {
         <p className="text-sm text-text-secondary mb-1.5">Nama lengkap sesuai akta atau papan nama</p>
         <input
           id="name" name="name" type="text" required maxLength={200} autoComplete="off"
-          className={inputClass}
+          onInput={() => clearFieldError('name')}
+          aria-invalid={fieldErrors.name ? true : undefined}
+          className={`${inputClass}${fieldErrors.name ? ' border-danger' : ''}`}
           placeholder="cth. Koperasi Simpan Pinjam Maju Bersama"
         />
+        {fieldErrors.name && (
+          <p className="mt-1.5 text-sm text-danger">{fieldErrors.name}</p>
+        )}
       </div>
 
       {/* Map pin picker */}
@@ -443,10 +477,14 @@ export function SubmitForm() {
             step="any"
             required
             value={latInput}
-            onChange={e => handleLatChange(e.target.value)}
-            className={coordInputClass}
+            onChange={e => { clearFieldError('latitude'); handleLatChange(e.target.value) }}
+            aria-invalid={fieldErrors.latitude ? true : undefined}
+            className={`${coordInputClass}${fieldErrors.latitude ? ' border-danger' : ''}`}
             placeholder="-6.12345"
           />
+          {fieldErrors.latitude && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.latitude}</p>
+          )}
         </div>
         <div>
           <label htmlFor="longitude" className="block text-sm font-medium text-text-primary mb-1">
@@ -459,10 +497,14 @@ export function SubmitForm() {
             step="any"
             required
             value={lngInput}
-            onChange={e => handleLngChange(e.target.value)}
-            className={coordInputClass}
+            onChange={e => { clearFieldError('longitude'); handleLngChange(e.target.value) }}
+            aria-invalid={fieldErrors.longitude ? true : undefined}
+            className={`${coordInputClass}${fieldErrors.longitude ? ' border-danger' : ''}`}
             placeholder="106.45678"
           />
+          {fieldErrors.longitude && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.longitude}</p>
+          )}
         </div>
       </div>
       {coordError && (
@@ -489,33 +531,62 @@ export function SubmitForm() {
         </label>
         <input
           ref={addressRef}
-          id="address" name="address" type="text" required
-          className={inputClass}
+          id="address" name="address" type="text" required maxLength={500}
+          onInput={() => clearFieldError('address')}
+          aria-invalid={fieldErrors.address ? true : undefined}
+          className={`${inputClass}${fieldErrors.address ? ' border-danger' : ''}`}
           placeholder={geocoding ? 'Memuat alamat...' : 'cth. Jl. Raya Desa No. 12'}
         />
+        {fieldErrors.address && (
+          <p className="mt-1.5 text-sm text-danger">{fieldErrors.address}</p>
+        )}
       </div>
 
       {/* Region fields */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="kelurahan" className="block text-sm font-medium text-text-primary mb-1">Kelurahan / Desa</label>
-          <input ref={kelurahanRef} id="kelurahan" name="kelurahan" type="text" className={inputClass} />
+          <input ref={kelurahanRef} id="kelurahan" name="kelurahan" type="text" maxLength={100}
+            onInput={() => clearFieldError('kelurahan')}
+            aria-invalid={fieldErrors.kelurahan ? true : undefined}
+            className={`${inputClass}${fieldErrors.kelurahan ? ' border-danger' : ''}`} />
+          {fieldErrors.kelurahan && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.kelurahan}</p>
+          )}
         </div>
         <div>
           <label htmlFor="kecamatan" className="block text-sm font-medium text-text-primary mb-1">Kecamatan</label>
-          <input ref={kecamatanRef} id="kecamatan" name="kecamatan" type="text" className={inputClass} />
+          <input ref={kecamatanRef} id="kecamatan" name="kecamatan" type="text" maxLength={100}
+            onInput={() => clearFieldError('kecamatan')}
+            aria-invalid={fieldErrors.kecamatan ? true : undefined}
+            className={`${inputClass}${fieldErrors.kecamatan ? ' border-danger' : ''}`} />
+          {fieldErrors.kecamatan && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.kecamatan}</p>
+          )}
         </div>
         <div>
           <label htmlFor="kabupaten" className="block text-sm font-medium text-text-primary mb-1">
             Kabupaten / Kota <span className="text-primary text-xs">(wajib)</span>
           </label>
-          <input ref={kabupatenRef} id="kabupaten" name="kabupaten" type="text" required className={inputClass} />
+          <input ref={kabupatenRef} id="kabupaten" name="kabupaten" type="text" required maxLength={100}
+            onInput={() => clearFieldError('kabupaten')}
+            aria-invalid={fieldErrors.kabupaten ? true : undefined}
+            className={`${inputClass}${fieldErrors.kabupaten ? ' border-danger' : ''}`} />
+          {fieldErrors.kabupaten && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.kabupaten}</p>
+          )}
         </div>
         <div>
           <label htmlFor="provinsi" className="block text-sm font-medium text-text-primary mb-1">
             Provinsi <span className="text-primary text-xs">(wajib)</span>
           </label>
-          <input ref={provinsiRef} id="provinsi" name="provinsi" type="text" required className={inputClass} />
+          <input ref={provinsiRef} id="provinsi" name="provinsi" type="text" required maxLength={100}
+            onInput={() => clearFieldError('provinsi')}
+            aria-invalid={fieldErrors.provinsi ? true : undefined}
+            className={`${inputClass}${fieldErrors.provinsi ? ' border-danger' : ''}`} />
+          {fieldErrors.provinsi && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.provinsi}</p>
+          )}
         </div>
       </div>
 
@@ -524,17 +595,27 @@ export function SubmitForm() {
         <div>
           <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-1">Nomor Telepon</label>
           <input
-            id="phone" name="phone" type="tel" autoComplete="tel"
-            className={`${inputClass} font-mono`}
+            id="phone" name="phone" type="tel" autoComplete="tel" maxLength={20}
+            onInput={() => clearFieldError('phone')}
+            aria-invalid={fieldErrors.phone ? true : undefined}
+            className={`${inputClass} font-mono${fieldErrors.phone ? ' border-danger' : ''}`}
             placeholder="cth. 0812-3456-7890"
           />
+          {fieldErrors.phone && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.phone}</p>
+          )}
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-1">Email</label>
           <input
             id="email" name="email" type="email" autoComplete="email"
-            className={inputClass}
+            onInput={() => clearFieldError('email')}
+            aria-invalid={fieldErrors.email ? true : undefined}
+            className={`${inputClass}${fieldErrors.email ? ' border-danger' : ''}`}
           />
+          {fieldErrors.email && (
+            <p className="mt-1.5 text-sm text-danger">{fieldErrors.email}</p>
+          )}
         </div>
       </div>
 
