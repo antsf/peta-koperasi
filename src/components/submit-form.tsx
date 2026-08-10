@@ -55,6 +55,7 @@ export function SubmitForm() {
   const kecamatanRef = useRef<HTMLInputElement>(null)
   const kabupatenRef = useRef<HTMLInputElement>(null)
   const provinsiRef = useRef<HTMLInputElement>(null)
+  const coordTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const validateCoords = useCallback((lat: number, lng: number): string | null => {
     if (isNaN(lat) || isNaN(lng)) return 'Koordinat tidak valid'
@@ -88,11 +89,11 @@ export function SubmitForm() {
         setGeocoding(true)
         reverseGeocode(pos.lat, pos.lng).then(result => {
           if (result) {
-            if (addressRef.current) addressRef.current.value = result.address
-            if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan
-            if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan
-            if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten
-            if (provinsiRef.current) provinsiRef.current.value = result.provinsi
+            if (addressRef.current) addressRef.current.value = result.address || addressRef.current.value
+            if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan || kelurahanRef.current.value
+            if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan || kecamatanRef.current.value
+            if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten || kabupatenRef.current.value
+            if (provinsiRef.current) provinsiRef.current.value = result.provinsi || provinsiRef.current.value
           }
           setGeocoding(false)
         })
@@ -103,10 +104,12 @@ export function SubmitForm() {
     }
   }, [])
 
-  const updatePinFromCoords = useCallback((lat: number, lng: number, fromMap = false) => {
+  const updatePinFromCoords = useCallback((lat: number, lng: number, fromMap = false, preserveInputs = false) => {
     setPin({ lat, lng })
-    setLatInput(lat.toFixed(5))
-    setLngInput(lng.toFixed(5))
+    if (!preserveInputs) {
+      setLatInput(lat.toFixed(5))
+      setLngInput(lng.toFixed(5))
+    }
     setCoordError(null)
     if (!fromMap && mapRef.current) {
       mapRef.current.setView([lat, lng], 14)
@@ -116,11 +119,11 @@ export function SubmitForm() {
     setGeocoding(true)
     reverseGeocode(lat, lng).then(result => {
       if (result) {
-        if (addressRef.current) addressRef.current.value = result.address
-        if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan
-        if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan
-        if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten
-        if (provinsiRef.current) provinsiRef.current.value = result.provinsi
+        if (addressRef.current) addressRef.current.value = result.address || addressRef.current.value
+        if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan || kelurahanRef.current.value
+        if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan || kecamatanRef.current.value
+        if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten || kabupatenRef.current.value
+        if (provinsiRef.current) provinsiRef.current.value = result.provinsi || provinsiRef.current.value
       }
       setGeocoding(false)
     })
@@ -162,6 +165,9 @@ export function SubmitForm() {
       const L = await import('leaflet')
       await import('leaflet/dist/leaflet.css')
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(window as any).LeafletLib = L
+
       const map = L.map(mapContainerRef.current!, {
         center: [-2.5, 118.0],
         zoom: 5,
@@ -184,6 +190,7 @@ export function SubmitForm() {
     })()
 
     return () => {
+      if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
       if (photoPreview) { URL.revokeObjectURL(photoPreview) }
     }
@@ -197,7 +204,8 @@ export function SubmitForm() {
       const err = validateCoords(lat, lng)
       setCoordError(err)
       if (!err && mapRef.current) {
-        updatePinFromCoords(lat, lng)
+        if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
+        coordTimerRef.current = setTimeout(() => updatePinFromCoords(lat, lng, false, true), 500)
       }
     } else {
       setCoordError(null)
@@ -212,7 +220,8 @@ export function SubmitForm() {
       const err = validateCoords(lat, lng)
       setCoordError(err)
       if (!err && mapRef.current) {
-        updatePinFromCoords(lat, lng)
+        if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
+        coordTimerRef.current = setTimeout(() => updatePinFromCoords(lat, lng, false, true), 500)
       }
     } else {
       setCoordError(null)
@@ -231,13 +240,29 @@ export function SubmitForm() {
       setError('Lokasi harus berada di wilayah Indonesia'); return
     }
 
-    setSubmitting(true)
-    setError(null)
-
+    const requiredLabels: Record<string, string> = {
+      name: 'Nama Koperasi',
+      address: 'Alamat',
+      kabupaten: 'Kabupaten / Kota',
+      provinsi: 'Provinsi',
+    }
     const form = e.currentTarget
     const formData = new FormData(form)
     formData.set('latitude', String(lat))
     formData.set('longitude', String(lng))
+
+    const missing: string[] = []
+    for (const [key, label] of Object.entries(requiredLabels)) {
+      const value = String(formData.get(key) ?? '').trim()
+      if (!value) missing.push(label)
+    }
+    if (missing.length > 0) {
+      setError(`Kolom wajib belum diisi: ${missing.join(', ')}`)
+      return
+    }
+
+    setSubmitting(true)
+    setError(null)
 
     try {
       const fingerprint = await getFingerprint()
