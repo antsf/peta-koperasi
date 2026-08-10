@@ -6,6 +6,44 @@ import { reverseGeocode } from '@/lib/geocode'
 import { SubmitPointSchema } from '@/lib/validation'
 import type { ZodIssue } from 'zod'
 
+const MAX_PHOTO_DIMENSION = 1920
+const JPEG_QUALITY = 0.82
+
+function compressImage(file: File): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const url = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      let { width, height } = img
+      if (width > MAX_PHOTO_DIMENSION || height > MAX_PHOTO_DIMENSION) {
+        if (width > height) {
+          height = Math.round((height / width) * MAX_PHOTO_DIMENSION)
+          width = MAX_PHOTO_DIMENSION
+        } else {
+          width = Math.round((width / height) * MAX_PHOTO_DIMENSION)
+          height = MAX_PHOTO_DIMENSION
+        }
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')!
+      ctx.drawImage(img, 0, 0, width, height)
+      canvas.toBlob(
+        (blob) => (blob ? resolve(blob) : reject(new Error('Gagal mengompres foto'))),
+        'image/jpeg',
+        JPEG_QUALITY,
+      )
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('Gagal membaca foto'))
+    }
+    img.src = url
+  })
+}
+
 const FIELD_LABELS: Record<string, string> = {
   name: 'Nama Koperasi',
   address: 'Alamat',
@@ -326,6 +364,18 @@ export function SubmitForm() {
 
     try {
       const fingerprint = await getFingerprint()
+
+      const photo = formData.get('photo') as File | null
+      if (photo && photo.size > 0) {
+        try {
+          const compressed = await compressImage(photo)
+          formData.set('photo', compressed, photo.name.replace(/\.[^.]+$/, '.jpg'))
+        } catch {
+          setError('Gagal mengompres foto. Coba gunakan foto yang lebih kecil.')
+          return
+        }
+      }
+
       const res = await fetch('/api/points', {
         method: 'POST',
         headers: { 'x-fingerprint': fingerprint },
@@ -344,7 +394,8 @@ export function SubmitForm() {
       setPhotoName(null)
       setPhotoPreview(null)
       if (pinMarkerRef.current) { pinMarkerRef.current.remove(); pinMarkerRef.current = null }
-    } catch {
+    } catch (err) {
+      console.error('Submit error:', err)
       setError('Gagal mengirim. Periksa koneksi internet Anda.')
     } finally {
       setSubmitting(false)
