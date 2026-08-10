@@ -107,12 +107,12 @@ export async function POST(req: NextRequest) {
   // Validate photo if provided
   if (photo && photo.size > 0) {
     if (photo.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: 'Photo must be under 5MB' }, { status: 400 })
+      return NextResponse.json({ error: 'Ukuran foto maksimum 5MB' }, { status: 400 })
     }
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
     if (!allowedTypes.includes(photo.type)) {
       return NextResponse.json(
-        { error: 'Photo must be JPEG, PNG, or WebP' },
+        { error: 'Format foto harus JPEG, PNG, atau WebP' },
         { status: 400 }
       )
     }

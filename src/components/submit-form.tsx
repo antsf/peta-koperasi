@@ -6,10 +6,16 @@ import { reverseGeocode } from '@/lib/geocode'
 import { SubmitPointSchema } from '@/lib/validation'
 import type { ZodIssue } from 'zod'
 
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024
 const MAX_PHOTO_DIMENSION = 1920
 const JPEG_QUALITY = 0.82
 
+const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp']
+
 function compressImage(file: File): Promise<Blob> {
+  if (!ALLOWED_MIME.includes(file.type)) {
+    return Promise.reject(new Error('Format foto harus JPEG, PNG, atau WebP'))
+  }
   return new Promise((resolve, reject) => {
     const img = new Image()
     const url = URL.createObjectURL(file)
@@ -369,9 +375,14 @@ export function SubmitForm() {
       if (photo && photo.size > 0) {
         try {
           const compressed = await compressImage(photo)
+          if (compressed.size > MAX_PHOTO_BYTES) {
+            setError(`Foto terlalu besar setelah dikompres (${Math.round(compressed.size / 1024 / 1024)}MB). Maksimum 5MB.`)
+            return
+          }
           formData.set('photo', compressed, photo.name.replace(/\.[^.]+$/, '.jpg'))
-        } catch {
-          setError('Gagal mengompres foto. Coba gunakan foto yang lebih kecil.')
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : 'Foto tidak dapat diproses.'
+          setError(msg)
           return
         }
       }
