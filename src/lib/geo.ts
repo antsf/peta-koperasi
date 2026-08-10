@@ -70,7 +70,7 @@ export async function getPointById(id: string): Promise<KoperasiPoint | null> {
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const photoUrl =
-    data.status === 'approved' && data.photo_path
+    data.status !== 'removed' && data.photo_path
       ? `${supabaseUrl}/storage/v1/object/public/koperasi-photos/${data.photo_path}`
       : null
 

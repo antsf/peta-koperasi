@@ -8,11 +8,12 @@ interface PhotoDisplayProps {
 }
 
 /**
- * Renders cooperative photo only when status === 'approved' AND photo_url is set.
- * Shows a placeholder otherwise — never reveals photos for pending/flagged/removed points.
+ * Renders cooperative photo when status is NOT 'removed' AND photo_url is set.
+ * Voters need to see the photo to verify the submission before voting.
+ * Only hidden for 'removed' points.
  */
 export function PhotoDisplay({ photoUrl, pointName, status }: PhotoDisplayProps) {
-  const showPhoto = status === 'approved' && photoUrl !== null
+  const showPhoto = status !== 'removed' && photoUrl !== null
 
   if (showPhoto) {
     return (
@@ -38,7 +39,7 @@ export function PhotoDisplay({ photoUrl, pointName, status }: PhotoDisplayProps)
       <div className="text-center text-text-disabled">
         <div className="text-3xl mb-2" aria-hidden="true">📷</div>
         <p className="text-sm">
-          {status === 'approved' ? 'Belum ada foto' : 'Foto tersedia setelah terverifikasi'}
+          {status === 'approved' ? 'Belum ada foto' : 'Foto belum diunggah'}
         </p>
       </div>
     </div>

@@ -42,7 +42,7 @@ Status: `[ ]` belum dikerjakan, `[x]` sudah/terpasang, `[~]` sebagian.
 ## 6. Operasional / Reliability
 - [ ] Error monitoring (Sentry / log terstruktur) — bukan analytics, tidak melanggar aturan anti-tracking.
 - [ ] React Error Boundary client.
-- [ ] RLS aktif di tabel publik; `photo_path` tidak terekspos untuk status non-approved (sudah dijaga di `geo.ts` — jangan dilonggarkan).
+- [x] RLS aktif di tabel publik; `photo_path` hanya disembunyikan untuk status `removed` (foto terlihat untuk `pending`/`flagged` supaya voter bisa memverifikasi).
 
 ## 7. Produk/UX — anti "hal seperti ini terlewat"
 - [x] Debounce & race-condition koordinat + geocode di submit form.

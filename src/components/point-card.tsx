@@ -42,8 +42,8 @@ export async function PointCard({ point, showVotes = false }: PointCardProps) {
         {point.kabupaten}, {point.provinsi}
       </p>
 
-      {/* Photo — only shown for approved points */}
-      {point.photo_url && point.status === 'approved' && (
+      {/* Photo — shown for all statuses except removed */}
+      {point.photo_url && point.status !== 'removed' && (
         <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4 bg-surface-raised">
           <Image
             src={point.photo_url}
@@ -57,7 +57,7 @@ export async function PointCard({ point, showVotes = false }: PointCardProps) {
       {!point.photo_url && (
         <div className="w-full aspect-video rounded-lg mb-4 bg-surface-raised flex items-center justify-center">
           <span className="text-text-disabled text-sm" aria-hidden="true">
-            {point.status === 'approved' ? 'Belum ada foto' : '—'}
+            {point.status === 'approved' ? 'Belum ada foto' : 'Foto belum diunggah'}
           </span>
         </div>
       )}
