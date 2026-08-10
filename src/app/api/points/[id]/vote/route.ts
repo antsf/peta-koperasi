@@ -9,12 +9,36 @@ const DOWNVOTE_FLAG_THRESHOLD = 3
 const DOWNVOTE_REMOVE_THRESHOLD = 6
 const UPVOTE_OVERRIDE_THRESHOLD = 5
 
+// Simple in-memory rate limiter: max 30 votes per IP per hour
+// Note: resets on Vercel function cold start — acceptable for MVP
+const voteLog = new Map<string, number[]>()
+const VOTE_RATE_LIMIT = 30
+const VOTE_RATE_WINDOW_MS = 60 * 60 * 1000 // 1 hour
+
+function checkVoteRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const windowStart = now - VOTE_RATE_WINDOW_MS
+  const times = (voteLog.get(ip) ?? []).filter(t => t > windowStart)
+  if (times.length >= VOTE_RATE_LIMIT) return false
+  voteLog.set(ip, [...times, now])
+  return true
+}
+
 // POST /api/points/[id]/vote — cast a community vote
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: pointId } = await params
+
+  // Rate limit by raw IP before processing
+  const rawIP = extractIP(req.headers.get('x-forwarded-for'))
+  if (!checkVoteRateLimit(rawIP)) {
+    return NextResponse.json(
+      { error: 'Too many votes. Please try again later.' },
+      { status: 429 }
+    )
+  }
 
   // Parse and validate body
   let body: unknown
@@ -35,7 +59,6 @@ export async function POST(
   const { vote_type } = parsed.data
 
   // Hash PII at entry — before any DB interaction
-  const rawIP = extractIP(req.headers.get('x-forwarded-for'))
   const rawFingerprint = req.headers.get('x-fingerprint') ?? 'unknown'
   const [hashedIP, hashedFingerprint] = await Promise.all([
     hashPII(rawIP),

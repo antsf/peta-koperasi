@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -44,6 +44,12 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0B6E4F',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 interface RootLayoutProps {

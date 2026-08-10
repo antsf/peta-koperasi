@@ -21,12 +21,19 @@ const FIELD_LABELS: Record<string, string> = {
 
 function fieldMessage(issue: ZodIssue): string {
   const label = FIELD_LABELS[String(issue.path[0])] ?? 'Kolom'
+  const field = String(issue.path[0])
   if (issue.code === 'too_small' || issue.code === 'invalid_type') {
     return `${label} wajib diisi`
   } else if (issue.code === 'invalid_format' && issue.format === 'email') {
     return `${label} harus format email yang valid`
   } else if (issue.code === 'too_big' && typeof issue.maximum === 'number') {
     return `${label} maksimal ${issue.maximum} karakter`
+  } else if (
+    issue.code === 'custom' &&
+    (field === 'latitude' || field === 'longitude') &&
+    /bounds|out of/i.test(issue.message)
+  ) {
+    return 'Koordinat harus di wilayah Indonesia'
   }
   return `${label}: ${issue.message}`
 }
@@ -289,35 +296,10 @@ export function SubmitForm() {
     const lat = parseFloat(latInput)
     const lng = parseFloat(lngInput)
 
-    if (isNaN(lat) || isNaN(lng)) {
-      setFieldErrors({ latitude: 'Latitude wajib diisi', longitude: 'Longitude wajib diisi' })
-      setError('Lokasi di peta harus ditentukan'); return
-    }
-    if (!isInsideIndonesia(lat, lng)) {
-      setFieldErrors({ latitude: 'Koordinat harus di wilayah Indonesia' })
-      setError('Lokasi harus berada di wilayah Indonesia'); return
-    }
-
-    const requiredLabels: Record<string, string> = {
-      name: 'Nama Koperasi',
-      address: 'Alamat',
-      kabupaten: 'Kabupaten / Kota',
-      provinsi: 'Provinsi',
-    }
     const form = e.currentTarget
     const formData = new FormData(form)
     formData.set('latitude', String(lat))
     formData.set('longitude', String(lng))
-
-    const missing: string[] = []
-    for (const [key, label] of Object.entries(requiredLabels)) {
-      const value = String(formData.get(key) ?? '').trim()
-      if (!value) missing.push(label)
-    }
-    if (missing.length > 0) {
-      setError(`Kolom wajib belum diisi: ${missing.join(', ')}`)
-      return
-    }
 
     const payload = {
       name: String(formData.get('name') ?? ''),
