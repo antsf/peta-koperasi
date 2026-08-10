@@ -459,11 +459,12 @@ export function SubmitForm() {
           id="name" name="name" type="text" required maxLength={200} autoComplete="off"
           onInput={() => clearFieldError('name')}
           aria-invalid={fieldErrors.name ? true : undefined}
+          aria-describedby={fieldErrors.name ? 'name-error' : undefined}
           className={`${inputClass}${fieldErrors.name ? ' border-danger' : ''}`}
           placeholder="cth. Koperasi Simpan Pinjam Maju Bersama"
         />
         {fieldErrors.name && (
-          <p className="mt-1.5 text-sm text-danger">{fieldErrors.name}</p>
+          <p id="name-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.name}</p>
         )}
       </div>
 
@@ -523,11 +524,12 @@ export function SubmitForm() {
             value={latInput}
             onChange={e => { clearFieldError('latitude'); handleLatChange(e.target.value) }}
             aria-invalid={fieldErrors.latitude ? true : undefined}
+            aria-describedby={fieldErrors.latitude ? 'latitude-error' : undefined}
             className={`${coordInputClass}${fieldErrors.latitude ? ' border-danger' : ''}`}
             placeholder="-6.12345"
           />
           {fieldErrors.latitude && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.latitude}</p>
+            <p id="latitude-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.latitude}</p>
           )}
         </div>
         <div>
@@ -543,11 +545,12 @@ export function SubmitForm() {
             value={lngInput}
             onChange={e => { clearFieldError('longitude'); handleLngChange(e.target.value) }}
             aria-invalid={fieldErrors.longitude ? true : undefined}
+            aria-describedby={fieldErrors.longitude ? 'longitude-error' : undefined}
             className={`${coordInputClass}${fieldErrors.longitude ? ' border-danger' : ''}`}
             placeholder="106.45678"
           />
           {fieldErrors.longitude && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.longitude}</p>
+            <p id="longitude-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.longitude}</p>
           )}
         </div>
       </div>
@@ -578,11 +581,12 @@ export function SubmitForm() {
           id="address" name="address" type="text" required maxLength={500}
           onInput={() => clearFieldError('address')}
           aria-invalid={fieldErrors.address ? true : undefined}
+          aria-describedby={fieldErrors.address ? 'address-error' : undefined}
           className={`${inputClass}${fieldErrors.address ? ' border-danger' : ''}`}
           placeholder={geocoding ? 'Memuat alamat...' : 'cth. Jl. Raya Desa No. 12'}
         />
         {fieldErrors.address && (
-          <p className="mt-1.5 text-sm text-danger">{fieldErrors.address}</p>
+          <p id="address-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.address}</p>
         )}
       </div>
 
@@ -593,9 +597,10 @@ export function SubmitForm() {
           <input ref={kelurahanRef} id="kelurahan" name="kelurahan" type="text" maxLength={100}
             onInput={() => clearFieldError('kelurahan')}
             aria-invalid={fieldErrors.kelurahan ? true : undefined}
+            aria-describedby={fieldErrors.kelurahan ? 'kelurahan-error' : undefined}
             className={`${inputClass}${fieldErrors.kelurahan ? ' border-danger' : ''}`} />
           {fieldErrors.kelurahan && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.kelurahan}</p>
+            <p id="kelurahan-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.kelurahan}</p>
           )}
         </div>
         <div>
@@ -603,9 +608,10 @@ export function SubmitForm() {
           <input ref={kecamatanRef} id="kecamatan" name="kecamatan" type="text" maxLength={100}
             onInput={() => clearFieldError('kecamatan')}
             aria-invalid={fieldErrors.kecamatan ? true : undefined}
+            aria-describedby={fieldErrors.kecamatan ? 'kecamatan-error' : undefined}
             className={`${inputClass}${fieldErrors.kecamatan ? ' border-danger' : ''}`} />
           {fieldErrors.kecamatan && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.kecamatan}</p>
+            <p id="kecamatan-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.kecamatan}</p>
           )}
         </div>
         <div>
@@ -615,9 +621,10 @@ export function SubmitForm() {
           <input ref={kabupatenRef} id="kabupaten" name="kabupaten" type="text" required maxLength={100}
             onInput={() => clearFieldError('kabupaten')}
             aria-invalid={fieldErrors.kabupaten ? true : undefined}
+            aria-describedby={fieldErrors.kabupaten ? 'kabupaten-error' : undefined}
             className={`${inputClass}${fieldErrors.kabupaten ? ' border-danger' : ''}`} />
           {fieldErrors.kabupaten && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.kabupaten}</p>
+            <p id="kabupaten-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.kabupaten}</p>
           )}
         </div>
         <div>
@@ -627,9 +634,10 @@ export function SubmitForm() {
           <input ref={provinsiRef} id="provinsi" name="provinsi" type="text" required maxLength={100}
             onInput={() => clearFieldError('provinsi')}
             aria-invalid={fieldErrors.provinsi ? true : undefined}
+            aria-describedby={fieldErrors.provinsi ? 'provinsi-error' : undefined}
             className={`${inputClass}${fieldErrors.provinsi ? ' border-danger' : ''}`} />
           {fieldErrors.provinsi && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.provinsi}</p>
+            <p id="provinsi-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.provinsi}</p>
           )}
         </div>
       </div>
@@ -642,11 +650,12 @@ export function SubmitForm() {
             id="phone" name="phone" type="tel" autoComplete="tel" maxLength={20}
             onInput={() => clearFieldError('phone')}
             aria-invalid={fieldErrors.phone ? true : undefined}
+            aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
             className={`${inputClass} font-mono${fieldErrors.phone ? ' border-danger' : ''}`}
             placeholder="cth. 0812-3456-7890"
           />
           {fieldErrors.phone && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.phone}</p>
+            <p id="phone-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.phone}</p>
           )}
         </div>
         <div>
@@ -655,10 +664,11 @@ export function SubmitForm() {
             id="email" name="email" type="email" autoComplete="email"
             onInput={() => clearFieldError('email')}
             aria-invalid={fieldErrors.email ? true : undefined}
+            aria-describedby={fieldErrors.email ? 'email-error' : undefined}
             className={`${inputClass}${fieldErrors.email ? ' border-danger' : ''}`}
           />
           {fieldErrors.email && (
-            <p className="mt-1.5 text-sm text-danger">{fieldErrors.email}</p>
+            <p id="email-error" className="mt-1.5 text-sm text-danger" role="alert">{fieldErrors.email}</p>
           )}
         </div>
       </div>
@@ -790,6 +800,12 @@ export function SubmitForm() {
             </button>
           </div>
         )}
+      </div>
+
+      {/* Honeypot — hidden from humans, bots fill it */}
+      <div className="absolute -left-[9999px] opacity-0 pointer-events-none" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       {error && (

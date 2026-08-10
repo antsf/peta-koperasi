@@ -5,7 +5,9 @@ import { getRegions } from '@/lib/geo'
 export async function GET() {
   try {
     const regions = await getRegions()
-    return NextResponse.json({ data: regions })
+    return NextResponse.json({ data: regions }, {
+      headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' },
+    })
   } catch (err) {
     console.error('GET /api/regions error:', err)
     return NextResponse.json({ error: 'Failed to fetch regions' }, { status: 503 })

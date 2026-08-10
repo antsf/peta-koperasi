@@ -31,8 +31,33 @@ export default async function PointDetailPage({ params }: Props) {
 
   const canVote = point.status === 'pending' || point.status === 'flagged'
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: point.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: point.address,
+      addressLocality: point.kabupaten,
+      addressRegion: point.provinsi,
+      addressCountry: 'ID',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: point.latitude,
+      longitude: point.longitude,
+    },
+    ...(point.phone && { telephone: point.phone }),
+    ...(point.email && { email: point.email }),
+    image: point.photo_url ?? undefined,
+  }
+
   return (
     <div className="flex-1">
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="max-w-2xl mx-auto w-full px-4 py-8">
       {/* Back */}
       <Link

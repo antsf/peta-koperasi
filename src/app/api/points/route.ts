@@ -80,6 +80,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid form data' }, { status: 400 })
   }
 
+  // Honeypot — bots fill this, humans don't
+  if (formData.get('website')) {
+    return NextResponse.json({ error: 'Submission rejected' }, { status: 400 })
+  }
+
   const body = {
     name: formData.get('name'),
     latitude: formData.get('latitude'),
