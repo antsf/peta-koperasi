@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next'
-import { createServerClient } from '@/lib/supabase/server'
+import { createAnonServerClient } from '@/lib/supabase/server'
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://peta-koperasi.vercel.app'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = createServerClient()
+  const supabase = createAnonServerClient()
 
   const { data } = await supabase
     .from('koperasi_points')
