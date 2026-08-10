@@ -10,7 +10,9 @@ interface NominatimResult {
     town?: string
     municipality?: string
     state?: string
+    state_district?: string
     province?: string
+    region?: string
     country?: string
   }
   display_name?: string
@@ -41,9 +43,9 @@ export async function reverseGeocode(
 
     const road = a.road || a.neighbourhood || a.hamlet || ''
     const village = a.village || a.suburb || ''
-    const kecamatan = a.county || ''
-    const kabupaten = a.city || a.town || a.municipality || ''
-    const provinsi = a.state || a.province || ''
+    const kabupaten = a.county || a.state_district || a.municipality || a.city || a.town || ''
+    const kecamatan = a.municipality || a.town || a.city || ''
+    const provinsi = a.state || a.province || a.region || ''
 
     return {
       address: road,
