@@ -30,3 +30,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Claude Code skills (local tooling, not app code)
+.agents/
+.claude/
+skills-lock.json
+graphify-out/
