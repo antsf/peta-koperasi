@@ -17,13 +17,13 @@ export function Header() {
         <nav className="hidden sm:flex items-center gap-1">
           <Link
             href="/submit"
-            className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
+            className="flex items-center min-h-11 px-3 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
           >
             + Tambah Koperasi
           </Link>
           <Link
             href="/pending"
-            className="flex items-center px-3 py-1.5 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
+            className="flex items-center min-h-11 px-3 text-sm font-medium text-text-secondary rounded-lg transition-colors duration-120 hover:text-primary hover:bg-surface-raised active:scale-[0.97] active:bg-surface-raised"
           >
             Verifikasi
           </Link>

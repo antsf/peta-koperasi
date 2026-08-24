@@ -12,7 +12,7 @@
   --color-danger: #B91C1C;
   --color-text-primary: #1C1917;
   --color-text-secondary: #57534E;
-  --color-text-disabled: #A8A29E;
+  --color-text-disabled: #6B6560;
   --color-border: #E7E5E4;
   --color-border-focus: #0B6E4F;
 
@@ -27,7 +27,7 @@
   --color-status-flagged-text: #7C2D12;
   --color-status-flagged-border: #FDBA74;
   --color-status-removed-bg: #F5F5F4;
-  --color-status-removed-text: #78716C;
+  --color-status-removed-text: #6B6560;
   --color-status-removed-border: #D6D3D1;
 
   /* Typography */
@@ -92,6 +92,23 @@ body {
 /* Leaflet z-index fix for Next.js */
 .leaflet-container {
   z-index: 1;
+}
+
+/* Leaflet's default zoom control is 26-30px — below the app's 44px touch-target
+   minimum, and it's the most-used control on the map. */
+.leaflet-control-zoom a {
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  font-size: 20px !important;
+}
+
+/* Popup close button is similarly undersized (~24px default). */
+.leaflet-popup-close-button {
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  font-size: 20px !important;
 }
 
 /* Custom scrollbar — subtle, warm */

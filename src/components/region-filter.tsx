@@ -45,10 +45,8 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
       <select
         value={selectedProvinsi}
         onChange={e => handleProvinsi(e.target.value)}
-        className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
+        className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 transition-[border-color,box-shadow] duration-120 appearance-none cursor-pointer"
         aria-label="Filter berdasarkan provinsi"
-        role="combobox"
-        aria-expanded="false"
       >
         <option value="">Semua Provinsi</option>
         {regions.map(r => (
@@ -60,10 +58,8 @@ export function RegionFilter({ onFilterChange }: RegionFilterProps) {
         <select
           value={selectedKabupaten}
           onChange={e => handleKabupaten(e.target.value)}
-          className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary transition-colors duration-120 appearance-none cursor-pointer"
+          className="min-h-11 w-full sm:w-auto pl-3 pr-8 text-sm border border-border rounded-lg bg-surface text-text-primary focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 transition-[border-color,box-shadow] duration-120 appearance-none cursor-pointer"
           aria-label="Filter berdasarkan kabupaten"
-          role="combobox"
-          aria-expanded="false"
         >
           <option value="">Semua Kabupaten/Kota</option>
           {kabupatenList.map(k => (

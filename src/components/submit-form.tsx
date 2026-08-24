@@ -115,8 +115,8 @@ const inputClass = [
   'border-2 border-border rounded-lg',
   'text-sm text-text-primary bg-surface',
   'outline-none',
-  'transition-[border-color] duration-120 ease-out',
-  'focus:border-primary',
+  'transition-[border-color,box-shadow] duration-120 ease-out',
+  'focus:border-primary focus:ring-2 focus:ring-primary/30',
 ].join(' ')
 
 const coordInputClass = [
@@ -124,8 +124,8 @@ const coordInputClass = [
   'border-2 border-border rounded-lg',
   'text-sm text-text-primary bg-surface font-mono',
   'outline-none',
-  'transition-[border-color] duration-120 ease-out',
-  'focus:border-primary',
+  'transition-[border-color,box-shadow] duration-120 ease-out',
+  'focus:border-primary focus:ring-2 focus:ring-primary/30',
 ].join(' ')
 
 export function SubmitForm() {
