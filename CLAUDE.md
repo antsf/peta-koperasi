@@ -6,7 +6,7 @@ Project-specific instructions for Claude Code working in this repo.
 
 ## Project Overview
 
-Crowdsourced map of village cooperatives (koperasi desa) across Indonesia. Anonymous submission, community voting for verification, bilingual UI (Bahasa Indonesia + English). No auth, no admin panel — the community governs itself.
+Crowdsourced map of village cooperatives (koperasi desa) across Indonesia. Anonymous submission, community voting for verification, Bahasa Indonesia UI. No auth, no admin panel — the community governs itself.
 
 Read `soul.md` for project philosophy. Read `SPEC.md` for full technical specification.
 
@@ -14,7 +14,7 @@ Read `soul.md` for project philosophy. Read `SPEC.md` for full technical specifi
 
 ## Tech Stack
 
-- **Framework:** Next.js 14+ (App Router) deployed on Vercel
+- **Framework:** Next.js 16 (App Router) deployed on Vercel
 - **Database:** Supabase (PostgreSQL + PostGIS extension)
 - **Storage:** Supabase Storage (photos)
 - **Map:** Leaflet + OpenStreetMap tiles (no paid tile providers). Plain markers (markercluster removed due to Turbopack CJS incompatibility).
@@ -49,7 +49,7 @@ These are locked. Do not change, bypass, or "temporarily disable" any of these:
 
 2. **Photos are hidden until approved.** The `photo_url` field must return `null` for any point where `status != 'approved'`. This applies to both the API response and the UI. Never render a photo for a pending/flagged/removed point.
 
-3. **PostGIS viewport queries.** Currently uses latitude/longitude column comparisons (`.gte/.lte`). Migrate to `ST_Within(location, ST_MakeEnvelope(...))` for scaling to 75k+ pins. This is required before large-scale deployment.
+3. **PostGIS viewport queries.** Uses `ST_Within(location, ST_MakeEnvelope(...))` via the `get_points_in_viewport` RPC (`supabase/migrations/002_viewport_query.sql`), called from `src/lib/geo.ts`. Never fall back to plain lat/lng column comparisons (`.gte`/`.lte`) — that was the pre-migration approach and does not scale.
 
 4. **No authentication.** There is no login, no user accounts, no session management. All actions are anonymous. Do not add auth middleware, Supabase Auth, NextAuth, or any auth library.
 
@@ -118,7 +118,7 @@ npx supabase start
 npx supabase db push
 
 # Option B: Use remote Supabase project
-# Run supabase/migrations/001_initial_schema.sql in the SQL editor
+# Run supabase/migrations/001_initial_schema.sql, then 002_viewport_query.sql in the SQL editor
 # Enable PostGIS: CREATE EXTENSION IF NOT EXISTS postgis;
 
 # 4. Run dev server

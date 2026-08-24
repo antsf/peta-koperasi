@@ -19,8 +19,9 @@ Indonesia has 120,000+ cooperatives, most invisible online. No unified, public, 
 | V1 | As a visitor, I can see a map of Indonesia with pins for approved cooperatives so I can browse what exists near me. |
 | V2 | As a visitor, I can click a pin to see the cooperative's name, address, contact info, and photo. |
 | V3 | As a visitor, I can search by province, kabupaten, or kecamatan to filter the map. |
-| V4 | As a visitor, I can switch the UI between Bahasa Indonesia and English. |
 | V5 | As a visitor, I can see how many cooperatives are on the map (total count). |
+
+> **Note:** V4 (bilingual UI toggle) was implemented then removed — the bilingual i18n system was superseded, app is now Bahasa Indonesia only. See §11.1.
 
 ### 2.2 Contributor (unauthenticated, submits data)
 
@@ -335,16 +336,17 @@ function castVote(pointId, voteType, voterIp, voterFingerprint):
 
 | Component | Description |
 |-----------|-------------|
-| `MapView` | Leaflet map, loads pins via viewport bounding box, plain markers (no clustering in v1) |
-| `MapPin` | Individual pin with popup (name, kabupaten, status indicator) |
+| `MapView` | Leaflet map, loads pins via viewport bounding box, plain markers (no clustering in v1). Pin markup/popup is built inline via `L.divIcon`, not a separate component. |
 | `PointCard` | Card showing cooperative details (used in detail page and pending list) |
 | `SubmitForm` | Form with fields matching POST /api/points, includes draggable map pin, manual lat/lng input, geolocation button, reverse geocoding auto-fill, and photo drag-and-drop zone |
 | `VoteButtons` | Upvote/downvote buttons with counts, disabled after voting |
-| `RegionFilter` | Province + kabupaten cascading dropdowns |
-| `SearchBar` | Text search + region filter combined |
-| `PhotoDisplay` | Shows photo only for approved points, placeholder otherwise |
-| `Header` | Logo, nav links, stats counter |
+| `RegionFilter` | Province + kabupaten cascading dropdowns (no separate combined search bar — filtering is region-only in v1) |
+| `PhotoDisplay` | Shows photo only for approved/pending/flagged points, placeholder for removed |
+| `StatusBadge` | Status pill (pending/approved/flagged/removed) with color token + label |
+| `Header` | Logo, desktop nav links, stats counter |
 | `Footer` | MIT license note, GitHub link |
+| `MobileBottomNav` | Fixed bottom tab bar (Peta/Tambah/Verifikasi), mobile only |
+| `StatsCounter` | Animated count-up of total approved cooperatives |
 
 ### 6.3 Client-Only Components
 
@@ -366,9 +368,11 @@ peta-koperasi/
 ├── tsconfig.json
 ├── .env.local.example
 ├── public/
-│   ├── marker-default.svg
-│   ├── marker-pending.svg
-│   └── og-image.png
+│   ├── favicon.svg
+│   ├── manifest.json
+│   └── og-image.svg
+│   # marker-approved.svg / marker-pending.svg exist but are unused —
+│   # map markers are rendered inline via Leaflet's L.divIcon, not image files
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx              # Root layout, font, metadata
@@ -401,6 +405,8 @@ peta-koperasi/
 │   │   ├── status-badge.tsx
 │   │   ├── header.tsx
 │   │   ├── footer.tsx
+│   │   ├── mobile-bottom-nav.tsx
+│   │   ├── stats-counter.tsx
 │   ├── lib/
 │   │   ├── supabase/
 │   │   │   ├── client.ts           # Browser Supabase client
@@ -414,7 +420,8 @@ peta-koperasi/
 │       └── index.ts                # Shared TypeScript types
 └── supabase/
     └── migrations/
-        └── 001_initial_schema.sql  # Tables, indexes, RLS policies
+        ├── 001_initial_schema.sql   # Tables, indexes, RLS policies
+        └── 002_viewport_query.sql   # get_points_in_viewport RPC (ST_Within)
 ```
 
 ---
@@ -437,7 +444,7 @@ peta-koperasi/
 ### Supabase Setup
 1. Create a new Supabase project.
 2. Enable the PostGIS extension: `CREATE EXTENSION IF NOT EXISTS postgis;`
-3. Run `supabase/migrations/001_initial_schema.sql`.
+3. Run `supabase/migrations/001_initial_schema.sql`, then `supabase/migrations/002_viewport_query.sql`.
 4. Create the `koperasi-photos` storage bucket with public read access.
 5. Configure storage bucket policies: allow public uploads (with size/type restrictions), public reads for approved photos only.
 6. Copy project URL, anon key, and service role key.

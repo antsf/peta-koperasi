@@ -28,7 +28,6 @@ Program **Koperasi Desa Merah Putih** adalah inisiatif pemerintah untuk mendirik
 | Voting komunitas | Upvote/downvote untuk verifikasi data |
 | Foto koperasi | Upload foto — tampil hanya setelah diverifikasi |
 | Filter wilayah | Saring per provinsi dan kabupaten |
-| Bilingual | Bahasa Indonesia (default) + English |
 | Anti-spam | Dedup vote via IP + browser fingerprint (hashed SHA-256) |
 
 ---
@@ -72,8 +71,9 @@ cp .env.local.example .env.local
 # Edit .env.local — isi Supabase URL + keys
 
 # 4. Setup database (sekali saja)
-# Buka Supabase dashboard → SQL Editor → jalankan:
+# Buka Supabase dashboard → SQL Editor → jalankan berurutan:
 # supabase/migrations/001_initial_schema.sql
+# supabase/migrations/002_viewport_query.sql
 
 # 5. Jalankan dev server
 npm run dev
@@ -97,8 +97,9 @@ npm run dev
 -- 1. Enable PostGIS (SQL Editor Supabase)
 CREATE EXTENSION IF NOT EXISTS postgis;
 
--- 2. Jalankan migration lengkap
+-- 2. Jalankan migration lengkap (berurutan)
 -- Copy-paste isi file: supabase/migrations/001_initial_schema.sql
+-- Lalu: supabase/migrations/002_viewport_query.sql
 ```
 
 Buat storage bucket:
@@ -113,7 +114,7 @@ Buat storage bucket:
 ```bash
 npm run dev        # Dev server (http://localhost:3000)
 npm run build      # Production build
-npm run test       # Jalankan semua test (53 test)
+npm run test       # Jalankan semua test (66 test)
 npm run test:watch # Test mode watch (untuk development)
 ```
 
@@ -141,13 +142,9 @@ peta-koperasi/
 │   ├── lib/
 │   │   ├── geo.ts           # PostGIS query helpers
 │   │   ├── hash.ts          # SHA-256 PII hashing
-│   │   ├── i18n.ts          # Bilingual translation hook
 │   │   ├── validation.ts    # Zod schemas (semua API input)
 │   │   └── supabase/        # Supabase clients (browser + server)
 │   └── types/index.ts       # Shared TypeScript types
-├── messages/
-│   ├── id.json              # Teks Bahasa Indonesia
-│   └── en.json              # English text
 ├── supabase/migrations/     # SQL schema + migrations
 ├── .skills/                 # Claude Code skill library (36 skills)
 ├── soul.md                  # Filosofi dan nilai project

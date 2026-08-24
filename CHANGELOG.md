@@ -51,6 +51,14 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Point-card: "Lihat Detail" dan "Belum ada foto" menggunakan i18n
 - Pending page: semua label dan status menggunakan i18n
 - Geolocation button: touch target diperbesar ke min-h-11 min-w-11
+- Mobile bottom nav: `aria-current="page"` untuk active tab, `aria-hidden` untuk ikon dekoratif, `active:scale-95` untuk tap feedback
+- Kontras teks gagal WCAG AA diperbaiki: `text-disabled` (2.4:1 → 5.3–5.7:1) dan `status-removed-text` (4.40:1 → 5.27:1+), keduanya jadi `#6B6560`
+- Focus indicator form input & region-filter select diperkuat (`focus:ring-2`, sebelumnya cuma border-color berubah)
+- Native `<select>` di region-filter: `role="combobox"`/`aria-expanded` yang salah dihapus
+- Leaflet zoom control (26-30px default) dan popup close button diperbesar ke touch target yang layak (44px / 32px)
+- Header desktop nav links: `min-h-11` ditambahkan (sebelumnya ~32px)
+- Map loading/limited status: `aria-live="polite"` ditambahkan
+- Ikon emoji (📍📞📷) diganti SVG untuk konsisten dengan sistem ikon lainnya
 
 ## [0.1.0] — 2026-08-04
 

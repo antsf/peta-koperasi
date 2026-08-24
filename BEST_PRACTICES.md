@@ -22,10 +22,10 @@ Status: `[ ]` belum dikerjakan, `[x]` sudah/terpasang, `[~]` sebagian.
 - [x] `export const viewport` + `themeColor` di layout.
 
 ## 3. Aksesibilitas
-- [ ] Map interaktif: keyboard nav, focus indicator, fallback daftar.
-- [x] `prefers-reduced-motion` untuk animasi (sudah ada di `globals.css:143`).
+- [~] Map interaktif: keyboard nav (native via Leaflet), Leaflet zoom control diperbesar ke 44px touch target. Focus ring diperkuat di semua form input (`focus:ring-2`, bukan cuma border-color). Fallback daftar (non-map) masih belum ada.
+- [x] `prefers-reduced-motion` untuk animasi (sudah ada di `globals.css`).
 - [x] Pesan error form dikaitkan via `aria-describedby` + `role="alert"` (sudah ada `aria-invalid`).
-- [ ] Kontras & label: status badge, region filter (cascading), mobile nav.
+- [x] Kontras & label: semua status badge diverifikasi (6.25–8.3:1, WCAG AA). `text-disabled` (`#A8A29E`, 2.4:1) dan `status-removed-text` (`#78716C`, 4.40:1) gagal AA — diperbaiki jadi `#6B6560` (5.3–5.7:1). Region filter: `role="combobox"`/`aria-expanded` yang salah di native `<select>` dihapus. Mobile nav: `aria-current="page"` + `aria-hidden` pada ikon ditambahkan.
 
 ## 4. SEO & Metadata
 - [x] `sitemap.xml` + `robots.txt` (dynamic untuk halaman detail approved).
