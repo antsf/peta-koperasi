@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getFingerprint } from '@/lib/fingerprint'
-import { reverseGeocode } from '@/lib/geocode'
+import { reverseGeocode, type ReverseGeocodeResult } from '@/lib/geocode'
 import { SubmitPointSchema } from '@/lib/validation'
 import type { ZodIssue } from 'zod'
 
@@ -155,6 +155,15 @@ export function SubmitForm() {
   const provinsiRef = useRef<HTMLInputElement>(null)
   const coordTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const applyGeocodeResult = useCallback((result: ReverseGeocodeResult | null) => {
+    if (!result) return
+    if (addressRef.current) addressRef.current.value = result.address || addressRef.current.value
+    if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan || kelurahanRef.current.value
+    if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan || kecamatanRef.current.value
+    if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten || kabupatenRef.current.value
+    if (provinsiRef.current) provinsiRef.current.value = result.provinsi || provinsiRef.current.value
+  }, [])
+
   const validateCoords = useCallback((lat: number, lng: number): string | null => {
     if (isNaN(lat) || isNaN(lng)) return 'Koordinat tidak valid'
     if (!isInsideIndonesia(lat, lng)) return 'Koordinat harus di wilayah Indonesia'
@@ -195,13 +204,7 @@ export function SubmitForm() {
         setCoordError(null)
         setGeocoding(true)
         reverseGeocode(pos.lat, pos.lng).then(result => {
-          if (result) {
-            if (addressRef.current) addressRef.current.value = result.address || addressRef.current.value
-            if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan || kelurahanRef.current.value
-            if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan || kecamatanRef.current.value
-            if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten || kabupatenRef.current.value
-            if (provinsiRef.current) provinsiRef.current.value = result.provinsi || provinsiRef.current.value
-          }
+          applyGeocodeResult(result)
           setGeocoding(false)
         })
       })
@@ -209,7 +212,7 @@ export function SubmitForm() {
       marker.addTo(map)
       pinMarkerRef.current = marker
     }
-  }, [])
+  }, [applyGeocodeResult])
 
   const updatePinFromCoords = useCallback((lat: number, lng: number, fromMap = false, preserveInputs = false) => {
     setPin({ lat, lng })
@@ -225,16 +228,10 @@ export function SubmitForm() {
 
     setGeocoding(true)
     reverseGeocode(lat, lng).then(result => {
-      if (result) {
-        if (addressRef.current) addressRef.current.value = result.address || addressRef.current.value
-        if (kelurahanRef.current) kelurahanRef.current.value = result.kelurahan || kelurahanRef.current.value
-        if (kecamatanRef.current) kecamatanRef.current.value = result.kecamatan || kecamatanRef.current.value
-        if (kabupatenRef.current) kabupatenRef.current.value = result.kabupaten || kabupatenRef.current.value
-        if (provinsiRef.current) provinsiRef.current.value = result.provinsi || provinsiRef.current.value
-      }
+      applyGeocodeResult(result)
       setGeocoding(false)
     })
-  }, [placePin])
+  }, [placePin, applyGeocodeResult])
 
   const handleGeolocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -303,35 +300,22 @@ export function SubmitForm() {
     }
   }, [photoPreview, updatePinFromCoords, placePin])
 
-  const handleLatChange = (value: string) => {
-    setLatInput(value)
-    const lat = parseFloat(value)
-    const lng = parseFloat(lngInput)
-    if (!isNaN(lat) && !isNaN(lng)) {
-      const err = validateCoords(lat, lng)
-      setCoordError(err)
-      if (!err && mapRef.current) {
-        if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
-        coordTimerRef.current = setTimeout(() => updatePinFromCoords(lat, lng, false, true), 500)
-      }
-    } else {
-      setCoordError(null)
-    }
-  }
+  const handleCoordChange = (field: 'lat' | 'lng', value: string) => {
+    if (field === 'lat') setLatInput(value)
+    else setLngInput(value)
 
-  const handleLngChange = (value: string) => {
-    setLngInput(value)
-    const lat = parseFloat(latInput)
-    const lng = parseFloat(value)
-    if (!isNaN(lat) && !isNaN(lng)) {
-      const err = validateCoords(lat, lng)
-      setCoordError(err)
-      if (!err && mapRef.current) {
-        if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
-        coordTimerRef.current = setTimeout(() => updatePinFromCoords(lat, lng, false, true), 500)
-      }
-    } else {
+    const lat = parseFloat(field === 'lat' ? value : latInput)
+    const lng = parseFloat(field === 'lng' ? value : lngInput)
+    if (isNaN(lat) || isNaN(lng)) {
       setCoordError(null)
+      return
+    }
+
+    const err = validateCoords(lat, lng)
+    setCoordError(err)
+    if (!err && mapRef.current) {
+      if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
+      coordTimerRef.current = setTimeout(() => updatePinFromCoords(lat, lng, false, true), 500)
     }
   }
 
@@ -522,7 +506,7 @@ export function SubmitForm() {
             step="any"
             required
             value={latInput}
-            onChange={e => { clearFieldError('latitude'); handleLatChange(e.target.value) }}
+            onChange={e => { clearFieldError('latitude'); handleCoordChange('lat', e.target.value) }}
             aria-invalid={fieldErrors.latitude ? true : undefined}
             aria-describedby={fieldErrors.latitude ? 'latitude-error' : undefined}
             className={`${coordInputClass}${fieldErrors.latitude ? ' border-danger' : ''}`}
@@ -543,7 +527,7 @@ export function SubmitForm() {
             step="any"
             required
             value={lngInput}
-            onChange={e => { clearFieldError('longitude'); handleLngChange(e.target.value) }}
+            onChange={e => { clearFieldError('longitude'); handleCoordChange('lng', e.target.value) }}
             aria-invalid={fieldErrors.longitude ? true : undefined}
             aria-describedby={fieldErrors.longitude ? 'longitude-error' : undefined}
             className={`${coordInputClass}${fieldErrors.longitude ? ' border-danger' : ''}`}
