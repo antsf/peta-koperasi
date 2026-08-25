@@ -47,7 +47,7 @@ These are locked. Do not change, bypass, or "temporarily disable" any of these:
 
 1. **Vote dedup is mandatory.** Every vote must be checked against `(point_id, hashed_ip, hashed_fingerprint)` before insertion. Never skip the dedup check. Never allow duplicate votes "for testing."
 
-2. **Photos are hidden until approved.** The `photo_url` field must return `null` for any point where `status != 'approved'`. This applies to both the API response and the UI. Never render a photo for a pending/flagged/removed point.
+2. **Photos are hidden only for removed points.** The `photo_url` field must return `null` for any point where `status == 'removed'`. Pending and flagged points still show their photo — voters need to see it to verify the submission before voting. This applies to both the API response and the UI.
 
 3. **PostGIS viewport queries.** Uses `ST_Within(location, ST_MakeEnvelope(...))` via the `get_points_in_viewport` RPC (`supabase/migrations/002_viewport_query.sql`), called from `src/lib/geo.ts`. Never fall back to plain lat/lng column comparisons (`.gte`/`.lte`) — that was the pre-migration approach and does not scale.
 

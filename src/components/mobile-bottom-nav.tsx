@@ -11,7 +11,7 @@ const NAV_ITEMS = [
 
 function NavIcon({ icon, isActive }: { icon: string; isActive: boolean }) {
   const stroke = isActive ? 2.5 : 1.5
-  const color = isActive ? '#0B6E4F' : '#78716C'
+  const color = isActive ? '#0B6E4F' : '#57534E'
 
   if (icon === 'map') {
     return (
