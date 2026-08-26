@@ -11,13 +11,12 @@
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^5.2.0",
-    "@swc/helpers": "^0.5.23",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.0",
+    "@swc/helpers": "^0.5.23",
     "@types/leaflet": "^1.9.22",
     "leaflet": "^1.9.4",
     "next": "16.3.0",
-    "next-intl": "^4.13.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "zod": "^4.4.3"
