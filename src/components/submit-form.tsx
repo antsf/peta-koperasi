@@ -299,9 +299,15 @@ export function SubmitForm() {
       cancelled = true
       if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatePinFromCoords, placePin])
+
+  useEffect(() => {
+    return () => {
       if (photoPreview) { URL.revokeObjectURL(photoPreview) }
     }
-  }, [photoPreview, updatePinFromCoords, placePin])
+  }, [photoPreview])
 
   const handleCoordChange = (field: 'lat' | 'lng', value: string) => {
     if (field === 'lat') setLatInput(value)
