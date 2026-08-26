@@ -484,7 +484,7 @@ export function SubmitForm() {
           </button>
         </div>
         {geoError && (
-          <p className="mt-1.5 text-sm text-danger flex items-center gap-1.5">
+          <p className="submit-error mt-1.5 text-sm text-danger flex items-center gap-1.5">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
@@ -539,7 +539,7 @@ export function SubmitForm() {
         </div>
       </div>
       {coordError && (
-        <p className="text-sm text-danger flex items-center gap-1.5 -mt-4">
+        <p className="submit-error text-sm text-danger flex items-center gap-1.5 -mt-4">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>

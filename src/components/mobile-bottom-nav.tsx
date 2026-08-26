@@ -63,13 +63,13 @@ export function MobileBottomNav() {
               key={item.href}
               href={item.href}
               aria-current={active ? 'page' : undefined}
-              className={`flex flex-col items-center justify-center gap-0.5 w-16 h-full transition-all duration-120 active:scale-95 ${
+              className={`flex flex-col items-center justify-center gap-0.5 w-16 h-full transition-[color,transform] duration-120 active:scale-95 ${
                 active
                   ? 'text-primary'
                   : 'text-text-secondary hover:text-text-primary'
               }`}
             >
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-120 ${
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full transition-[background-color] duration-120 ${
                 active ? 'bg-primary/10' : ''
               }`}>
                 <NavIcon icon={item.icon} isActive={active} />

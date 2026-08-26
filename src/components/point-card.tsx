@@ -11,7 +11,7 @@ interface PointCardProps {
 export async function PointCard({ point, showVotes = false }: PointCardProps) {
   return (
     <article
-      className="bg-surface border border-border rounded-card p-6 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-180 ease-out-custom"
+      className="bg-surface border border-border rounded-card p-6 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-[transform,box-shadow] duration-180 ease-out-custom"
       aria-labelledby={`point-${point.id}-name`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
