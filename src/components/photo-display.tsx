@@ -30,18 +30,20 @@ export function PhotoDisplay({ photoUrl, pointName, status }: PhotoDisplayProps)
     )
   }
 
+  const placeholderText = status === 'approved' ? 'Belum ada foto' : 'Foto belum diunggah'
+
   return (
     <div
       className="w-full aspect-video rounded-xl bg-surface-raised flex items-center justify-center"
-      aria-label="Foto belum tersedia"
+      aria-label={placeholderText}
       role="img"
     >
       <div className="text-center text-text-disabled">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-2" aria-hidden="true">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
         </svg>
-        <p className="text-sm">
-          {status === 'approved' ? 'Belum ada foto' : 'Foto belum diunggah'}
+        <p className="text-sm" aria-hidden="true">
+          {placeholderText}
         </p>
       </div>
     </div>

@@ -94,6 +94,7 @@ export function MapView({
       }
 
       marker.addTo(map)
+      marker.getElement()?.setAttribute('aria-label', `${point.name}, ${point.kabupaten}`)
       markersRef.current.push(marker)
     })
   }
