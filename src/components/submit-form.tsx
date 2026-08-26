@@ -300,7 +300,6 @@ export function SubmitForm() {
       if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatePinFromCoords, placePin])
 
   useEffect(() => {

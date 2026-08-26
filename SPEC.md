@@ -170,7 +170,7 @@ Fetch full detail of a single point.
 }
 ```
 
-**Note:** `photo_url` is only returned when `status = 'approved'`. For `pending` points, `photo_url` is `null`.
+**Note:** `photo_url` is `null` only when `status = 'removed'`. Pending, flagged, and approved points all return their `photo_url` — voters need to see the photo to verify a submission before voting.
 
 ### 4.3 `POST /api/points`
 
@@ -446,7 +446,7 @@ peta-koperasi/
 2. Enable the PostGIS extension: `CREATE EXTENSION IF NOT EXISTS postgis;`
 3. Run `supabase/migrations/001_initial_schema.sql`, then `supabase/migrations/002_viewport_query.sql`.
 4. Create the `koperasi-photos` storage bucket with public read access.
-5. Configure storage bucket policies: allow public uploads (with size/type restrictions), public reads for approved photos only.
+5. Configure storage bucket policies: allow public uploads (with size/type restrictions), public reads for all photos except those on `removed` points.
 6. Copy project URL, anon key, and service role key.
 
 ### Vercel Setup
@@ -459,7 +459,7 @@ peta-koperasi/
 1. Open the site. Map should render centered on Indonesia.
 2. Submit a test cooperative. Verify it appears in /pending with status `pending`.
 3. Vote on it 3 times from different browsers/IPs. Verify it transitions to `approved`.
-4. Verify the photo becomes visible only after approval.
+4. Verify the photo is visible immediately while `pending`, and becomes hidden only if the point is later marked `removed`.
 5. Test region filter dropdown populates from actual data.
 6. Verify all UI text is in Bahasa Indonesia (no hardcoded English).
 
@@ -559,7 +559,7 @@ For input validation of lat/lng:
 
 | Status | Visible on main map | Photo visible | Can be voted on |
 |--------|-------------------|---------------|-----------------|
-| `pending` | No | No | Yes |
+| `pending` | No | Yes | Yes |
 | `approved` | Yes | Yes | No |
-| `flagged` | No | No | Yes |
+| `flagged` | No | Yes | Yes |
 | `removed` | No | No | No |

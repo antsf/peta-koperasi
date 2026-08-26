@@ -81,7 +81,7 @@ Ini adalah aturan keras — PR yang melanggar ini tidak akan di-merge:
 | Aturan | Alasan |
 |--------|--------|
 | Vote dedup WAJIB | Mencegah manipulasi data |
-| Foto disembunyikan sampai approved | Privasi dan keakuratan data |
+| Foto disembunyikan hanya untuk status `removed` | Voter perlu lihat foto (pending/flagged) untuk verifikasi sebelum vote |
 | Tidak ada autentikasi | Prinsip anonimitas project |
 | Tidak ada admin dashboard | Desentralisasi — komunitas yang berkuasa |
 | IP + fingerprint selalu di-hash | Privasi pengguna |
@@ -123,7 +123,7 @@ Format: `type: deskripsi singkat`
 Contoh:
 ```
 feat: tambah filter berdasarkan provinsi di peta
-fix: foto muncul untuk titik pending (seharusnya tersembunyi)
+fix: foto masih muncul untuk titik removed (seharusnya tersembunyi)
 docs: perbaiki instruksi setup di README
 test: tambah test untuk transisi flagged → removed
 ```
