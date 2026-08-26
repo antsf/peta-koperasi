@@ -101,10 +101,12 @@ export function MapView({
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return
+    let cancelled = false
 
     ;(async () => {
       const L = await import('leaflet')
       await import('leaflet/dist/leaflet.css')
+      if (cancelled || !containerRef.current || mapRef.current) return
 
       // Fix broken default icons in webpack
       delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl
@@ -118,7 +120,7 @@ export function MapView({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(window as any).LeafletLib = L
 
-      const map = L.map(containerRef.current!, {
+      const map = L.map(containerRef.current, {
         center: [MAP_CENTER_LAT, MAP_CENTER_LNG],
         zoom: MAP_DEFAULT_ZOOM,
         maxBounds: INDONESIA_BOUNDS,
@@ -140,6 +142,7 @@ export function MapView({
     })()
 
     return () => {
+      cancelled = true
       if (debounceRef.current) clearTimeout(debounceRef.current)
       if (mapRef.current) {
         mapRef.current.remove()

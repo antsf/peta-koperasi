@@ -264,15 +264,17 @@ export function SubmitForm() {
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return
+    let cancelled = false
 
     ;(async () => {
       const L = await import('leaflet')
       await import('leaflet/dist/leaflet.css')
+      if (cancelled || !mapContainerRef.current || mapRef.current) return
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(window as any).LeafletLib = L
 
-      const map = L.map(mapContainerRef.current!, {
+      const map = L.map(mapContainerRef.current, {
         center: [-2.5, 118.0],
         zoom: 5,
         maxBounds: [[-11, 95], [6, 141]],
@@ -294,6 +296,7 @@ export function SubmitForm() {
     })()
 
     return () => {
+      cancelled = true
       if (coordTimerRef.current) clearTimeout(coordTimerRef.current)
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null }
       if (photoPreview) { URL.revokeObjectURL(photoPreview) }
