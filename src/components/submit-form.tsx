@@ -722,6 +722,7 @@ export function SubmitForm() {
             id="photo-gallery"
             name="photo"
             type="file"
+            aria-label="Pilih foto dari galeri"
             accept="image/jpeg,image/png,image/webp"
             className="sr-only"
             onChange={e => {
@@ -741,6 +742,7 @@ export function SubmitForm() {
             id="photo-camera"
             name="photo"
             type="file"
+            aria-label="Ambil foto dengan kamera"
             accept="image/jpeg,image/png,image/webp"
             capture="environment"
             className="sr-only"
