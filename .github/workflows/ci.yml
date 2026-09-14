@@ -1,5 +1,9 @@
 name: CI
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main]
@@ -22,8 +26,14 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
-      - name: Tests
-        run: npm test
+      - name: Tests with coverage
+        run: npx vitest run --coverage
+
+      - name: Enforce minimum coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: coverage/lcov.info
+          min_coverage: 60
 
       - name: Build
         run: npm run build
